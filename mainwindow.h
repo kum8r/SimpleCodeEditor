@@ -10,6 +10,7 @@
 #include <QSysInfo>
 #include <QFontDialog>
 #include <QFileSystemModel>
+#include <QLabel>
 #include "Qsci/qsciscintilla.h"
 
 namespace Ui {
@@ -25,15 +26,20 @@ public:
     ~MainWindow();
 
     QList <TextEdit *> tabs;
+    QStringList filelist;
     QString filepath;
+    QString filename;
     QString line;
     MainWindow *newwindow;
     QActionGroup *lineending;
     QFileSystemModel *filemodel;
+    QLabel *label;
+    QTimer *timer;
 
 //functions
     int newtab(QString tabname);
     void setEOL();
+    QString settabname();
 
 
 private slots:
@@ -164,6 +170,13 @@ private slots:
     void on_actionShow_Linenumbers_triggered();
 
     void on_tabWidget_tabCloseRequested(int index);
+
+    void on_lineEdit_returnPressed();
+
+    void on_actionWordWrap_triggered();
+
+    void statusbar();
+
 
 private:
     Ui::MainWindow *ui;

@@ -41,7 +41,18 @@ MainWindow::MainWindow(QWidget *parent) :
     lineending->addAction(ui->actionUnix);
     lineending->addAction(ui->actionMac);
 
+    //statusBar
+    label = new QLabel();
+    ui->statusBar->addWidget(label);
+    on_actionNew_triggered();
 
+
+    //timer
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()),this,SLOT(statusbar()));
+    timer->start(1000);
+
+    statusbar();
 }
 
 MainWindow::~MainWindow() {
@@ -72,24 +83,54 @@ void MainWindow::setEOL() {
     }
 }
 
+QString MainWindow::settabname() {
+
+}
+
+void MainWindow::statusbar() {
+    int colpos = tabs[ui->tabWidget->currentIndex()]->getColpos();
+    int linecount = tabs[ui->tabWidget->currentIndex()]->getLinecount();
+    label->setText("Col: " + QString::number(colpos) + " Line: " + QString::number(linecount));
+}
+
 void MainWindow::on_actionNew_triggered() {
-    newtab("Untitled");
+    QString filename = "untitled";
+    int j = 1;
+    for (int i = 0; i < filelist.length(); i++) {
+        if (filelist[i] == filename) {
+            filename = "untitled " + QString::number(j);
+            j++;
+            i = 0;
+        }
+    }
+    filelist.append(filename);
+    newtab(filename);
     setEOL();
 }
 
 void MainWindow::on_actionOpen_triggered() {
     int tabindex = newtab("");
     if (tabs[tabindex]->openfile()) {
-        QString filename = tabs[tabindex]->filename;
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),filename);
+        filepath = tabs[tabindex]->filePath();
+        for (int i = 0; i < filelist.length(); i++) {
+            if (filelist[i] == filepath) {
+                ui->tabWidget->setCurrentIndex(i);
+                ui->tabWidget->removeTab(tabindex);
+                return;
+            }
+        }
+        filename = tabs[tabindex]->fileName();
+        ui->tabWidget->setTabText(tabindex,filename);
     }
+    filelist.append(filepath);
     setEOL();
 }
 
 void MainWindow::on_actionSave_triggered() {
+    //if two file name are same it will be confused
     int currentindex = ui->tabWidget->currentIndex();
     if (tabs[currentindex]->saveFile()) {
-        QString filename = tabs[currentindex]->filename;
+        filename = tabs[currentindex]->filename;
         ui->tabWidget->setTabText(currentindex,filename);
     }
     else {
@@ -151,12 +192,19 @@ void MainWindow::on_actionClose_All_Files_triggered() {
     //close files are not working properly
     //except one tab is not closing
     int tabcount = ui->tabWidget->count();
-    for (int i = 0; i < tabcount; ++i) {
+ //   QMessageBox::about(this,QString::number(tabcount),QString::number(ui->tabWidget->currentIndex()));
+
+   int i = 0;
+    while (i < tabcount) {
         ui->tabWidget->setCurrentIndex(i);
-        if (tabs[i]->close()) {
-            ui->tabWidget->removeTab(i);
-        }
+        QMessageBox::about(this,QString::number(i),ui->tabWidget->tabText(i));
+//        if (tabs[i]->closeAllFiles()) {
+//            ui->tabWidget->removeTab(i);
+
+//        }
+        i =i +1;
     }
+
 }
 
 void MainWindow::on_actionFind_triggered() {
@@ -412,5 +460,18 @@ void MainWindow::on_actionShow_Linenumbers_triggered() {
 void MainWindow::on_tabWidget_tabCloseRequested(int index) {
     if (tabs[index]->close() == true) {
         ui->tabWidget->removeTab(index);
+    }
+}
+
+void MainWindow::on_lineEdit_returnPressed() {
+    ui->listView->keyboardSearch(ui->lineEdit->text());
+}
+
+void MainWindow::on_actionWordWrap_triggered() {
+    if (ui->actionWordWrap->isChecked()) {
+        tabs[ui->tabWidget->currentIndex()]->wordwrap();
+    }
+    else {
+        tabs[ui->tabWidget->currentIndex()]->wordwrapNone();
     }
 }

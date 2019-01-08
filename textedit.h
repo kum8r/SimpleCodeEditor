@@ -50,13 +50,15 @@ public:
     QString filepath;
     QString line;
     QString filename;
+    QString dirname;
     QMap <QVariant, QVariant> lexers;
 
     bool getfile(QString filepath);
     bool openfile();
     void setFileName(QString filepath);
-    QString FileName();
-    QString FilePath();
+    QString fileName();
+    QString dirName();
+    QString filePath();
     bool saveFile();
     bool saveFileas();
     bool close();
@@ -82,6 +84,10 @@ public:
     QFont getFont();
     void showLinenumbers();
     void hideLinenumbers();
+    void wordwrap();
+    void wordwrapNone();
+    int getLinecount();
+    int getColpos();
 
     //lexers
     void changetoBash();

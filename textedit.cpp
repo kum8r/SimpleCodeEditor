@@ -83,11 +83,18 @@ void TextEdit::setFileName(QString filepath) {
     filename = fileinfo.fileName();
 }
 
-QString TextEdit::FileName() {
+QString TextEdit::fileName() {
     return filename;
 }
 
-QString TextEdit::FilePath() {
+QString TextEdit::dirName() {
+    QFileInfo fileinfo(filepath);
+    QDir dir = fileinfo.dir();
+    dirname = dir.dirName();
+    return dirname;
+}
+
+QString TextEdit::filePath() {
     return filepath;
 }
 
@@ -127,6 +134,51 @@ bool TextEdit::saveFileas() {
     }
 }
 
+bool TextEdit::closeAllFiles() {
+    QFileInfo fileinfo(filepath);
+    if (fileinfo.exists()) {
+        filename = fileinfo.fileName();
+        QFile file(filepath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            while (!in.atEnd()) {
+                line = in.readAll();
+            }
+            if (line == ui->textEdit->text()) {
+                    return true;
+            }
+            else {
+                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+ filename,QMessageBox::Yes | QMessageBox::No ,
+                                                                        QMessageBox::Yes);
+                if (ask == QMessageBox::Yes) {
+                    saveFile();
+                    return true;
+                }
+                else if (ask == QMessageBox::No) {
+                    return true;
+                }
+            }
+        }
+    }
+    else {
+        if (ui->textEdit->text() != "") {
+            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),QMessageBox::Yes | QMessageBox::No ,
+                                                                    QMessageBox::Yes);
+            if (ask == QMessageBox::Yes) {
+                saveFile();
+                return true;
+            }
+            else if (ask == QMessageBox::No) {
+                return true;
+            }
+        }
+        else {
+            return true;
+        }
+
+    }
+}
+
 bool TextEdit::close() {
     QFileInfo fileinfo(filepath);
     if (fileinfo.exists()) {
@@ -138,14 +190,11 @@ bool TextEdit::close() {
                 line = in.readAll();
             }
             if (line == ui->textEdit->text()) {
-                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Close Document"),tr("Do You want to Close File ") + filename,QMessageBox::Yes | QMessageBox::No ,
-                                      QMessageBox::No);
-                if (ask == QMessageBox::Yes) {
                     return true;
-                }
             }
             else {
-                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+ filename,QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel ,
+                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+ filename,QMessageBox::Yes | QMessageBox::No |
+                                                                        QMessageBox::Cancel,
                                                                         QMessageBox::Cancel);
                 if (ask == QMessageBox::Yes) {
                     saveFile();
@@ -162,8 +211,8 @@ bool TextEdit::close() {
     }
     else {
         if (!(ui->textEdit->text()=="")) {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel ,
-                                                                    QMessageBox::Cancel);
+            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),QMessageBox::Yes | QMessageBox::No |
+                                                                   QMessageBox::Cancel, QMessageBox::Cancel);
             if (ask == QMessageBox::Yes) {
                 saveFile();
                 return true;
@@ -176,11 +225,7 @@ bool TextEdit::close() {
             }
         }
         else {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Close Document"),tr("Do You want to Close File"),QMessageBox::Yes | QMessageBox::No ,
-                                  QMessageBox::No);
-            if (ask == QMessageBox::Yes) {
-                return true;
-            }
+            return true;
         }
 
     }
@@ -300,6 +345,26 @@ void TextEdit::showLinenumbers() {
 
 void TextEdit::hideLinenumbers() {
     ui->textEdit->setMarginWidth(0,"");
+}
+
+void TextEdit::wordwrap() {
+    ui->textEdit->setWrapMode(QsciScintilla::WrapCharacter);
+}
+
+void TextEdit::wordwrapNone() {
+    ui->textEdit->setWrapMode(QsciScintilla::WrapNone);
+}
+
+int TextEdit::getLinecount() {
+    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    int linecount  = ui->textEdit->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION,pos);
+    return linecount;
+}
+
+int TextEdit::getColpos() {
+    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    int colpos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCOLUMN,pos);
+    return colpos;
 }
 
 void TextEdit::changetoBash() {
@@ -449,4 +514,5 @@ void TextEdit::on_textEdit_cursorPositionChanged(int line, int index) {
         ui->textEdit->setMarginType(1,QsciScintilla::NumberMargin);
         ui->textEdit->setMarginWidth(1,"00000");
     }
+
 }

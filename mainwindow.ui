@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>817</width>
-    <height>600</height>
+    <width>813</width>
+    <height>596</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -121,8 +121,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>817</width>
-     <height>22</height>
+     <width>813</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -155,7 +155,7 @@
    </widget>
    <widget class="QMenu" name="menuFind">
     <property name="title">
-     <string>Find</string>
+     <string>F&amp;ind</string>
     </property>
     <addaction name="actionFind"/>
     <addaction name="actionFind_Next"/>
@@ -165,11 +165,11 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
     <widget class="QMenu" name="menuLine_Ending">
      <property name="title">
-      <string>Line Ending</string>
+      <string>&amp;Line Ending</string>
      </property>
      <addaction name="actionWindows"/>
      <addaction name="actionUnix"/>
@@ -177,7 +177,7 @@
     </widget>
     <widget class="QMenu" name="menuSyntax">
      <property name="title">
-      <string>Syntax</string>
+      <string>S&amp;yntax</string>
      </property>
      <addaction name="actionBash"/>
      <addaction name="actionBatch_File"/>
@@ -209,13 +209,14 @@
     <addaction name="actionToolbar"/>
     <addaction name="actionShow_Tabs"/>
     <addaction name="actionShow_Linenumbers"/>
+    <addaction name="actionWordWrap"/>
     <addaction name="menuSyntax"/>
     <addaction name="menuLine_Ending"/>
     <addaction name="actionChange_Font"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_QT"/>
@@ -252,7 +253,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>New</string>
+    <string>&amp;New</string>
    </property>
    <property name="toolTip">
     <string>create a new document</string>
@@ -267,7 +268,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
    <property name="toolTip">
     <string>Open a document</string>
@@ -282,7 +283,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
    <property name="toolTip">
     <string>Save a document</string>
@@ -297,7 +298,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Save As</string>
+    <string>Sa&amp;ve As</string>
    </property>
    <property name="toolTip">
     <string>Save as </string>
@@ -312,7 +313,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
    <property name="toolTip">
     <string>Quit</string>
@@ -327,10 +328,13 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string>&amp;Cut</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionCopy">
@@ -339,7 +343,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string>C&amp;opy</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -351,7 +355,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string>&amp;Paste</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
@@ -363,7 +367,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Close</string>
+    <string>C&amp;lose</string>
    </property>
    <property name="toolTip">
     <string>Close document</string>
@@ -375,7 +379,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Reload</string>
+    <string>&amp;Reload</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -384,7 +388,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>&amp;Undo</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -393,7 +397,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>&amp;Redo</string>
    </property>
   </action>
   <action name="actionNew_Window">
@@ -402,7 +406,7 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>New Window</string>
+    <string>New &amp;Window</string>
    </property>
   </action>
   <action name="actionClose_Window">
@@ -411,32 +415,32 @@
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>Close Window</string>
+    <string>&amp;Close Window</string>
    </property>
   </action>
   <action name="actionClose_All_Files">
    <property name="text">
-    <string>Close All Files</string>
+    <string>Close All &amp;Files</string>
    </property>
   </action>
   <action name="actionFind">
    <property name="text">
-    <string>Find</string>
+    <string>&amp;Find</string>
    </property>
   </action>
   <action name="actionFind_Next">
    <property name="text">
-    <string>Find Next</string>
+    <string>Find &amp;Next</string>
    </property>
   </action>
   <action name="actionReplace">
    <property name="text">
-    <string>Replace</string>
+    <string>&amp;Replace</string>
    </property>
   </action>
   <action name="actionReplace_All">
    <property name="text">
-    <string>Replace All</string>
+    <string>R&amp;eplace All</string>
    </property>
   </action>
   <action name="actionSidebar">
@@ -447,7 +451,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Sidebar</string>
+    <string>&amp;Show Sidebar</string>
    </property>
   </action>
   <action name="actionStatusbar">
@@ -458,7 +462,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Statusbar</string>
+    <string>S&amp;how Statusbar</string>
    </property>
   </action>
   <action name="actionToolbar">
@@ -469,17 +473,17 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Toolbar</string>
+    <string>Sh&amp;ow Toolbar</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About </string>
+    <string>&amp;About </string>
    </property>
   </action>
   <action name="actionAbout_QT">
    <property name="text">
-    <string>About QT</string>
+    <string>About &amp;QT</string>
    </property>
   </action>
   <action name="actionShow_Tabs">
@@ -490,7 +494,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Tabs</string>
+    <string>Sho&amp;w Tabs</string>
    </property>
   </action>
   <action name="actionWindows">
@@ -498,7 +502,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Windows</string>
+    <string>&amp;Windows</string>
    </property>
   </action>
   <action name="actionUnix">
@@ -506,7 +510,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Unix</string>
+    <string>&amp;Unix</string>
    </property>
   </action>
   <action name="actionMac">
@@ -514,37 +518,37 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Mac</string>
+    <string>&amp;Mac</string>
    </property>
   </action>
   <action name="actionFind_All">
    <property name="text">
-    <string>Find All</string>
+    <string>F&amp;ind All</string>
    </property>
   </action>
   <action name="actionSelect_All">
    <property name="text">
-    <string>Select All</string>
+    <string>&amp;Select All</string>
    </property>
   </action>
   <action name="actionDeselect">
    <property name="text">
-    <string>Deselect</string>
+    <string>&amp;Deselect</string>
    </property>
   </action>
   <action name="actionOpen_Directory">
    <property name="text">
-    <string>Open Directory</string>
+    <string>Open &amp;Directory</string>
    </property>
   </action>
   <action name="actionBatch_File">
    <property name="text">
-    <string>Batch File</string>
+    <string>Batch F&amp;ile</string>
    </property>
   </action>
   <action name="actionCoffeeScript">
    <property name="text">
-    <string>CoffeeScript</string>
+    <string>C&amp;offeeScript</string>
    </property>
   </action>
   <action name="actionC">
@@ -554,7 +558,7 @@
   </action>
   <action name="actionJava">
    <property name="text">
-    <string>Java</string>
+    <string>&amp;Java</string>
    </property>
   </action>
   <action name="actionCSS">
@@ -564,22 +568,22 @@
   </action>
   <action name="actionHTML">
    <property name="text">
-    <string>HTML</string>
+    <string>&amp;HTML</string>
    </property>
   </action>
   <action name="actionJavaScript">
    <property name="text">
-    <string>JavaScript</string>
+    <string>Ja&amp;vaScript</string>
    </property>
   </action>
   <action name="actionJSON">
    <property name="text">
-    <string>JSON</string>
+    <string>JSO&amp;N</string>
    </property>
   </action>
   <action name="actionMakeFile">
    <property name="text">
-    <string>MakeFile</string>
+    <string>Ma&amp;keFile</string>
    </property>
   </action>
   <action name="actionMatLab">
@@ -589,22 +593,22 @@
   </action>
   <action name="actionPascal">
    <property name="text">
-    <string>Pascal</string>
+    <string>&amp;Pascal</string>
    </property>
   </action>
   <action name="actionPython">
    <property name="text">
-    <string>Python</string>
+    <string>P&amp;ython</string>
    </property>
   </action>
   <action name="actionBash">
    <property name="text">
-    <string>Bash</string>
+    <string>&amp;Bash</string>
    </property>
   </action>
   <action name="actionCMake">
    <property name="text">
-    <string>CMake</string>
+    <string>&amp;CMake</string>
    </property>
   </action>
   <action name="actionC_2">
@@ -614,42 +618,42 @@
   </action>
   <action name="actionFortan">
    <property name="text">
-    <string>Fortan</string>
+    <string>&amp;Fortan</string>
    </property>
   </action>
   <action name="actionXML">
    <property name="text">
-    <string>XML</string>
+    <string>&amp;XML</string>
    </property>
   </action>
   <action name="actionLua">
    <property name="text">
-    <string>Lua</string>
+    <string>&amp;Lua</string>
    </property>
   </action>
   <action name="actionMarkDown">
    <property name="text">
-    <string>MarkDown</string>
+    <string>&amp;MarkDown</string>
    </property>
   </action>
   <action name="actionPerl">
    <property name="text">
-    <string>Perl</string>
+    <string>P&amp;erl</string>
    </property>
   </action>
   <action name="actionRuby">
    <property name="text">
-    <string>Ruby</string>
+    <string>&amp;Ruby</string>
    </property>
   </action>
   <action name="actionSQL">
    <property name="text">
-    <string>SQL</string>
+    <string>&amp;SQL</string>
    </property>
   </action>
   <action name="actionTeX">
    <property name="text">
-    <string>TeX</string>
+    <string>&amp;TeX</string>
    </property>
   </action>
   <action name="actionC_3">
@@ -659,7 +663,7 @@
   </action>
   <action name="actionChange_Font">
    <property name="text">
-    <string>Change Font</string>
+    <string>&amp;Change Font</string>
    </property>
   </action>
   <action name="actionShow_Linenumbers">
@@ -670,7 +674,15 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Linenumbers</string>
+    <string>Show L&amp;inenumbers</string>
+   </property>
+  </action>
+  <action name="actionWordWrap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>WordWrap</string>
    </property>
   </action>
  </widget>

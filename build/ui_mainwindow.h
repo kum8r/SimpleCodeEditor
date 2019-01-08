@@ -90,6 +90,7 @@ public:
     QAction *actionC_3;
     QAction *actionChange_Font;
     QAction *actionShow_Linenumbers;
+    QAction *actionWordWrap;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter;
@@ -126,7 +127,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(817, 600);
+        MainWindow->resize(813, 596);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QStringLiteral("actionNew"));
         QIcon icon;
@@ -187,6 +188,7 @@ public:
             icon5.addFile(QStringLiteral("."), QSize(), QIcon::Normal, QIcon::Off);
         }
         actionCut->setIcon(icon5);
+        actionCut->setVisible(true);
         actionCopy = new QAction(MainWindow);
         actionCopy->setObjectName(QStringLiteral("actionCopy"));
         QIcon icon6;
@@ -361,6 +363,9 @@ public:
         actionShow_Linenumbers->setObjectName(QStringLiteral("actionShow_Linenumbers"));
         actionShow_Linenumbers->setCheckable(true);
         actionShow_Linenumbers->setChecked(true);
+        actionWordWrap = new QAction(MainWindow);
+        actionWordWrap->setObjectName(QStringLiteral("actionWordWrap"));
+        actionWordWrap->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -469,7 +474,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 817, 22));
+        menuBar->setGeometry(QRect(0, 0, 813, 24));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -525,6 +530,7 @@ public:
         menuView->addAction(actionToolbar);
         menuView->addAction(actionShow_Tabs);
         menuView->addAction(actionShow_Linenumbers);
+        menuView->addAction(actionWordWrap);
         menuView->addAction(menuSyntax->menuAction());
         menuView->addAction(menuLine_Ending->menuAction());
         menuView->addAction(actionChange_Font);
@@ -580,117 +586,118 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "SimpleCodeEditor", nullptr));
-        actionNew->setText(QApplication::translate("MainWindow", "New", nullptr));
+        actionNew->setText(QApplication::translate("MainWindow", "&New", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionNew->setToolTip(QApplication::translate("MainWindow", "create a new document", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_SHORTCUT
         actionNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionOpen->setText(QApplication::translate("MainWindow", "Open", nullptr));
+        actionOpen->setText(QApplication::translate("MainWindow", "&Open", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionOpen->setToolTip(QApplication::translate("MainWindow", "Open a document", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_SHORTCUT
         actionOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionSave->setText(QApplication::translate("MainWindow", "Save", nullptr));
+        actionSave->setText(QApplication::translate("MainWindow", "&Save", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionSave->setToolTip(QApplication::translate("MainWindow", "Save a document", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_SHORTCUT
         actionSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionSave_As->setText(QApplication::translate("MainWindow", "Save As", nullptr));
+        actionSave_As->setText(QApplication::translate("MainWindow", "Sa&ve As", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionSave_As->setToolTip(QApplication::translate("MainWindow", "Save as ", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_SHORTCUT
         actionSave_As->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+S", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionQuit->setText(QApplication::translate("MainWindow", "Quit", nullptr));
+        actionQuit->setText(QApplication::translate("MainWindow", "&Quit", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionQuit->setToolTip(QApplication::translate("MainWindow", "Quit", nullptr));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_SHORTCUT
         actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionCut->setText(QApplication::translate("MainWindow", "Cut", nullptr));
+        actionCut->setText(QApplication::translate("MainWindow", "&Cut", nullptr));
 #ifndef QT_NO_SHORTCUT
         actionCut->setShortcut(QApplication::translate("MainWindow", "Ctrl+X", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionCopy->setText(QApplication::translate("MainWindow", "Copy", nullptr));
+        actionCopy->setText(QApplication::translate("MainWindow", "C&opy", nullptr));
 #ifndef QT_NO_SHORTCUT
         actionCopy->setShortcut(QApplication::translate("MainWindow", "Ctrl+C", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionPaste->setText(QApplication::translate("MainWindow", "Paste", nullptr));
+        actionPaste->setText(QApplication::translate("MainWindow", "&Paste", nullptr));
 #ifndef QT_NO_SHORTCUT
         actionPaste->setShortcut(QApplication::translate("MainWindow", "Ctrl+V", nullptr));
 #endif // QT_NO_SHORTCUT
-        actionClose->setText(QApplication::translate("MainWindow", "Close", nullptr));
+        actionClose->setText(QApplication::translate("MainWindow", "C&lose", nullptr));
 #ifndef QT_NO_TOOLTIP
         actionClose->setToolTip(QApplication::translate("MainWindow", "Close document", nullptr));
 #endif // QT_NO_TOOLTIP
-        actionReload->setText(QApplication::translate("MainWindow", "Reload", nullptr));
-        actionUndo->setText(QApplication::translate("MainWindow", "Undo", nullptr));
-        actionRedo->setText(QApplication::translate("MainWindow", "Redo", nullptr));
-        actionNew_Window->setText(QApplication::translate("MainWindow", "New Window", nullptr));
-        actionClose_Window->setText(QApplication::translate("MainWindow", "Close Window", nullptr));
-        actionClose_All_Files->setText(QApplication::translate("MainWindow", "Close All Files", nullptr));
-        actionFind->setText(QApplication::translate("MainWindow", "Find", nullptr));
-        actionFind_Next->setText(QApplication::translate("MainWindow", "Find Next", nullptr));
-        actionReplace->setText(QApplication::translate("MainWindow", "Replace", nullptr));
-        actionReplace_All->setText(QApplication::translate("MainWindow", "Replace All", nullptr));
-        actionSidebar->setText(QApplication::translate("MainWindow", "Show Sidebar", nullptr));
-        actionStatusbar->setText(QApplication::translate("MainWindow", "Show Statusbar", nullptr));
-        actionToolbar->setText(QApplication::translate("MainWindow", "Show Toolbar", nullptr));
-        actionAbout->setText(QApplication::translate("MainWindow", "About ", nullptr));
-        actionAbout_QT->setText(QApplication::translate("MainWindow", "About QT", nullptr));
-        actionShow_Tabs->setText(QApplication::translate("MainWindow", "Show Tabs", nullptr));
-        actionWindows->setText(QApplication::translate("MainWindow", "Windows", nullptr));
-        actionUnix->setText(QApplication::translate("MainWindow", "Unix", nullptr));
-        actionMac->setText(QApplication::translate("MainWindow", "Mac", nullptr));
-        actionFind_All->setText(QApplication::translate("MainWindow", "Find All", nullptr));
-        actionSelect_All->setText(QApplication::translate("MainWindow", "Select All", nullptr));
-        actionDeselect->setText(QApplication::translate("MainWindow", "Deselect", nullptr));
-        actionOpen_Directory->setText(QApplication::translate("MainWindow", "Open Directory", nullptr));
-        actionBatch_File->setText(QApplication::translate("MainWindow", "Batch File", nullptr));
-        actionCoffeeScript->setText(QApplication::translate("MainWindow", "CoffeeScript", nullptr));
+        actionReload->setText(QApplication::translate("MainWindow", "&Reload", nullptr));
+        actionUndo->setText(QApplication::translate("MainWindow", "&Undo", nullptr));
+        actionRedo->setText(QApplication::translate("MainWindow", "&Redo", nullptr));
+        actionNew_Window->setText(QApplication::translate("MainWindow", "New &Window", nullptr));
+        actionClose_Window->setText(QApplication::translate("MainWindow", "&Close Window", nullptr));
+        actionClose_All_Files->setText(QApplication::translate("MainWindow", "Close All &Files", nullptr));
+        actionFind->setText(QApplication::translate("MainWindow", "&Find", nullptr));
+        actionFind_Next->setText(QApplication::translate("MainWindow", "Find &Next", nullptr));
+        actionReplace->setText(QApplication::translate("MainWindow", "&Replace", nullptr));
+        actionReplace_All->setText(QApplication::translate("MainWindow", "R&eplace All", nullptr));
+        actionSidebar->setText(QApplication::translate("MainWindow", "&Show Sidebar", nullptr));
+        actionStatusbar->setText(QApplication::translate("MainWindow", "S&how Statusbar", nullptr));
+        actionToolbar->setText(QApplication::translate("MainWindow", "Sh&ow Toolbar", nullptr));
+        actionAbout->setText(QApplication::translate("MainWindow", "&About ", nullptr));
+        actionAbout_QT->setText(QApplication::translate("MainWindow", "About &QT", nullptr));
+        actionShow_Tabs->setText(QApplication::translate("MainWindow", "Sho&w Tabs", nullptr));
+        actionWindows->setText(QApplication::translate("MainWindow", "&Windows", nullptr));
+        actionUnix->setText(QApplication::translate("MainWindow", "&Unix", nullptr));
+        actionMac->setText(QApplication::translate("MainWindow", "&Mac", nullptr));
+        actionFind_All->setText(QApplication::translate("MainWindow", "F&ind All", nullptr));
+        actionSelect_All->setText(QApplication::translate("MainWindow", "&Select All", nullptr));
+        actionDeselect->setText(QApplication::translate("MainWindow", "&Deselect", nullptr));
+        actionOpen_Directory->setText(QApplication::translate("MainWindow", "Open &Directory", nullptr));
+        actionBatch_File->setText(QApplication::translate("MainWindow", "Batch F&ile", nullptr));
+        actionCoffeeScript->setText(QApplication::translate("MainWindow", "C&offeeScript", nullptr));
         actionC->setText(QApplication::translate("MainWindow", "C#", nullptr));
-        actionJava->setText(QApplication::translate("MainWindow", "Java", nullptr));
+        actionJava->setText(QApplication::translate("MainWindow", "&Java", nullptr));
         actionCSS->setText(QApplication::translate("MainWindow", "CSS", nullptr));
-        actionHTML->setText(QApplication::translate("MainWindow", "HTML", nullptr));
-        actionJavaScript->setText(QApplication::translate("MainWindow", "JavaScript", nullptr));
-        actionJSON->setText(QApplication::translate("MainWindow", "JSON", nullptr));
-        actionMakeFile->setText(QApplication::translate("MainWindow", "MakeFile", nullptr));
+        actionHTML->setText(QApplication::translate("MainWindow", "&HTML", nullptr));
+        actionJavaScript->setText(QApplication::translate("MainWindow", "Ja&vaScript", nullptr));
+        actionJSON->setText(QApplication::translate("MainWindow", "JSO&N", nullptr));
+        actionMakeFile->setText(QApplication::translate("MainWindow", "Ma&keFile", nullptr));
         actionMatLab->setText(QApplication::translate("MainWindow", "MatLab", nullptr));
-        actionPascal->setText(QApplication::translate("MainWindow", "Pascal", nullptr));
-        actionPython->setText(QApplication::translate("MainWindow", "Python", nullptr));
-        actionBash->setText(QApplication::translate("MainWindow", "Bash", nullptr));
-        actionCMake->setText(QApplication::translate("MainWindow", "CMake", nullptr));
+        actionPascal->setText(QApplication::translate("MainWindow", "&Pascal", nullptr));
+        actionPython->setText(QApplication::translate("MainWindow", "P&ython", nullptr));
+        actionBash->setText(QApplication::translate("MainWindow", "&Bash", nullptr));
+        actionCMake->setText(QApplication::translate("MainWindow", "&CMake", nullptr));
         actionC_2->setText(QApplication::translate("MainWindow", "C++", nullptr));
-        actionFortan->setText(QApplication::translate("MainWindow", "Fortan", nullptr));
-        actionXML->setText(QApplication::translate("MainWindow", "XML", nullptr));
-        actionLua->setText(QApplication::translate("MainWindow", "Lua", nullptr));
-        actionMarkDown->setText(QApplication::translate("MainWindow", "MarkDown", nullptr));
-        actionPerl->setText(QApplication::translate("MainWindow", "Perl", nullptr));
-        actionRuby->setText(QApplication::translate("MainWindow", "Ruby", nullptr));
-        actionSQL->setText(QApplication::translate("MainWindow", "SQL", nullptr));
-        actionTeX->setText(QApplication::translate("MainWindow", "TeX", nullptr));
+        actionFortan->setText(QApplication::translate("MainWindow", "&Fortan", nullptr));
+        actionXML->setText(QApplication::translate("MainWindow", "&XML", nullptr));
+        actionLua->setText(QApplication::translate("MainWindow", "&Lua", nullptr));
+        actionMarkDown->setText(QApplication::translate("MainWindow", "&MarkDown", nullptr));
+        actionPerl->setText(QApplication::translate("MainWindow", "P&erl", nullptr));
+        actionRuby->setText(QApplication::translate("MainWindow", "&Ruby", nullptr));
+        actionSQL->setText(QApplication::translate("MainWindow", "&SQL", nullptr));
+        actionTeX->setText(QApplication::translate("MainWindow", "&TeX", nullptr));
         actionC_3->setText(QApplication::translate("MainWindow", "C", nullptr));
-        actionChange_Font->setText(QApplication::translate("MainWindow", "Change Font", nullptr));
-        actionShow_Linenumbers->setText(QApplication::translate("MainWindow", "Show Linenumbers", nullptr));
+        actionChange_Font->setText(QApplication::translate("MainWindow", "&Change Font", nullptr));
+        actionShow_Linenumbers->setText(QApplication::translate("MainWindow", "Show L&inenumbers", nullptr));
+        actionWordWrap->setText(QApplication::translate("MainWindow", "WordWrap", nullptr));
         pushButton->setText(QApplication::translate("MainWindow", "Find", nullptr));
         pushButton_2->setText(QApplication::translate("MainWindow", "Find All", nullptr));
         pushButton_3->setText(QApplication::translate("MainWindow", "Replace", nullptr));
         pushButton_4->setText(QApplication::translate("MainWindow", "Replace All", nullptr));
         menuFile->setTitle(QApplication::translate("MainWindow", "&File", nullptr));
         menuEdit->setTitle(QApplication::translate("MainWindow", "&Edit", nullptr));
-        menuFind->setTitle(QApplication::translate("MainWindow", "Find", nullptr));
-        menuView->setTitle(QApplication::translate("MainWindow", "View", nullptr));
-        menuLine_Ending->setTitle(QApplication::translate("MainWindow", "Line Ending", nullptr));
-        menuSyntax->setTitle(QApplication::translate("MainWindow", "Syntax", nullptr));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", nullptr));
+        menuFind->setTitle(QApplication::translate("MainWindow", "F&ind", nullptr));
+        menuView->setTitle(QApplication::translate("MainWindow", "&View", nullptr));
+        menuLine_Ending->setTitle(QApplication::translate("MainWindow", "&Line Ending", nullptr));
+        menuSyntax->setTitle(QApplication::translate("MainWindow", "S&yntax", nullptr));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "&Help", nullptr));
     } // retranslateUi
 
 };
