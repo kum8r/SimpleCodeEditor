@@ -9,27 +9,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //removing the space between layouts in mainwindow
     ui->verticalLayout->setSpacing(0);
-    ui->verticalLayout->setMargin(0);
-    ui->verticalLayout->setContentsMargins(0,0,0,0);
     ui->gridLayout->setSpacing(0);
-    ui->gridLayout->setMargin(0);
-    ui->gridLayout->setContentsMargins(0,0,0,0);
     ui->gridLayout_2->setSpacing(0);
-    ui->gridLayout_2->setMargin(0);
-    ui->gridLayout_2->setContentsMargins(0,0,0,0);
+//    ui->verticalLayout->setMargin(0);
+//    ui->gridLayout->setMargin(0);
+//    ui->gridLayout_2->setMargin(0);
+
+
+    //set splitter stretch
     ui->splitter->setStretchFactor(1,1);
-    ui->splitter->setHandleWidth(0);
+//    ui->splitter->setHandleWidth(0);
 
     //removing the space between layout in find widget
     ui->horizontalLayout->setSpacing(0);
-    ui->horizontalLayout->setMargin(0);
-    ui->horizontalLayout->setContentsMargins(0,0,0,0);
     ui->horizontalLayout_2->setSpacing(0);
-    ui->horizontalLayout_2->setMargin(0);
-    ui->horizontalLayout_2->setContentsMargins(0,0,0,0);
     ui->verticalLayout_2->setSpacing(0);
-    ui->verticalLayout_2->setMargin(0);
-    ui->verticalLayout_2->setContentsMargins(0,0,0,0);
+//    ui->horizontalLayout->setMargin(0);
+//    ui->horizontalLayout_2->setMargin(0);
+//    ui->verticalLayout_2->setMargin(0);
 
     //find widget
     ui->widget_2->hide();
@@ -41,25 +38,14 @@ MainWindow::MainWindow(QWidget *parent) :
     lineending->addAction(ui->actionUnix);
     lineending->addAction(ui->actionMac);
 
-    //statusBar
-    label = new QLabel();
-    ui->statusBar->addWidget(label);
     on_actionNew_triggered();
-
-
-    //timer
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()),this,SLOT(statusbar()));
-    timer->start(1000);
-
-    statusbar();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
-int MainWindow::newtab(QString tabname) {
+int MainWindow::newTab(QString tabname) {
     TextEdit *editor = new TextEdit;
     tabs.append(editor);
     int tabindex = ui->tabWidget->addTab(editor,tabname);
@@ -68,7 +54,7 @@ int MainWindow::newtab(QString tabname) {
 }
 
 void MainWindow::setEOL() {
-    if (QSysInfo::productType() == "windows" | QSysInfo::productType() == "winrt") {
+    if ((QSysInfo::productType() == "windows") | (QSysInfo::productType() == "winrt")) {
         ui->actionWindows->setChecked(true);
         on_actionWindows_triggered();
 
@@ -83,11 +69,68 @@ void MainWindow::setEOL() {
     }
 }
 
-QString MainWindow::settabname() {
 
+void MainWindow::disableMenu() {
+    ui->actionSave->setDisabled(true);
+    ui->actionSave_As->setDisabled(true);
+    ui->actionClose->setDisabled(true);
+    ui->actionClose_All_Files->setDisabled(true);
+    ui->actionReload->setDisabled(true);
+    ui->actionUndo->setDisabled(true);
+    ui->actionRedo->setDisabled(true);
+    ui->actionCut->setDisabled(true);
+    ui->actionCopy->setDisabled(true);
+    ui->actionPaste->setDisabled(true);
+    ui->actionSelect_All->setDisabled(true);
+    ui->actionDeselect->setDisabled(true);
+    ui->actionFind->setDisabled(true);
+    ui->actionFind_All->setDisabled(true);
+    ui->actionFind_Next->setDisabled(true);
+    ui->actionReplace->setDisabled(true);
+    ui->actionReplace_All->setDisabled(true);
+    ui->actionShow_Linenumbers->setDisabled(true);
+    ui->actionShow_Tabs->setDisabled(true);
+    ui->menuSyntax->setDisabled(true);
+    ui->menuLine_Ending->setDisabled(true);
+    ui->actionChange_Font->setDisabled(true);
+    ui->actionWordWrap->setDisabled(true);
+}
+
+void MainWindow::enableMenu() {
+    ui->actionSave->setEnabled(true);
+    ui->actionSave_As->setEnabled(true);
+    ui->actionClose->setEnabled(true);
+    ui->actionClose_All_Files->setEnabled(true);
+    ui->actionReload->setEnabled(true);
+    ui->actionUndo->setEnabled(true);
+    ui->actionRedo->setEnabled(true);
+    ui->actionCut->setEnabled(true);
+    ui->actionCopy->setEnabled(true);
+    ui->actionPaste->setEnabled(true);
+    ui->actionSelect_All->setEnabled(true);
+    ui->actionDeselect->setEnabled(true);
+    ui->actionFind->setEnabled(true);
+    ui->actionFind_All->setEnabled(true);
+    ui->actionFind_Next->setEnabled(true);
+    ui->actionReplace->setEnabled(true);
+    ui->actionReplace_All->setEnabled(true);
+    ui->actionShow_Linenumbers->setEnabled(true);
+    ui->actionShow_Tabs->setEnabled(true);
+    ui->menuSyntax->setEnabled(true);
+    ui->menuLine_Ending->setEnabled(true);
+    ui->actionChange_Font->setEnabled(true);
+    ui->actionWordWrap->setEnabled(true);
+}
+
+void MainWindow::timerstart() {
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()),this,SLOT(statusbar()));
+    timer->start(1000);
 }
 
 void MainWindow::statusbar() {
+    label = new QLabel();
+    ui->statusBar->addWidget(label);
     int colpos = tabs[ui->tabWidget->currentIndex()]->getColpos();
     int linecount = tabs[ui->tabWidget->currentIndex()]->getLinecount();
     label->setText("Col: " + QString::number(colpos) + " Line: " + QString::number(linecount));
@@ -104,18 +147,20 @@ void MainWindow::on_actionNew_triggered() {
         }
     }
     filelist.append(filename);
-    newtab(filename);
+    newTab(filename);
     setEOL();
 }
 
 void MainWindow::on_actionOpen_triggered() {
-    int tabindex = newtab("");
+    int tabindex = newTab("");
     if (tabs[tabindex]->openfile()) {
         filepath = tabs[tabindex]->filePath();
         for (int i = 0; i < filelist.length(); i++) {
             if (filelist[i] == filepath) {
                 ui->tabWidget->setCurrentIndex(i);
                 ui->tabWidget->removeTab(tabindex);
+                tabs.removeAt(tabindex);
+                setEOL();
                 return;
             }
         }
@@ -126,14 +171,24 @@ void MainWindow::on_actionOpen_triggered() {
     setEOL();
 }
 
+void MainWindow::on_actionOpen_Directory_triggered() {
+    QString filedir = QFileDialog::getExistingDirectory(this,tr("Open Directory"),QDir::homePath());
+    if (!filedir.isEmpty()) {
+        filemodel = new QFileSystemModel();
+        filemodel->setRootPath(filedir);
+        ui->listView->setModel(filemodel);
+        ui->listView->setRootIndex(filemodel->index(filedir));
+    }
+}
+
 void MainWindow::on_actionSave_triggered() {
-    //if two file name are same it will be confused
     int currentindex = ui->tabWidget->currentIndex();
     if (tabs[currentindex]->saveFile()) {
         filename = tabs[currentindex]->filename;
         ui->tabWidget->setTabText(currentindex,filename);
     }
     else {
+        tabs.removeAt(currentindex);
         ui->tabWidget->removeTab(currentindex);
     }
 }
@@ -145,15 +200,93 @@ void MainWindow::on_actionSave_As_triggered() {
         ui->tabWidget->setTabText(currentindex,filename);
     }
     else {
+        tabs.removeAt(currentindex);
         ui->tabWidget->removeTab(currentindex);
+    }
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index) {
+    if (tabs[index]->close() == true) {
+        QString tabname = ui->tabWidget->tabText(index);
+         for (int i = 0; i < tabname.length(); i++) {
+             if (tabname[i] == '&') {
+                 tabname.remove(i,1);
+             }
+         }
+        QStringList result = filelist.filter(tabname);
+        filelist.removeOne(result[0]);
+        tabs.removeAt(index);
+        ui->tabWidget->removeTab(index);
     }
 }
 
 void MainWindow::on_actionClose_triggered() {
     if (tabs[ui->tabWidget->currentIndex()]->close()) {
+        QString tabname = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+         for (int i = 0; i < tabname.length(); i++) {
+             if (tabname[i] == '&') {
+                 tabname.remove(i,1);
+             }
+         }
+        QStringList result = filelist.filter(tabname);
+        filelist.removeOne(result[0]);
+        tabs.removeAt(ui->tabWidget->currentIndex());
         ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
     }
 }
+
+void MainWindow::on_actionClose_All_Files_triggered() {
+    for (int i = 0;i <= ui->tabWidget->count(); i++) {
+        i =0;
+        ui->tabWidget->setCurrentIndex(i);
+        if (tabs[i]->returnchanged()) {
+            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save before exit ")+ ui->tabWidget->tabText(i),
+                                                                    tr("Do you want to save ")+ ui->tabWidget->tabText(i),
+                                                                    QMessageBox::Yes | QMessageBox::No , QMessageBox::Yes);
+            if (ask == QMessageBox::Yes) {
+                tabs[i]->saveFile();
+                ui->tabWidget->removeTab(i);
+                tabs.removeAt(i);
+            }
+            else if (ask == QMessageBox::No) {
+                ui->tabWidget->removeTab(i);
+                tabs.removeAt(i);
+            }
+        }
+        else {
+            ui->tabWidget->removeTab(i);
+            tabs.removeAt(i);
+        }
+    }
+}
+
+void MainWindow::on_actionQuit_triggered() {
+//    for (int i = 0;i <= ui->tabWidget->count(); i++) {
+//        if (tabs[i]->returnchanged()) {
+//            ui->tabWidget->setCurrentIndex(i);
+//            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save before exit ")+ ui->tabWidget->tabText(i),
+//                                                                    tr("Do you want to save ")+ ui->tabWidget->tabText(i),
+//                                                                    QMessageBox::Yes | QMessageBox::No , QMessageBox::Yes);
+//            if (ask == QMessageBox::Yes) {
+//                tabs[i]->saveFile();
+//            }
+//        }
+//    }
+    qApp->exit();
+}
+
+// opening file from filebrowser sidebar by double clicking
+void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
+    int tabindex = newTab("");
+    QString filepath = filemodel->filePath(index);
+    if (tabs[tabindex]->getfile(filepath)) {
+        QString filename = tabs[tabindex]->filename;
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),filename);
+    }
+    filelist.append(filepath);
+    setEOL();
+}
+
 
 void MainWindow::on_actionCut_triggered() {
     tabs[ui->tabWidget->currentIndex()]->cut();
@@ -188,40 +321,69 @@ void MainWindow::on_actionClose_Window_triggered() {
     this->close();
 }
 
-void MainWindow::on_actionClose_All_Files_triggered() {
-    //close files are not working properly
-    //except one tab is not closing
-    int tabcount = ui->tabWidget->count();
- //   QMessageBox::about(this,QString::number(tabcount),QString::number(ui->tabWidget->currentIndex()));
-
-   int i = 0;
-    while (i < tabcount) {
-        ui->tabWidget->setCurrentIndex(i);
-        QMessageBox::about(this,QString::number(i),ui->tabWidget->tabText(i));
-//        if (tabs[i]->closeAllFiles()) {
-//            ui->tabWidget->removeTab(i);
-
-//        }
-        i =i +1;
-    }
-
-}
-
 void MainWindow::on_actionFind_triggered() {
     ui->widget_2->show();
+    ui->widget_3->show();
 }
 
+//find text by clicking find button
 void MainWindow::on_pushButton_clicked() {
     QString searchtext = ui->lineEdit_2->text();
     tabs[ui->tabWidget->currentIndex()]->findText(searchtext);
 }
 
+//find next
+void MainWindow::on_actionFind_Next_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->findNext();
+}
+
+//find all
+void MainWindow::on_actionFind_All_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->findAll(ui->lineEdit_2->text());
+}
+
+//find all by clicking button
+void MainWindow::on_pushButton_2_clicked() {
+    tabs[ui->tabWidget->currentIndex()]->findAll(ui->lineEdit_2->text());
+}
+
+//close the find and replace widget
+void MainWindow::on_toolButton_clicked() {
+    ui->widget_3->hide();
+    ui->widget_4->hide();
+    ui->widget_2->hide();
+}
+
 void MainWindow::on_actionReplace_triggered() {
+    ui->widget_2->show();
+    ui->widget_3->show();
     ui->widget_4->show();
     QString replacetext = ui->lineEdit_3->text();
     tabs[ui->tabWidget->currentIndex()]->replaceText(replacetext);
 }
 
+//replace text by clicking replace button
+void MainWindow::on_pushButton_3_clicked() {
+    QString replacetext = ui->lineEdit_3->text();
+    tabs[ui->tabWidget->currentIndex()]->replaceText(replacetext);
+}
+
+//replace all the selected text
+void MainWindow::on_actionReplace_All_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->replaceAll(ui->lineEdit_3->text());
+}
+
+//replace all by clicking button
+void MainWindow::on_pushButton_4_clicked() {
+    tabs[ui->tabWidget->currentIndex()]->replaceAll(ui->lineEdit_3->text());
+}
+
+//hide the replace window
+void MainWindow::on_toolButton_2_clicked() {
+    ui->widget_4->hide();
+}
+
+//show or hide the filebrowser
 void MainWindow::on_actionSidebar_triggered() {
     if (ui->actionSidebar->isChecked()) {
         ui->widget->show();
@@ -249,36 +411,15 @@ void MainWindow::on_actionToolbar_triggered() {
     }
 }
 
-
 void MainWindow::on_actionAbout_triggered() {
     QMessageBox::about(this,tr("About SimpleCodeEditor"),tr("SimpleCodeEditor \n @kumar"));
 }
 
 void MainWindow::on_actionAbout_QT_triggered() {
-    QMessageBox::aboutQt(this,tr("About QT"));
+    QMessageBox::aboutQt(this,tr("About Qt"));
 }
 
-void MainWindow::on_actionFind_Next_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->findNext();
-}
-
-void MainWindow::on_actionReplace_All_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->replaceAll(ui->lineEdit_3->text());
-}
-
-void MainWindow::on_pushButton_3_clicked() {
-    QString replacetext = ui->lineEdit_3->text();
-    tabs[ui->tabWidget->currentIndex()]->replaceText(replacetext);
-}
-
-void MainWindow::on_pushButton_4_clicked() {
-    tabs[ui->tabWidget->currentIndex()]->replaceAll(ui->lineEdit_3->text());
-}
-
-void MainWindow::on_pushButton_2_clicked() {
-    tabs[ui->tabWidget->currentIndex()]->findAll(ui->lineEdit_2->text());
-}
-
+//show or hide the tabbar
 void MainWindow::on_actionShow_Tabs_triggered() {
     if (ui->actionShow_Tabs->isChecked()) {
         QTabBar *tabBar = ui->tabWidget->findChild<QTabBar *>();
@@ -308,26 +449,12 @@ void MainWindow::on_actionMac_triggered() {
     }
 }
 
-void MainWindow::on_actionFind_All_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->findAll(ui->lineEdit_2->text());
-}
-
 void MainWindow::on_actionSelect_All_triggered() {
     tabs[ui->tabWidget->currentIndex()]->selectAll();
 }
 
 void MainWindow::on_actionDeselect_triggered() {
     tabs[ui->tabWidget->currentIndex()]->deselect();
-}
-
-void MainWindow::on_actionOpen_Directory_triggered() {
-    QString filedir = QFileDialog::getExistingDirectory(this,tr("Open Directory"),QDir::homePath());
-    if (!filedir.isEmpty()) {
-        filemodel = new QFileSystemModel();
-        filemodel->setRootPath(filedir);
-        ui->listView->setModel(filemodel);
-        ui->listView->setRootIndex(filemodel->index(filedir));
-    }
 }
 
 void MainWindow::on_actionC_2_triggered() {
@@ -378,9 +505,7 @@ void MainWindow::on_actionMatLab_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoMatlab();
 }
 
-void MainWindow::on_actionQuit_triggered() {
-    qApp->exit();
-}
+
 
 void MainWindow::on_actionPascal_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoPascal();
@@ -438,15 +563,7 @@ void MainWindow::on_actionChange_Font_triggered() {
     }
 }
 
-void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
-    int tabindex = newtab("");
-    QString filepath = filemodel->filePath(index);
-    if (tabs[tabindex]->getfile(filepath)) {
-        QString filename = tabs[tabindex]->filename;
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),filename);
-    }
-    setEOL();
-}
+
 
 void MainWindow::on_actionShow_Linenumbers_triggered() {
     if (ui->actionShow_Linenumbers->isChecked()) {
@@ -457,12 +574,9 @@ void MainWindow::on_actionShow_Linenumbers_triggered() {
     }
 }
 
-void MainWindow::on_tabWidget_tabCloseRequested(int index) {
-    if (tabs[index]->close() == true) {
-        ui->tabWidget->removeTab(index);
-    }
-}
 
+
+//search in file browser
 void MainWindow::on_lineEdit_returnPressed() {
     ui->listView->keyboardSearch(ui->lineEdit->text());
 }
@@ -474,4 +588,29 @@ void MainWindow::on_actionWordWrap_triggered() {
     else {
         tabs[ui->tabWidget->currentIndex()]->wordwrapNone();
     }
+}
+
+//if current tab is changed
+void MainWindow::on_tabWidget_currentChanged(int index) {
+    if (index == -1) {
+        disableMenu();
+        //timer->stop();
+    }
+    else {
+       enableMenu();
+        //timer->start(1000);
+        //timerstart();
+
+    }
+}
+
+
+
+
+
+
+//settings dialog is shown
+void MainWindow::on_actionSettings_triggered() {
+    Settings *settings = new Settings();
+    settings->exec();
 }

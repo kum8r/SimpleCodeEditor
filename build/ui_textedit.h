@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'textedit.ui'
 **
-** Created by: Qt User Interface Compiler version 5.11.2
+** Created by: Qt User Interface Compiler version 5.12.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -26,12 +26,13 @@ public:
     void setupUi(QDialog *TextEdit)
     {
         if (TextEdit->objectName().isEmpty())
-            TextEdit->setObjectName(QStringLiteral("TextEdit"));
-        TextEdit->resize(398, 298);
+            TextEdit->setObjectName(QString::fromUtf8("TextEdit"));
+        TextEdit->resize(396, 296);
         gridLayout = new QGridLayout(TextEdit);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         textEdit = new QsciScintilla(TextEdit);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
+        textEdit->setObjectName(QString::fromUtf8("textEdit"));
 
         gridLayout->addWidget(textEdit, 0, 0, 1, 1);
 

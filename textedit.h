@@ -35,6 +35,7 @@
 
 
 
+
 namespace Ui {
 class TextEdit;
 }
@@ -52,6 +53,7 @@ public:
     QString filename;
     QString dirname;
     QMap <QVariant, QVariant> lexers;
+    bool changed;
 
     bool getfile(QString filepath);
     bool openfile();
@@ -89,6 +91,11 @@ public:
     int getLinecount();
     int getColpos();
 
+    void fontSize();
+
+    bool returnchanged();
+    void setChanged(bool changed);
+
     //lexers
     void changetoBash();
     void changetoBatch();
@@ -118,6 +125,8 @@ private slots:
 
 
     void on_textEdit_cursorPositionChanged(int line, int index);
+
+    void on_textEdit_textChanged();
 
 private:
     Ui::TextEdit *ui;

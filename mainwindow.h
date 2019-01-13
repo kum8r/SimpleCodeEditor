@@ -12,6 +12,7 @@
 #include <QFileSystemModel>
 #include <QLabel>
 #include "Qsci/qsciscintilla.h"
+#include "settings.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,10 +37,14 @@ public:
     QLabel *label;
     QTimer *timer;
 
+
 //functions
-    int newtab(QString tabname);
+    int newTab(QString tabname);
     void setEOL();
     QString settabname();
+    void disableMenu();
+    void enableMenu();
+    void timerstart();
 
 
 private slots:
@@ -177,6 +182,16 @@ private slots:
 
     void statusbar();
 
+
+    void on_tabWidget_currentChanged(int index);
+
+
+
+    void on_toolButton_clicked();
+
+    void on_toolButton_2_clicked();
+
+    void on_actionSettings_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -13,6 +13,9 @@ TextEdit::TextEdit(QWidget *parent) :
     ui->gridLayout->setMargin(0);
     ui->gridLayout->setContentsMargins(0,0,0,0);
 
+    //check if text is changed or not
+    changed = false;
+
     //list of syntaxes
      lexers.insert('None', "None");
      lexers.insert('Bash', "QsciLexerBash");
@@ -127,6 +130,7 @@ bool TextEdit::saveFileas() {
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
         out << ui->textEdit->text();
+        setFileName(filepath);
         return true;
     }
     else {
@@ -134,50 +138,6 @@ bool TextEdit::saveFileas() {
     }
 }
 
-bool TextEdit::closeAllFiles() {
-    QFileInfo fileinfo(filepath);
-    if (fileinfo.exists()) {
-        filename = fileinfo.fileName();
-        QFile file(filepath);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            while (!in.atEnd()) {
-                line = in.readAll();
-            }
-            if (line == ui->textEdit->text()) {
-                    return true;
-            }
-            else {
-                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+ filename,QMessageBox::Yes | QMessageBox::No ,
-                                                                        QMessageBox::Yes);
-                if (ask == QMessageBox::Yes) {
-                    saveFile();
-                    return true;
-                }
-                else if (ask == QMessageBox::No) {
-                    return true;
-                }
-            }
-        }
-    }
-    else {
-        if (ui->textEdit->text() != "") {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),QMessageBox::Yes | QMessageBox::No ,
-                                                                    QMessageBox::Yes);
-            if (ask == QMessageBox::Yes) {
-                saveFile();
-                return true;
-            }
-            else if (ask == QMessageBox::No) {
-                return true;
-            }
-        }
-        else {
-            return true;
-        }
-
-    }
-}
 
 bool TextEdit::close() {
     QFileInfo fileinfo(filepath);
@@ -193,9 +153,9 @@ bool TextEdit::close() {
                     return true;
             }
             else {
-                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+ filename,QMessageBox::Yes | QMessageBox::No |
-                                                                        QMessageBox::Cancel,
-                                                                        QMessageBox::Cancel);
+                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+
+                                                                        filename,QMessageBox::Yes | QMessageBox::No |
+                                                                        QMessageBox::Cancel,QMessageBox::Cancel);
                 if (ask == QMessageBox::Yes) {
                     saveFile();
                     return true;
@@ -211,7 +171,8 @@ bool TextEdit::close() {
     }
     else {
         if (!(ui->textEdit->text()=="")) {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),QMessageBox::Yes | QMessageBox::No |
+            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),
+                                                                    QMessageBox::Yes | QMessageBox::No |
                                                                    QMessageBox::Cancel, QMessageBox::Cancel);
             if (ask == QMessageBox::Yes) {
                 saveFile();
@@ -231,6 +192,7 @@ bool TextEdit::close() {
     }
     return false;
 }
+
 
 void TextEdit::cut() {
     ui->textEdit->cut();
@@ -365,6 +327,18 @@ int TextEdit::getColpos() {
     int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
     int colpos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCOLUMN,pos);
     return colpos;
+}
+
+void TextEdit::fontSize() {
+
+}
+
+bool TextEdit::returnchanged() {
+    return changed;
+}
+
+void TextEdit::setChanged(bool changed) {
+    this->changed  = changed;
 }
 
 void TextEdit::changetoBash() {
@@ -515,4 +489,8 @@ void TextEdit::on_textEdit_cursorPositionChanged(int line, int index) {
         ui->textEdit->setMarginWidth(1,"00000");
     }
 
+}
+
+void TextEdit::on_textEdit_textChanged() {
+    changed = true;
 }

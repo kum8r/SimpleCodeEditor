@@ -27,15 +27,18 @@ CONFIG += c++11 qscintilla2
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    textedit.cpp
+    textedit.cpp \
+    settings.cpp
 
 HEADERS += \
         mainwindow.h \
-    textedit.h
+    textedit.h \
+    settings.h
 
 FORMS += \
         mainwindow.ui \
-    textedit.ui
+    textedit.ui \
+    settings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

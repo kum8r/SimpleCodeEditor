@@ -1,16 +1,16 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'textedit.h'
+** Meta object code from reading C++ file 'settings.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../textedit.h"
+#include "../settings.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'textedit.h' doesn't include <QObject>."
+#error "The header file 'settings.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.12.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -20,37 +20,35 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_TextEdit_t {
-    QByteArrayData data[6];
-    char stringdata0[79];
+struct qt_meta_stringdata_Settings_t {
+    QByteArrayData data[4];
+    char stringdata0[39];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_TextEdit_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_Settings_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_TextEdit_t qt_meta_stringdata_TextEdit = {
+static const qt_meta_stringdata_Settings_t qt_meta_stringdata_Settings = {
     {
-QT_MOC_LITERAL(0, 0, 8), // "TextEdit"
-QT_MOC_LITERAL(1, 9, 33), // "on_textEdit_cursorPositionCha..."
-QT_MOC_LITERAL(2, 43, 0), // ""
-QT_MOC_LITERAL(3, 44, 4), // "line"
-QT_MOC_LITERAL(4, 49, 5), // "index"
-QT_MOC_LITERAL(5, 55, 23) // "on_textEdit_textChanged"
+QT_MOC_LITERAL(0, 0, 8), // "Settings"
+QT_MOC_LITERAL(1, 9, 23), // "on_spinBox_valueChanged"
+QT_MOC_LITERAL(2, 33, 0), // ""
+QT_MOC_LITERAL(3, 34, 4) // "arg1"
 
     },
-    "TextEdit\0on_textEdit_cursorPositionChanged\0"
-    "\0line\0index\0on_textEdit_textChanged"
+    "Settings\0on_spinBox_valueChanged\0\0"
+    "arg1"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_TextEdit[] = {
+static const uint qt_meta_data_Settings[] = {
 
  // content:
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -58,65 +56,62 @@ static const uint qt_meta_data_TextEdit[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x08 /* Private */,
-       5,    0,   29,    2, 0x08 /* Private */,
+       1,    1,   19,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,    3,    4,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    3,
 
        0        // eod
 };
 
-void TextEdit::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void Settings::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        TextEdit *_t = static_cast<TextEdit *>(_o);
+        Settings *_t = static_cast<Settings *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_textEdit_cursorPositionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 1: _t->on_textEdit_textChanged(); break;
+        case 0: _t->on_spinBox_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject TextEdit::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject Settings::staticMetaObject = { {
     &QDialog::staticMetaObject,
-    qt_meta_stringdata_TextEdit.data,
-    qt_meta_data_TextEdit,
+    qt_meta_stringdata_Settings.data,
+    qt_meta_data_Settings,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *TextEdit::metaObject() const
+const QMetaObject *Settings::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *TextEdit::qt_metacast(const char *_clname)
+void *Settings::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_TextEdit.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_Settings.stringdata0))
         return static_cast<void*>(this);
     return QDialog::qt_metacast(_clname);
 }
 
-int TextEdit::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int Settings::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 1;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 1)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 2;
+        _id -= 1;
     }
     return _id;
 }
