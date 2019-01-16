@@ -7,26 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //removing the space between layouts in mainwindow
-    ui->verticalLayout->setSpacing(0);
-    ui->gridLayout->setSpacing(0);
-    ui->gridLayout_2->setSpacing(0);
-//    ui->verticalLayout->setMargin(0);
-//    ui->gridLayout->setMargin(0);
-//    ui->gridLayout_2->setMargin(0);
-
-
     //set splitter stretch
     ui->splitter->setStretchFactor(1,1);
-//    ui->splitter->setHandleWidth(0);
-
-    //removing the space between layout in find widget
-    ui->horizontalLayout->setSpacing(0);
-    ui->horizontalLayout_2->setSpacing(0);
-    ui->verticalLayout_2->setSpacing(0);
-//    ui->horizontalLayout->setMargin(0);
-//    ui->horizontalLayout_2->setMargin(0);
-//    ui->verticalLayout_2->setMargin(0);
 
     //find widget
     ui->widget_2->hide();
@@ -37,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
     lineending->addAction(ui->actionWindows);
     lineending->addAction(ui->actionUnix);
     lineending->addAction(ui->actionMac);
+
+    //statusbar
+    label = new QLabel();
+    ui->statusBar->addWidget(label);
+    timerstart();
 
     on_actionNew_triggered();
 }
@@ -68,7 +55,6 @@ void MainWindow::setEOL() {
         on_actionUnix_triggered();
     }
 }
-
 
 void MainWindow::disableMenu() {
     ui->actionSave->setDisabled(true);
@@ -125,12 +111,10 @@ void MainWindow::enableMenu() {
 void MainWindow::timerstart() {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(statusbar()));
-    timer->start(1000);
+   // timer->start(1000);
 }
 
 void MainWindow::statusbar() {
-    label = new QLabel();
-    ui->statusBar->addWidget(label);
     int colpos = tabs[ui->tabWidget->currentIndex()]->getColpos();
     int linecount = tabs[ui->tabWidget->currentIndex()]->getLinecount();
     label->setText("Col: " + QString::number(colpos) + " Line: " + QString::number(linecount));
@@ -165,11 +149,42 @@ void MainWindow::on_actionOpen_triggered() {
             }
         }
         filename = tabs[tabindex]->fileName();
-        ui->tabWidget->setTabText(tabindex,filename);
+        for (int i = 0; i < ui->tabWidget->count(); i++) {
+            QString tabname = ui->tabWidget->tabText(i);
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
+             }
+
+                 if (filename == tabname) {
+                    QFileInfo fileinfo(filepath);
+                    QDir dir = fileinfo.dir();
+                    filename = dir.dirName() + "/" + filename;
+                    ui->tabWidget->setTabText(tabindex,filename);
+                    QStringList result = filelist.filter(tabname);
+                    QFileInfo fileinfo1(result[0]);
+                    QDir dir1 = fileinfo1.dir();
+                    tabname = dir1.dirName() + "/" + tabname;
+                    ui->tabWidget->setTabText(i,tabname);
+                    filelist.append(filepath);
+                    setEOL();
+                    return;
+                 }
+
     }
+    filename = tabs[tabindex]->fileName();
+    ui->tabWidget->setTabText(tabindex,filename);
     filelist.append(filepath);
     setEOL();
+    }
+    else {
+        QMessageBox::about(this,tr("Error"),tr("Not Opened"));
+        ui->tabWidget->removeTab(tabindex);
+        tabs.removeAt(tabindex);
+    }
 }
+
 
 void MainWindow::on_actionOpen_Directory_triggered() {
     QString filedir = QFileDialog::getExistingDirectory(this,tr("Open Directory"),QDir::homePath());
@@ -178,6 +193,55 @@ void MainWindow::on_actionOpen_Directory_triggered() {
         filemodel->setRootPath(filedir);
         ui->listView->setModel(filemodel);
         ui->listView->setRootIndex(filemodel->index(filedir));
+    }
+}
+
+// opening file from filebrowser sidebar by double clicking
+void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
+    int tabindex = newTab("");
+    QString filepath = filemodel->filePath(index);
+    for (int i = 0; i < filelist.length(); i++) {
+        if (filelist[i] == filepath) {
+            ui->tabWidget->setCurrentIndex(i);
+            ui->tabWidget->removeTab(tabindex);
+            tabs.removeAt(tabindex);
+            setEOL();
+            return;
+        }
+    }
+    if (tabs[tabindex]->getfile(filepath)) {
+        QString filename = tabs[tabindex]->fileName();
+        for (int i = 0; i < ui->tabWidget->count(); i++) {
+            QString tabname = ui->tabWidget->tabText(i);
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
+             }
+                 if (filename == tabname) {
+                    QFileInfo fileinfo(filepath);
+                    QDir dir = fileinfo.dir();
+                    filename = dir.dirName() + "/" + filename;
+                    ui->tabWidget->setTabText(tabindex,filename);
+                    QStringList result = filelist.filter(tabname);
+                    QFileInfo fileinfo1(result[0]);
+                    QDir dir1 = fileinfo1.dir();
+                    tabname = dir1.dirName() + "/" + tabname;
+                    ui->tabWidget->setTabText(i,tabname);
+                    filelist.append(filepath);
+                    setEOL();
+                    return;
+                 }
+    }
+    filename = tabs[tabindex]->fileName();
+    ui->tabWidget->setTabText(tabindex,filename);
+    filelist.append(filepath);
+    setEOL();
+    }
+    else {
+        QMessageBox::about(this,tr("Error"),tr("Not Opened"));
+        ui->tabWidget->removeTab(tabindex);
+        tabs.removeAt(tabindex);
     }
 }
 
@@ -261,32 +325,9 @@ void MainWindow::on_actionClose_All_Files_triggered() {
 }
 
 void MainWindow::on_actionQuit_triggered() {
-//    for (int i = 0;i <= ui->tabWidget->count(); i++) {
-//        if (tabs[i]->returnchanged()) {
-//            ui->tabWidget->setCurrentIndex(i);
-//            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save before exit ")+ ui->tabWidget->tabText(i),
-//                                                                    tr("Do you want to save ")+ ui->tabWidget->tabText(i),
-//                                                                    QMessageBox::Yes | QMessageBox::No , QMessageBox::Yes);
-//            if (ask == QMessageBox::Yes) {
-//                tabs[i]->saveFile();
-//            }
-//        }
-//    }
+    on_actionClose_All_Files_triggered();
     qApp->exit();
 }
-
-// opening file from filebrowser sidebar by double clicking
-void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
-    int tabindex = newTab("");
-    QString filepath = filemodel->filePath(index);
-    if (tabs[tabindex]->getfile(filepath)) {
-        QString filename = tabs[tabindex]->filename;
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),filename);
-    }
-    filelist.append(filepath);
-    setEOL();
-}
-
 
 void MainWindow::on_actionCut_triggered() {
     tabs[ui->tabWidget->currentIndex()]->cut();
@@ -301,7 +342,18 @@ void MainWindow::on_actionPaste_triggered() {
 }
 
 void MainWindow::on_actionReload_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->reload();
+    if (tabs[ui->tabWidget->currentIndex()]->returnchanged()) {
+     QMessageBox::StandardButton ask = QMessageBox::question(this,tr("reload"),tr("The Document is modified. do you"
+                                                                                  "want to save"),
+                                                             QMessageBox::Yes | QMessageBox::No ,
+                                                             QMessageBox::No);
+     if (ask == QMessageBox::Yes) {
+         tabs[ui->tabWidget->currentIndex()]->reload();
+     }
+    }
+    else {
+        tabs[ui->tabWidget->currentIndex()]->reload();
+    }
 }
 
 void MainWindow::on_actionUndo_triggered() {
@@ -318,6 +370,7 @@ void MainWindow::on_actionNew_Window_triggered() {
 }
 
 void MainWindow::on_actionClose_Window_triggered() {
+    on_actionClose_All_Files_triggered();
     this->close();
 }
 
@@ -431,6 +484,8 @@ void MainWindow::on_actionShow_Tabs_triggered() {
     }
 }
 
+
+//setEOL - End Of line
 void MainWindow::on_actionWindows_triggered() {
     if (ui->actionWindows->isChecked()) {
         tabs[ui->tabWidget->currentIndex()]->windowsEOL();
@@ -457,6 +512,8 @@ void MainWindow::on_actionDeselect_triggered() {
     tabs[ui->tabWidget->currentIndex()]->deselect();
 }
 
+
+//Set Lexer - Syntax
 void MainWindow::on_actionC_2_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoCpp();
 }
@@ -504,8 +561,6 @@ void MainWindow::on_actionMakeFile_triggered() {
 void MainWindow::on_actionMatLab_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoMatlab();
 }
-
-
 
 void MainWindow::on_actionPascal_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoPascal();
@@ -563,8 +618,6 @@ void MainWindow::on_actionChange_Font_triggered() {
     }
 }
 
-
-
 void MainWindow::on_actionShow_Linenumbers_triggered() {
     if (ui->actionShow_Linenumbers->isChecked()) {
         tabs[ui->tabWidget->currentIndex()]->showLinenumbers();
@@ -573,8 +626,6 @@ void MainWindow::on_actionShow_Linenumbers_triggered() {
         tabs[ui->tabWidget->currentIndex()]->hideLinenumbers();
     }
 }
-
-
 
 //search in file browser
 void MainWindow::on_lineEdit_returnPressed() {
@@ -594,20 +645,13 @@ void MainWindow::on_actionWordWrap_triggered() {
 void MainWindow::on_tabWidget_currentChanged(int index) {
     if (index == -1) {
         disableMenu();
-        //timer->stop();
+        timer->stop();
     }
     else {
        enableMenu();
-        //timer->start(1000);
-        //timerstart();
-
+        timer->start(1000);
     }
 }
-
-
-
-
-
 
 //settings dialog is shown
 void MainWindow::on_actionSettings_triggered() {

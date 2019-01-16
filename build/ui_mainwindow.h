@@ -132,7 +132,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(809, 592);
+        MainWindow->resize(807, 590);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
         QIcon icon;
@@ -376,23 +376,24 @@ public:
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
-        gridLayout->setSpacing(6);
+        gridLayout->setSpacing(0);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
         splitter = new QSplitter(centralWidget);
         splitter->setObjectName(QString::fromUtf8("splitter"));
+        splitter->setMidLineWidth(0);
         splitter->setOrientation(Qt::Horizontal);
         splitter->setHandleWidth(0);
         widget = new QWidget(splitter);
         widget->setObjectName(QString::fromUtf8("widget"));
         gridLayout_2 = new QGridLayout(widget);
-        gridLayout_2->setSpacing(6);
+        gridLayout_2->setSpacing(0);
         gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
         verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(6);
+        verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         lineEdit = new QLineEdit(widget);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
@@ -432,14 +433,14 @@ public:
         sizePolicy1.setHeightForWidth(widget_2->sizePolicy().hasHeightForWidth());
         widget_2->setSizePolicy(sizePolicy1);
         verticalLayout_2 = new QVBoxLayout(widget_2);
-        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setSpacing(0);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
         widget_3 = new QWidget(widget_2);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
         horizontalLayout = new QHBoxLayout(widget_3);
-        horizontalLayout->setSpacing(6);
+        horizontalLayout->setSpacing(0);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -470,7 +471,7 @@ public:
         widget_4 = new QWidget(widget_2);
         widget_4->setObjectName(QString::fromUtf8("widget_4"));
         horizontalLayout_2 = new QHBoxLayout(widget_4);
-        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setSpacing(0);
         horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -504,7 +505,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 809, 23));
+        menuBar->setGeometry(QRect(0, 0, 807, 24));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);

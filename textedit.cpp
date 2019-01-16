@@ -66,19 +66,7 @@ bool TextEdit::getfile(QString filepath) {
 
 bool TextEdit::openfile() {
     filepath = QFileDialog::getOpenFileName(this,tr("Open File"),QDir::homePath());
-    QFile file(filepath);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            line = in.readAll();
-        }
-        ui->textEdit->setText(line);
-    }
-    else {
-        return false;
-    }
-    setFileName(filepath);
-    return true;
+    return getfile(filepath);
 }
 
 void TextEdit::setFileName(QString filepath) {
