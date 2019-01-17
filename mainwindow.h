@@ -44,7 +44,7 @@ public:
     QString settabname();
     void disableMenu();
     void enableMenu();
-    void timerstart();
+    void filetype(QString filepath);
 
 
 private slots:
@@ -180,18 +180,29 @@ private slots:
 
     void on_actionWordWrap_triggered();
 
-    void statusbar();
-
+    void statusbar(int line,int index);
 
     void on_tabWidget_currentChanged(int index);
-
-
 
     void on_toolButton_clicked();
 
     void on_toolButton_2_clicked();
 
     void on_actionSettings_triggered();
+
+    void on_pushButton_5_clicked();
+
+    void on_actionD_triggered();
+
+    void on_actionFortan77_triggered();
+
+    void on_actionDiff_triggered();
+
+    void on_actionProperties_triggered();
+
+    void on_actionYAML_triggered();
+
+    void on_actionNormal_triggered();
 
 private:
     Ui::MainWindow *ui;

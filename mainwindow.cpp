@@ -23,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //statusbar
     label = new QLabel();
     ui->statusBar->addWidget(label);
-    timerstart();
 
     on_actionNew_triggered();
+
 }
 
 MainWindow::~MainWindow() {
@@ -108,16 +108,92 @@ void MainWindow::enableMenu() {
     ui->actionWordWrap->setEnabled(true);
 }
 
-void MainWindow::timerstart() {
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()),this,SLOT(statusbar()));
-   // timer->start(1000);
+void MainWindow::filetype(QString filepath) {
+    QFileInfo fileinfo(filepath);
+    QString extension = fileinfo.completeSuffix();
+    if ((extension == "cpp") | (extension == "c") | (extension == "h") | (extension == "cc") | (extension == "cxx")
+             | (extension == "hpp") | (extension == "hxx")) {
+        on_actionC_2_triggered();
+    }
+    else if ((extension == "cs")) {
+        on_actionC_triggered();
+    }
+    else if ((extension == "cmake")) {
+        on_actionCMake_triggered();
+    }
+    else if ((extension == "litcoffee")) {
+        on_actionCoffeeScript_triggered();
+    }
+    else if ((extension == "css")) {
+        on_actionCSS_triggered();
+    }
+    else if ((extension == "d")) {
+        on_actionD_triggered();
+    }
+    else if ((extension == "diff") | (extension == "patch")) {
+        on_actionDiff_triggered();
+    }
+    else if ((extension == "f") | (extension == "for") | (extension == "f90")| (extension == "f95") | (extension == "f2k")) {
+        on_actionFortan_triggered();
+    }
+    else if ((extension == "f77")) {
+        on_actionFortan77_triggered();
+    }
+    else if ((extension == "htm") | (extension == "html") | (extension == "shtml") | (extension == "xhtml")| (extension == "hta")) {
+        on_actionHTML_triggered();
+    }
+    else if ((extension == "java")) {
+        on_actionJava_triggered();
+    }
+    else if ((extension == "js")) {
+        on_actionJavaScript_triggered();
+    }
+    else if ((extension == "lua")) {
+        on_actionLua_triggered();
+    }
+    else if ((extension == "mak")) {
+        on_actionMakeFile_triggered();
+    }
+    else if ((extension == "m")) {
+        on_actionMatLab_triggered();
+    }
+    else if ((extension == "pas") | (extension == "inc")) {
+        on_actionPascal_triggered();
+    }
+    else if ((extension == "pl") | (extension == "pm") | (extension == "plx")) {
+        on_actionPerl_triggered();
+    }
+    else if ((extension == "ps")) {
+        on_actionPascal_triggered();
+    }
+    else if ((extension == "properties")) {
+       on_actionProperties_triggered();
+    }
+    else if ((extension == "py") | (extension == "pyw")) {
+        on_actionPython_triggered();
+    }
+    else if ((extension == "rb") | (extension == "rbw")) {
+        on_actionRuby_triggered();
+    }
+    else if ((extension == "sql")) {
+        on_actionSQL_triggered();
+    }
+    else if ((extension == "tex")) {
+        on_actionTeX_triggered();
+    }
+    else if ((extension == "xml") | (extension == "xsml") | (extension == "xsl") | (extension == "kml") | (extension == "wsdl") | (extension == "xlf") | (extension == "xliff")) {
+        on_actionXML_triggered();
+    }
+    else if (extension == "yml") {
+        on_actionYAML_triggered();
+    }
+    else {
+        on_actionNormal_triggered();
+    }
 }
 
-void MainWindow::statusbar() {
-    int colpos = tabs[ui->tabWidget->currentIndex()]->getColpos();
-    int linecount = tabs[ui->tabWidget->currentIndex()]->getLinecount();
-    label->setText("Col: " + QString::number(colpos) + " Line: " + QString::number(linecount));
+void MainWindow::statusbar(int line,int index) {
+    label->setText("Col: " + QString::number(line) + " Line: " + QString::number(index));
 }
 
 void MainWindow::on_actionNew_triggered() {
@@ -169,6 +245,7 @@ void MainWindow::on_actionOpen_triggered() {
                     ui->tabWidget->setTabText(i,tabname);
                     filelist.append(filepath);
                     setEOL();
+                    filetype(filepath);
                     return;
                  }
 
@@ -176,6 +253,7 @@ void MainWindow::on_actionOpen_triggered() {
     filename = tabs[tabindex]->fileName();
     ui->tabWidget->setTabText(tabindex,filename);
     filelist.append(filepath);
+    filetype(filepath);
     setEOL();
     }
     else {
@@ -229,6 +307,7 @@ void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
                     tabname = dir1.dirName() + "/" + tabname;
                     ui->tabWidget->setTabText(i,tabname);
                     filelist.append(filepath);
+                    filetype(filepath);
                     setEOL();
                     return;
                  }
@@ -236,6 +315,7 @@ void MainWindow::on_listView_doubleClicked(const QModelIndex &index) {
     filename = tabs[tabindex]->fileName();
     ui->tabWidget->setTabText(tabindex,filename);
     filelist.append(filepath);
+    filetype(filepath);
     setEOL();
     }
     else {
@@ -250,6 +330,8 @@ void MainWindow::on_actionSave_triggered() {
     if (tabs[currentindex]->saveFile()) {
         filename = tabs[currentindex]->filename;
         ui->tabWidget->setTabText(currentindex,filename);
+        filepath = tabs[currentindex]->filePath();
+        filetype(filepath);
     }
     else {
         tabs.removeAt(currentindex);
@@ -261,7 +343,9 @@ void MainWindow::on_actionSave_As_triggered() {
     int currentindex = ui->tabWidget->currentIndex();
     if (tabs[currentindex]->saveFileas()) {
         QString filename = tabs[currentindex]->filename;
-        ui->tabWidget->setTabText(currentindex,filename);
+        ui->tabWidget->setTabText(currentindex,filename);QString
+        filepath = tabs[currentindex]->filePath();
+        filetype(filepath);
     }
     else {
         tabs.removeAt(currentindex);
@@ -269,8 +353,54 @@ void MainWindow::on_actionSave_As_triggered() {
     }
 }
 
+void MainWindow::on_actionReload_triggered() {
+    if (tabs[ui->tabWidget->currentIndex()]->returnchanged()) {
+     QMessageBox::StandardButton ask = QMessageBox::question(this,tr("reload"),tr("The Document is modified. do you"
+                                                                                  "want to save"),
+                                                             QMessageBox::Yes | QMessageBox::No ,
+                                                             QMessageBox::No);
+     if (ask == QMessageBox::Yes) {
+         tabs[ui->tabWidget->currentIndex()]->reload();
+     }
+    }
+    else {
+        tabs[ui->tabWidget->currentIndex()]->reload();
+    }
+}
+
 void MainWindow::on_tabWidget_tabCloseRequested(int index) {
-    if (tabs[index]->close() == true) {
+    if (tabs[index]->returnchanged()) {
+        QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save before close "),
+                                                                tr("Do you want to save "),
+                                                                QMessageBox::Yes | QMessageBox::No ,
+                                                                QMessageBox::No);
+        if (ask == QMessageBox::Yes) {
+            tabs[index]->saveFile();
+            QString tabname = ui->tabWidget->tabText(index);
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
+             }
+            QStringList result = filelist.filter(tabname);
+            filelist.removeOne(result[0]);
+            ui->tabWidget->removeTab(index);
+            tabs.removeAt(index);
+        }
+        else if (ask == QMessageBox::No) {
+            QString tabname = ui->tabWidget->tabText(index);
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
+             }
+            QStringList result = filelist.filter(tabname);
+            filelist.removeOne(result[0]);
+            ui->tabWidget->removeTab(index);
+            tabs.removeAt(index);
+        }
+    }
+    else {
         QString tabname = ui->tabWidget->tabText(index);
          for (int i = 0; i < tabname.length(); i++) {
              if (tabname[i] == '&') {
@@ -279,23 +409,42 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index) {
          }
         QStringList result = filelist.filter(tabname);
         filelist.removeOne(result[0]);
-        tabs.removeAt(index);
         ui->tabWidget->removeTab(index);
+        tabs.removeAt(index);
     }
 }
 
 void MainWindow::on_actionClose_triggered() {
-    if (tabs[ui->tabWidget->currentIndex()]->close()) {
-        QString tabname = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-         for (int i = 0; i < tabname.length(); i++) {
-             if (tabname[i] == '&') {
-                 tabname.remove(i,1);
+    if (tabs[ui->tabWidget->currentIndex()]->returnchanged()) {
+        QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save before close "),
+                                                                tr("Do you want to save "),
+                                                                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel ,
+                                                                QMessageBox::Cancel);
+        if (ask == QMessageBox::Yes) {
+            tabs[ui->tabWidget->currentIndex()]->saveFile();
+            QString tabname = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
              }
-         }
-        QStringList result = filelist.filter(tabname);
-        filelist.removeOne(result[0]);
-        tabs.removeAt(ui->tabWidget->currentIndex());
-        ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+            QStringList result = filelist.filter(tabname);
+            filelist.removeOne(result[0]);
+            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+            tabs.removeAt(ui->tabWidget->currentIndex());
+        }
+        else if (ask == QMessageBox::No) {
+            QString tabname = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+             for (int i = 0; i < tabname.length(); i++) {
+                 if (tabname[i] == '&') {
+                     tabname.remove(i,1);
+                 }
+             }
+            QStringList result = filelist.filter(tabname);
+            filelist.removeOne(result[0]);
+            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+            tabs.removeAt(ui->tabWidget->currentIndex());
+        }
     }
 }
 
@@ -324,6 +473,16 @@ void MainWindow::on_actionClose_All_Files_triggered() {
     }
 }
 
+void MainWindow::on_actionNew_Window_triggered() {
+    newwindow = new MainWindow ();
+    newwindow->show();
+}
+
+void MainWindow::on_actionClose_Window_triggered() {
+    on_actionClose_All_Files_triggered();
+    this->close();
+}
+
 void MainWindow::on_actionQuit_triggered() {
     on_actionClose_All_Files_triggered();
     qApp->exit();
@@ -341,21 +500,6 @@ void MainWindow::on_actionPaste_triggered() {
     tabs[ui->tabWidget->currentIndex()]->paste();
 }
 
-void MainWindow::on_actionReload_triggered() {
-    if (tabs[ui->tabWidget->currentIndex()]->returnchanged()) {
-     QMessageBox::StandardButton ask = QMessageBox::question(this,tr("reload"),tr("The Document is modified. do you"
-                                                                                  "want to save"),
-                                                             QMessageBox::Yes | QMessageBox::No ,
-                                                             QMessageBox::No);
-     if (ask == QMessageBox::Yes) {
-         tabs[ui->tabWidget->currentIndex()]->reload();
-     }
-    }
-    else {
-        tabs[ui->tabWidget->currentIndex()]->reload();
-    }
-}
-
 void MainWindow::on_actionUndo_triggered() {
     tabs[ui->tabWidget->currentIndex()]->undo();
 }
@@ -364,14 +508,12 @@ void MainWindow::on_actionRedo_triggered() {
     tabs[ui->tabWidget->currentIndex()]->redo();
 }
 
-void MainWindow::on_actionNew_Window_triggered() {
-    newwindow = new MainWindow ();
-    newwindow->show();
+void MainWindow::on_actionSelect_All_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->selectAll();
 }
 
-void MainWindow::on_actionClose_Window_triggered() {
-    on_actionClose_All_Files_triggered();
-    this->close();
+void MainWindow::on_actionDeselect_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->deselect();
 }
 
 void MainWindow::on_actionFind_triggered() {
@@ -398,6 +540,11 @@ void MainWindow::on_actionFind_All_triggered() {
 //find all by clicking button
 void MainWindow::on_pushButton_2_clicked() {
     tabs[ui->tabWidget->currentIndex()]->findAll(ui->lineEdit_2->text());
+}
+
+//find prev by click button
+void MainWindow::on_pushButton_5_clicked() {
+    tabs[ui->tabWidget->currentIndex()]->findPrev(ui->lineEdit_2->text());
 }
 
 //close the find and replace widget
@@ -446,6 +593,7 @@ void MainWindow::on_actionSidebar_triggered() {
     }
 }
 
+//show or hide the statusbar
 void MainWindow::on_actionStatusbar_triggered() {
     if (ui->actionStatusbar->isChecked()) {
         ui->statusBar->show();
@@ -455,6 +603,7 @@ void MainWindow::on_actionStatusbar_triggered() {
     }
 }
 
+//show or hide the toolbar
 void MainWindow::on_actionToolbar_triggered() {
     if (ui->actionToolbar->isChecked()) {
         ui->mainToolBar->show();
@@ -462,14 +611,6 @@ void MainWindow::on_actionToolbar_triggered() {
     else {
         ui->mainToolBar->hide();
     }
-}
-
-void MainWindow::on_actionAbout_triggered() {
-    QMessageBox::about(this,tr("About SimpleCodeEditor"),tr("SimpleCodeEditor \n @kumar"));
-}
-
-void MainWindow::on_actionAbout_QT_triggered() {
-    QMessageBox::aboutQt(this,tr("About Qt"));
 }
 
 //show or hide the tabbar
@@ -484,6 +625,13 @@ void MainWindow::on_actionShow_Tabs_triggered() {
     }
 }
 
+void MainWindow::on_actionAbout_triggered() {
+    QMessageBox::about(this,tr("About SimpleCodeEditor"),tr("SimpleCodeEditor \n @kumar"));
+}
+
+void MainWindow::on_actionAbout_QT_triggered() {
+    QMessageBox::aboutQt(this,tr("About Qt"));
+}
 
 //setEOL - End Of line
 void MainWindow::on_actionWindows_triggered() {
@@ -504,15 +652,6 @@ void MainWindow::on_actionMac_triggered() {
     }
 }
 
-void MainWindow::on_actionSelect_All_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->selectAll();
-}
-
-void MainWindow::on_actionDeselect_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->deselect();
-}
-
-
 //Set Lexer - Syntax
 void MainWindow::on_actionC_2_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoCpp();
@@ -531,7 +670,7 @@ void MainWindow::on_actionCoffeeScript_triggered() {
 }
 
 void MainWindow::on_actionC_triggered() {
-    tabs[ui->tabWidget->currentIndex()]->changetoCpp();
+    tabs[ui->tabWidget->currentIndex()]->changetoCSharp();
 }
 
 void MainWindow::on_actionJava_triggered() {
@@ -645,11 +784,11 @@ void MainWindow::on_actionWordWrap_triggered() {
 void MainWindow::on_tabWidget_currentChanged(int index) {
     if (index == -1) {
         disableMenu();
-        timer->stop();
     }
     else {
        enableMenu();
-        timer->start(1000);
+       connect(tabs[index],SIGNAL(cursorchanged(int,int)),this,SLOT(statusbar(int,int)));
+
     }
 }
 
@@ -657,4 +796,31 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
 void MainWindow::on_actionSettings_triggered() {
     Settings *settings = new Settings();
     settings->exec();
+}
+
+
+
+void MainWindow::on_actionD_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoD();
+}
+
+void MainWindow::on_actionFortan77_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoFortan77();
+}
+
+void MainWindow::on_actionDiff_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoDiff();
+}
+
+void MainWindow::on_actionProperties_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoProp();
+}
+
+void MainWindow::on_actionYAML_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoYAML();
+}
+
+void MainWindow::on_actionNormal_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->changetoNormal();
+
 }

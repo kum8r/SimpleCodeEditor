@@ -6,24 +6,29 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include "Qsci/qsciscintilla.h"
+#include "Qsci/qsciapis.h"
 #include "Qsci/qscilexer.h"
 #include "Qsci/qscilexerbash.h"
 #include "Qsci/qscilexercmake.h"
 #include "Qsci/qscilexercoffeescript.h"
 #include "Qsci/qscilexercpp.h"
 #include "Qsci/qscilexercsharp.h"
+#include "Qsci/qscilexerd.h"
+#include "Qsci/qscilexerdiff.h"
 #include "Qsci/qscilexerbatch.h"
 #include "Qsci/qscilexerjava.h"
 #include "Qsci/qscilexerjavascript.h"
 #include "Qsci/qscilexerjson.h"
 #include "Qsci/qscilexerhtml.h"
 #include "Qsci/qscilexerfortran.h"
+#include "Qsci/qscilexerfortran77.h"
 #include "Qsci/qscilexercss.h"
 #include "Qsci/qscilexerlua.h"
 #include "Qsci/qscilexerlua.h"
 #include "Qsci/qscilexermakefile.h"
 #include "Qsci/qscilexermarkdown.h"
 #include "Qsci/qscilexermatlab.h"
+#include "Qsci/qscilexerproperties.h"
 #include "Qsci/qscilexerpascal.h"
 #include "Qsci/qscilexerperl.h"
 #include "Qsci/qscilexerpython.h"
@@ -32,9 +37,6 @@
 #include "Qsci/qscilexertex.h"
 #include "Qsci/qscilexerxml.h"
 #include "Qsci/qscilexeryaml.h"
-
-
-
 
 namespace Ui {
 class TextEdit;
@@ -48,6 +50,8 @@ public:
     explicit TextEdit(QWidget *parent = 0);
     ~TextEdit();
 
+
+    //variables
     QString filepath;
     QString line;
     QString filename;
@@ -55,6 +59,7 @@ public:
     QMap <QVariant, QVariant> lexers;
     bool changed;
 
+    //functions
     bool getfile(QString filepath);
     bool openfile();
     void setFileName(QString filepath);
@@ -63,8 +68,6 @@ public:
     QString filePath();
     bool saveFile();
     bool saveFileas();
-    bool close();
-    bool closeAllFiles();
     void cut();
     void copy();
     void paste();
@@ -73,6 +76,7 @@ public:
     void redo();
     void findText(QString str);
     void findNext();
+    void findPrev(QString str);
     void replaceText(QString str);
     void replaceAll(QString str);
     void findAll(QString str);
@@ -81,7 +85,6 @@ public:
     void osxEOL();
     void selectAll();
     void deselect();
-    void changesyntax(QString str);
     void changeFont(QFont);
     QFont getFont();
     void showLinenumbers();
@@ -90,19 +93,23 @@ public:
     void wordwrapNone();
     int getLinecount();
     int getColpos();
-
     void fontSize();
-
     bool returnchanged();
     void setChanged(bool changed);
 
     //lexers
+    void changetoNormal();
     void changetoBash();
     void changetoBatch();
     void changetoCpp();
     void changetoCMake();
     void changetoCScript();
     void changetoCSharp();
+    void changetoD();
+    void changetoFortan77();
+    void changetoYAML();
+    void changetoProp();
+    void changetoDiff();
     void changetoJava();
     void changetoCSS();
     void changetoJavascipt();
@@ -123,10 +130,16 @@ public:
 
 private slots:
 
-
     void on_textEdit_cursorPositionChanged(int line, int index);
 
     void on_textEdit_textChanged();
+
+    void texteditcursorchanged(int l,int i);
+
+
+signals:
+    void cursorchanged(int l,int i);
+
 
 private:
     Ui::TextEdit *ui;

@@ -8,46 +8,47 @@ TextEdit::TextEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //removing spaces from gridlayout
-    ui->gridLayout->setSpacing(0);
-    ui->gridLayout->setMargin(0);
-    ui->gridLayout->setContentsMargins(0,0,0,0);
-
     //check if text is changed or not
     changed = false;
-
-    //list of syntaxes
-     lexers.insert('None', "None");
-     lexers.insert('Bash', "QsciLexerBash");
-     lexers.insert("Batch","QsciLexerBatch");
-     lexers.insert("CMake", "QsciLexerCMake");
-     lexers.insert("CoffeeScript", "QsciLexerCoffeeScript");
-     lexers.insert("C++", "QsciLexerCPP");
-     lexers.insert("C#","QsciLexerCSharp");
-     lexers.insert("CSS","QsciLexerCSS");
-     lexers.insert("Fortran","QsciLexerFortran");
-     lexers.insert("HTML","QsciLexerHTML");
-     lexers.insert("Java","QsciLexerJava");
-     lexers.insert("JavaScript","QsciLexerJavaScript");
-     lexers.insert("JSON","QsciLexerJSON");
-     lexers.insert("Lua","QsciLexerLua");
-     lexers.insert("Makefile","QsciLexerMakefile");
-     lexers.insert("Markdown","QsciLexerMarkdown");
-     lexers.insert("Matlab","QsciLexerMatlab");
-     lexers.insert("Pascal","QsciLexerPascal");
-     lexers.insert("Perl","QsciLexerPerl");
-     lexers.insert("Python","QsciLexerPython");
-     lexers.insert("Ruby","QsciLexerRuby");
-     lexers.insert("SQL","QsciLexerSQL");
-     lexers.insert("TeX","QsciLexerTeX");
-     lexers.insert("YAML","QsciLexerYAML");
-     lexers.insert("XML","QsciLexerXML");
 }
 
 TextEdit::~TextEdit() {
     delete ui;
 }
 
+void TextEdit::setFileName(QString filepath) {
+    QFileInfo fileinfo(filepath);
+    filename = fileinfo.fileName();
+}
+
+QString TextEdit::fileName() {
+    return filename;
+}
+
+bool TextEdit::returnchanged() {
+    return changed;
+}
+
+void TextEdit::setChanged(bool changed) {
+    this->changed  = changed;
+}
+
+void TextEdit::on_textEdit_textChanged() {
+    changed = true;
+}
+
+QString TextEdit::dirName() {
+    QFileInfo fileinfo(filepath);
+    QDir dir = fileinfo.dir();
+    dirname = dir.dirName();
+    return dirname;
+}
+
+QString TextEdit::filePath() {
+    return filepath;
+}
+
+//set the text from file to textedit
 bool TextEdit::getfile(QString filepath) {
     QFile file(filepath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -69,26 +70,6 @@ bool TextEdit::openfile() {
     return getfile(filepath);
 }
 
-void TextEdit::setFileName(QString filepath) {
-    QFileInfo fileinfo(filepath);
-    filename = fileinfo.fileName();
-}
-
-QString TextEdit::fileName() {
-    return filename;
-}
-
-QString TextEdit::dirName() {
-    QFileInfo fileinfo(filepath);
-    QDir dir = fileinfo.dir();
-    dirname = dir.dirName();
-    return dirname;
-}
-
-QString TextEdit::filePath() {
-    return filepath;
-}
-
 bool TextEdit::saveFile() {
     QFileInfo fileinfo(filepath);
     if (fileinfo.exists()) {
@@ -103,12 +84,7 @@ bool TextEdit::saveFile() {
         }
     }
     else {
-        if (saveFileas()) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return  saveFileas();
     }
 }
 
@@ -126,74 +102,6 @@ bool TextEdit::saveFileas() {
     }
 }
 
-
-bool TextEdit::close() {
-    QFileInfo fileinfo(filepath);
-    if (fileinfo.exists()) {
-        filename = fileinfo.fileName();
-        QFile file(filepath);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            while (!in.atEnd()) {
-                line = in.readAll();
-            }
-            if (line == ui->textEdit->text()) {
-                    return true;
-            }
-            else {
-                QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file")+
-                                                                        filename,QMessageBox::Yes | QMessageBox::No |
-                                                                        QMessageBox::Cancel,QMessageBox::Cancel);
-                if (ask == QMessageBox::Yes) {
-                    saveFile();
-                    return true;
-                }
-                else if (ask == QMessageBox::No) {
-                    return true;
-                }
-                else if (ask == QMessageBox::Cancel) {
-                    return false;
-                }
-            }
-        }
-    }
-    else {
-        if (!(ui->textEdit->text()=="")) {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save"),tr("Do You want to Save file"),
-                                                                    QMessageBox::Yes | QMessageBox::No |
-                                                                   QMessageBox::Cancel, QMessageBox::Cancel);
-            if (ask == QMessageBox::Yes) {
-                saveFile();
-                return true;
-            }
-            else if (ask == QMessageBox::No) {
-                return true;
-            }
-            else if (ask == QMessageBox::Cancel) {
-                return false;
-            }
-        }
-        else {
-            return true;
-        }
-
-    }
-    return false;
-}
-
-
-void TextEdit::cut() {
-    ui->textEdit->cut();
-}
-
-void TextEdit::copy() {
-    ui->textEdit->copy();
-}
-
-void TextEdit::paste() {
-    ui->textEdit->paste();
-}
-
 void TextEdit::reload() {
     QFileInfo fileinfo (filepath);
     if (fileinfo.exists()) {
@@ -208,6 +116,18 @@ void TextEdit::reload() {
     }
 }
 
+void TextEdit::cut() {
+    ui->textEdit->cut();
+}
+
+void TextEdit::copy() {
+    ui->textEdit->copy();
+}
+
+void TextEdit::paste() {
+    ui->textEdit->paste();
+}
+
 void TextEdit::undo() {
     ui->textEdit->undo();
 }
@@ -216,17 +136,25 @@ void TextEdit::redo() {
     ui->textEdit->redo();
 }
 
+void TextEdit::selectAll() {
+    ui->textEdit->selectAll();
+}
+
+void TextEdit::deselect() {
+    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    ui->textEdit->SendScintilla(QsciScintilla::SCI_SETEMPTYSELECTION,pos);
+}
+
 void TextEdit::findText(QString str) {
     ui->textEdit->findFirst(str,false,false,false,true);
 }
 
-void TextEdit::replaceText(QString str) {
-    QString replacetext = str;
-    ui->textEdit->replace(replacetext);
+void TextEdit::findNext() {
+    ui->textEdit->findNext();
 }
 
-void TextEdit::replaceAll(QString str){
-    ui->textEdit->replaceSelectedText(str);
+void TextEdit::findPrev(QString str) {
+    ui->textEdit->findFirst(str,false,false,false,true,false);
 }
 
 void TextEdit::findAll(QString str) {
@@ -241,11 +169,19 @@ void TextEdit::findAll(QString str) {
             while(cur != end)
             {
                 cur = docText.indexOf(str,cur+1);
-                ui->textEdit->SendScintilla(QsciScintillaBase::SCI_INDICATORFILLRANGE,cur,
-                    str.length());
+                ui->textEdit->SendScintilla(QsciScintillaBase::SCI_INDICATORFILLRANGE,cur,str.length());
             }
         }
     }
+}
+
+void TextEdit::replaceText(QString str) {
+    QString replacetext = str;
+    ui->textEdit->replace(replacetext);
+}
+
+void TextEdit::replaceAll(QString str){
+    ui->textEdit->replaceSelectedText(str);
 }
 
 void TextEdit::windowsEOL() {
@@ -258,21 +194,6 @@ void TextEdit::unixEOL() {
 
 void TextEdit::osxEOL() {
     ui->textEdit->setEolMode(QsciScintilla::EolMac);
-}
-
-void TextEdit::selectAll() {
-    ui->textEdit->selectAll();
-}
-
-void TextEdit::deselect() {
-    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
-    ui->textEdit->SendScintilla(QsciScintilla::SCI_SETEMPTYSELECTION,pos);
-}
-
-void TextEdit::changesyntax(QString str) {
-    QVariant key = lexers.key(str);
-    QsciLexerBash *l = new QsciLexerBash ();
-    ui->textEdit->setLexer(l);
 }
 
 void TextEdit::changeFont(QFont font) {
@@ -305,28 +226,14 @@ void TextEdit::wordwrapNone() {
     ui->textEdit->setWrapMode(QsciScintilla::WrapNone);
 }
 
-int TextEdit::getLinecount() {
-    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
-    int linecount  = ui->textEdit->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION,pos);
-    return linecount;
-}
-
-int TextEdit::getColpos() {
-    int pos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
-    int colpos = ui->textEdit->SendScintilla(QsciScintilla::SCI_GETCOLUMN,pos);
-    return colpos;
-}
 
 void TextEdit::fontSize() {
 
 }
 
-bool TextEdit::returnchanged() {
-    return changed;
-}
-
-void TextEdit::setChanged(bool changed) {
-    this->changed  = changed;
+void TextEdit::changetoNormal() {
+    ui->textEdit->setLexer(0);
+    changeFont(getFont());
 }
 
 void TextEdit::changetoBash() {
@@ -345,6 +252,10 @@ void TextEdit::changetoCpp() {
     QsciLexerCPP *lexer = new QsciLexerCPP ();
     ui->textEdit->setLexer(lexer);
     changeFont(getFont());
+    QsciAPIs *api = new QsciAPIs(lexer);
+    api->add("int");
+    api->prepare();
+    ui->textEdit->setAutoCompletionSource(QsciScintilla::AcsAll);
 }
 
 void TextEdit::changetoCMake() {
@@ -361,6 +272,36 @@ void TextEdit::changetoCScript() {
 
 void TextEdit::changetoCSharp() {
     QsciLexerCSharp *lexer = new QsciLexerCSharp ();
+    ui->textEdit->setLexer(lexer);
+    changeFont(getFont());
+}
+
+void TextEdit::changetoD() {
+    QsciLexerD *lexer = new QsciLexerD();
+    ui->textEdit->setLexer(lexer);
+    changeFont(getFont());
+}
+
+void TextEdit::changetoFortan77() {
+    QsciLexerFortran77 *lexer = new QsciLexerFortran77();
+    ui->textEdit->setLexer(lexer);
+    changeFont(getFont());
+}
+
+void TextEdit::changetoYAML() {
+    QsciLexerYAML *lexer = new QsciLexerYAML();
+    ui->textEdit->setLexer(lexer);
+    changeFont(getFont());
+}
+
+void TextEdit::changetoProp() {
+    QsciLexerProperties *lexer = new QsciLexerProperties();
+    ui->textEdit->setLexer(lexer);
+    changeFont(getFont());
+}
+
+void TextEdit::changetoDiff() {
+    QsciLexerDiff *lexer = new QsciLexerDiff();
     ui->textEdit->setLexer(lexer);
     changeFont(getFont());
 }
@@ -467,11 +408,8 @@ void TextEdit::changetoTex() {
     changeFont(getFont());
 }
 
-void TextEdit::findNext() {
-    ui->textEdit->findNext();
-}
-
 void TextEdit::on_textEdit_cursorPositionChanged(int line, int index) {
+    texteditcursorchanged(line,index);
     if (line  > 999) {
         ui->textEdit->setMarginType(1,QsciScintilla::NumberMargin);
         ui->textEdit->setMarginWidth(1,"00000");
@@ -479,6 +417,8 @@ void TextEdit::on_textEdit_cursorPositionChanged(int line, int index) {
 
 }
 
-void TextEdit::on_textEdit_textChanged() {
-    changed = true;
+void TextEdit::texteditcursorchanged(int l,int i) {
+    emit cursorchanged(l,i);
 }
+
+

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
-    <height>590</height>
+    <width>803</width>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -165,6 +165,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="text">
+             <string>Find Prev</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
              <string>Find All</string>
@@ -233,7 +240,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>807</width>
+     <width>803</width>
      <height>24</height>
     </rect>
    </property>
@@ -292,6 +299,7 @@
      <property name="title">
       <string>S&amp;yntax</string>
      </property>
+     <addaction name="actionNormal"/>
      <addaction name="actionBash"/>
      <addaction name="actionBatch_File"/>
      <addaction name="actionCMake"/>
@@ -300,7 +308,10 @@
      <addaction name="actionC_2"/>
      <addaction name="actionC"/>
      <addaction name="actionCSS"/>
+     <addaction name="actionD"/>
      <addaction name="actionFortan"/>
+     <addaction name="actionFortan77"/>
+     <addaction name="actionDiff"/>
      <addaction name="actionHTML"/>
      <addaction name="actionJava"/>
      <addaction name="actionJavaScript"/>
@@ -311,11 +322,13 @@
      <addaction name="actionMatLab"/>
      <addaction name="actionPascal"/>
      <addaction name="actionPerl"/>
+     <addaction name="actionProperties"/>
      <addaction name="actionPython"/>
      <addaction name="actionRuby"/>
      <addaction name="actionSQL"/>
      <addaction name="actionTeX"/>
      <addaction name="actionXML"/>
+     <addaction name="actionYAML"/>
     </widget>
     <addaction name="actionSidebar"/>
     <addaction name="actionStatusbar"/>
@@ -801,6 +814,36 @@
   <action name="actionSettings">
    <property name="text">
     <string>S&amp;ettings</string>
+   </property>
+  </action>
+  <action name="actionD">
+   <property name="text">
+    <string>D</string>
+   </property>
+  </action>
+  <action name="actionFortan77">
+   <property name="text">
+    <string>Fortan77</string>
+   </property>
+  </action>
+  <action name="actionDiff">
+   <property name="text">
+    <string>Diff</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="text">
+    <string>Properties</string>
+   </property>
+  </action>
+  <action name="actionYAML">
+   <property name="text">
+    <string>YAML</string>
+   </property>
+  </action>
+  <action name="actionNormal">
+   <property name="text">
+    <string>Normal</string>
    </property>
   </action>
  </widget>
