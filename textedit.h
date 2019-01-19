@@ -61,7 +61,7 @@ public:
 
     //functions
     bool getfile(QString filepath);
-    bool openfile();
+    bool openfile(QString filepath);
     void setFileName(QString filepath);
     QString fileName();
     QString dirName();
@@ -96,6 +96,9 @@ public:
     void fontSize();
     bool returnchanged();
     void setChanged(bool changed);
+    void converttouppercase();
+    void converttolowercase();
+    void converttotitlecase();
 
     //lexers
     void changetoNormal();

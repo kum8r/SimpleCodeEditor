@@ -33,6 +33,27 @@ void TextEdit::setChanged(bool changed) {
     this->changed  = changed;
 }
 
+void TextEdit::converttouppercase() {
+    ui->textEdit->replaceSelectedText(ui->textEdit->selectedText().toUpper());
+}
+
+void TextEdit::converttolowercase() {
+    ui->textEdit->replaceSelectedText(ui->textEdit->selectedText().toLower());
+}
+
+void TextEdit::converttotitlecase() {
+    QString str = ui->textEdit->selectedText();
+    for (int i = 0; i < str.length(); i++) {
+        if (str[i].isSpace()) {
+            str[i + 1] = str[i+1].toUpper();
+        }
+        else {
+            str[i] = str[i].toLower();
+        }
+    }
+    ui->textEdit->replaceSelectedText(str);
+}
+
 void TextEdit::on_textEdit_textChanged() {
     changed = true;
 }
@@ -50,6 +71,7 @@ QString TextEdit::filePath() {
 
 //set the text from file to textedit
 bool TextEdit::getfile(QString filepath) {
+    this->filepath = filepath;
     QFile file(filepath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream in(&file);
@@ -65,9 +87,8 @@ bool TextEdit::getfile(QString filepath) {
     return true;
 }
 
-bool TextEdit::openfile() {
-    filepath = QFileDialog::getOpenFileName(this,tr("Open File"),QDir::homePath());
-    return getfile(filepath);
+bool TextEdit::openfile(QString filepath) {
+
 }
 
 bool TextEdit::saveFile() {

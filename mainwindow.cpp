@@ -212,28 +212,29 @@ void MainWindow::on_actionNew_triggered() {
 }
 
 void MainWindow::on_actionOpen_triggered() {
-    int tabindex = newTab("");
-    if (tabs[tabindex]->openfile()) {
-        filepath = tabs[tabindex]->filePath();
-        for (int i = 0; i < filelist.length(); i++) {
-            if (filelist[i] == filepath) {
-                ui->tabWidget->setCurrentIndex(i);
-                ui->tabWidget->removeTab(tabindex);
-                tabs.removeAt(tabindex);
-                setEOL();
-                return;
+    QStringList filepaths = QFileDialog::getOpenFileNames(this,tr("Open files"),QDir::homePath());
+    for (int i = 0; i < filepaths.length(); i++) {
+        int tabindex = newTab("");
+        if (tabs[tabindex]->getfile(filepaths[i])) {
+            filepath = tabs[tabindex]->filePath();
+            for (int i = 0; i < filelist.length(); i++) {
+                if (filelist[i] == filepath) {
+                    ui->tabWidget->setCurrentIndex(i);
+                    ui->tabWidget->removeTab(tabindex);
+                    tabs.removeAt(tabindex);
+                    setEOL();
+                    goto next;
+                }
             }
-        }
-        filename = tabs[tabindex]->fileName();
-        for (int i = 0; i < ui->tabWidget->count(); i++) {
-            QString tabname = ui->tabWidget->tabText(i);
-             for (int i = 0; i < tabname.length(); i++) {
-                 if (tabname[i] == '&') {
-                     tabname.remove(i,1);
-                 }
-             }
-
-                 if (filename == tabname) {
+            filename = tabs[tabindex]->fileName();
+            for (int i = 0; i < ui->tabWidget->count(); i++) {
+                QString tabname = ui->tabWidget->tabText(i);
+                for (int i = 0; i < tabname.length(); i++) {
+                    if (tabname[i] == '&') {
+                        tabname.remove(i,1);
+                    }
+                }
+                if (filename == tabname) {
                     QFileInfo fileinfo(filepath);
                     QDir dir = fileinfo.dir();
                     filename = dir.dirName() + "/" + filename;
@@ -241,28 +242,29 @@ void MainWindow::on_actionOpen_triggered() {
                     QStringList result = filelist.filter(tabname);
                     QFileInfo fileinfo1(result[0]);
                     QDir dir1 = fileinfo1.dir();
-                    tabname = dir1.dirName() + "/" + tabname;
+                    tabname = dir1.dirName() + "/" + filename;
                     ui->tabWidget->setTabText(i,tabname);
                     filelist.append(filepath);
                     setEOL();
                     filetype(filepath);
-                    return;
+                    goto next;
                  }
-
-    }
-    filename = tabs[tabindex]->fileName();
-    ui->tabWidget->setTabText(tabindex,filename);
-    filelist.append(filepath);
-    filetype(filepath);
-    setEOL();
-    }
+            }
+            filename = tabs[tabindex]->fileName();
+            ui->tabWidget->setTabText(tabindex,filename);
+            filelist.append(filepath);
+            filetype(filepath);
+            setEOL();
+        }
     else {
-        QMessageBox::about(this,tr("Error"),tr("Not Opened"));
+        QMessageBox::about(this,tr("error"),tr("not opened"));
         ui->tabWidget->removeTab(tabindex);
         tabs.removeAt(tabindex);
     }
+    next:
+        setEOL();
+    }
 }
-
 
 void MainWindow::on_actionOpen_Directory_triggered() {
     QString filedir = QFileDialog::getExistingDirectory(this,tr("Open Directory"),QDir::homePath());
@@ -799,7 +801,6 @@ void MainWindow::on_actionSettings_triggered() {
 }
 
 
-
 void MainWindow::on_actionD_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoD();
 }
@@ -823,4 +824,16 @@ void MainWindow::on_actionYAML_triggered() {
 void MainWindow::on_actionNormal_triggered() {
     tabs[ui->tabWidget->currentIndex()]->changetoNormal();
 
+}
+
+void MainWindow::on_actionUPPER_Case_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->converttouppercase();
+}
+
+void MainWindow::on_actionlower_case_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->converttolowercase();
+}
+
+void MainWindow::on_actionTitle_Case_triggered() {
+    tabs[ui->tabWidget->currentIndex()]->converttotitlecase();
 }

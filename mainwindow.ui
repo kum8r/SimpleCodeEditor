@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>803</width>
-    <height>586</height>
+    <width>799</width>
+    <height>582</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -240,7 +240,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>803</width>
+     <width>799</width>
      <height>24</height>
     </rect>
    </property>
@@ -264,6 +264,14 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <widget class="QMenu" name="menuConvert_to">
+     <property name="title">
+      <string>Co&amp;nvert to</string>
+     </property>
+     <addaction name="actionUPPER_Case"/>
+     <addaction name="actionlower_case"/>
+     <addaction name="actionTitle_Case"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="actionCut"/>
@@ -271,6 +279,7 @@
     <addaction name="actionPaste"/>
     <addaction name="actionSelect_All"/>
     <addaction name="actionDeselect"/>
+    <addaction name="menuConvert_to"/>
     <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuFind">
@@ -818,12 +827,12 @@
   </action>
   <action name="actionD">
    <property name="text">
-    <string>D</string>
+    <string>&amp;D</string>
    </property>
   </action>
   <action name="actionFortan77">
    <property name="text">
-    <string>Fortan77</string>
+    <string>Fortan&amp;77</string>
    </property>
   </action>
   <action name="actionDiff">
@@ -844,6 +853,36 @@
   <action name="actionNormal">
    <property name="text">
     <string>Normal</string>
+   </property>
+  </action>
+  <action name="actionUPPER_Case">
+   <property name="text">
+    <string>&amp;UPPER CASE</string>
+   </property>
+  </action>
+  <action name="actionlower_case">
+   <property name="text">
+    <string>&amp;lower case</string>
+   </property>
+  </action>
+  <action name="actionTitle_Case">
+   <property name="text">
+    <string>&amp;Title Case</string>
+   </property>
+  </action>
+  <action name="actionIndentation">
+   <property name="text">
+    <string>Indentation</string>
+   </property>
+  </action>
+  <action name="actionUse_Space">
+   <property name="text">
+    <string>Use Space</string>
+   </property>
+  </action>
+  <action name="actionUse_Tabs">
+   <property name="text">
+    <string>Use Tabs</string>
    </property>
   </action>
  </widget>

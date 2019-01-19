@@ -46,6 +46,8 @@ public:
     void enableMenu();
     void filetype(QString filepath);
 
+    void example();
+
 
 private slots:
     void on_actionNew_triggered();
@@ -203,6 +205,12 @@ private slots:
     void on_actionYAML_triggered();
 
     void on_actionNormal_triggered();
+
+    void on_actionUPPER_Case_triggered();
+
+    void on_actionlower_case_triggered();
+
+    void on_actionTitle_Case_triggered();
 
 private:
     Ui::MainWindow *ui;
