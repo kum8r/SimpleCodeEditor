@@ -25,22 +25,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 qscintilla2
 
 SOURCES += \
-        codeeditor.cpp \
-        finddialog.cpp \
-        main.cpp \
-        mainwindow.cpp \
-        settings.cpp
+        src/codeeditor.cpp \
+        src/finddialog.cpp \
+        src/main.cpp \
+        src/mainwindow.cpp \
+        src/settings.cpp
 
 HEADERS += \
-        codeeditor.h \
-        finddialog.h \
-        mainwindow.h \
-        settings.h
+        src/codeeditor.h \
+        src/finddialog.h \
+        src/mainwindow.h \
+        src/settings.h
 
 FORMS += \
-        finddialog.ui \
-        mainwindow.ui \
-        settings.ui
+        src/finddialog.ui \
+        src/mainwindow.ui \
+        src/settings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
