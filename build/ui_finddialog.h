@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'finddialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.3
+** Created by: Qt User Interface Compiler version 5.13.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -116,13 +116,13 @@ public:
 
     void retranslateUi(QDialog *findDialog)
     {
-        findDialog->setWindowTitle(QApplication::translate("findDialog", "Dialog", nullptr));
-        findCloseBtn->setText(QApplication::translate("findDialog", "x", nullptr));
-        FindBtn->setText(QApplication::translate("findDialog", "Find", nullptr));
-        FindPrevBtn->setText(QApplication::translate("findDialog", "Find Previous", nullptr));
-        replaceCloseBtn->setText(QApplication::translate("findDialog", "x", nullptr));
-        replaceBtn->setText(QApplication::translate("findDialog", "Replace", nullptr));
-        replaceAllBtn->setText(QApplication::translate("findDialog", "Replace All", nullptr));
+        findDialog->setWindowTitle(QCoreApplication::translate("findDialog", "Dialog", nullptr));
+        findCloseBtn->setText(QCoreApplication::translate("findDialog", "x", nullptr));
+        FindBtn->setText(QCoreApplication::translate("findDialog", "Find", nullptr));
+        FindPrevBtn->setText(QCoreApplication::translate("findDialog", "Find Previous", nullptr));
+        replaceCloseBtn->setText(QCoreApplication::translate("findDialog", "x", nullptr));
+        replaceBtn->setText(QCoreApplication::translate("findDialog", "Replace", nullptr));
+        replaceAllBtn->setText(QCoreApplication::translate("findDialog", "Replace All", nullptr));
     } // retranslateUi
 
 };

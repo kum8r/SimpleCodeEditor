@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'settings.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.4
+** Created by: Qt User Interface Compiler version 5.13.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,7 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
@@ -26,7 +25,6 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab;
     QWidget *tab_2;
-    QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *Settings)
     {
@@ -46,26 +44,20 @@ public:
 
         gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
 
-        buttonBox = new QDialogButtonBox(Settings);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout->addWidget(buttonBox, 1, 0, 1, 1);
-
 
         retranslateUi(Settings);
-        QObject::connect(buttonBox, SIGNAL(accepted()), Settings, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), Settings, SLOT(reject()));
+
+        tabWidget->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(Settings);
     } // setupUi
 
     void retranslateUi(QDialog *Settings)
     {
-        Settings->setWindowTitle(QApplication::translate("Settings", "Dialog", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Settings", "Font", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Settings", "Tab 2", nullptr));
+        Settings->setWindowTitle(QCoreApplication::translate("Settings", "Settings", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Settings", "General", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QString());
     } // retranslateUi
 
 };

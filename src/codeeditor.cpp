@@ -1,10 +1,11 @@
 #include "codeeditor.h"
-
+#include <QDebug>
 codeEditor::codeEditor()
 {
     setWrapMode(this->WrapWord);
     setMarginType(0,NumberMargin);
     setMarginWidth(0,"00");
+    this->setFont(QFont("consolas"));
 }
 
 
@@ -19,12 +20,23 @@ void codeEditor::setTextChanges(bool value)
     textChanges = value;
 }
 
-QFont codeEditor::getFont() const
+
+
+
+void codeEditor::showLinenum(bool)
 {
-    return font;
+    this->marginWidth(0);
 }
 
-void codeEditor::setFont(const QFont &value)
+
+
+QString codeEditor::getFileName() const
 {
-    font = value;
+    return fileName;
 }
+
+void codeEditor::setFileName(const QString &value)
+{
+    fileName = value;
+}
+

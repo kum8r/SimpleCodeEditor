@@ -3,6 +3,7 @@
 
 #include "finddialog.h"
 #include "codeeditor.h"
+#include "settings.h"
 
 #include <QMainWindow>
 #include <QList>
@@ -12,6 +13,14 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include <QDebug>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
+#include <QPrintPreviewDialog>
+#include <Qsci/qsciprinter.h>
+#include <QTextDocument>
+#include <QSettings>
+#include <QSplitter>
 
 //lexer
 
@@ -61,27 +70,50 @@ public:
     ~MainWindow();
 
     void defaultLocation();
-    void statusbar(int, int);
+    void statusBar(int, int);
     void setEOL();
     int newTab(QString tabname);
     void openDirectory();
-    void openFile(QString filepath = NULL);
+    void openFile(QString filepath = nullptr);
     void addtoOpenedFiles(QString);
     void saveFile(QString);
-    void saveFileAs();
+    void saveFileAs(QString fileName);
     void closeFile();
     void closeFile(int index);
     void saveChanges();
     void lineNumwidthIncrement(int ,int);
+    void setFiletype(QString);
+    void setLexers(QsciLexer* lexers);
+
+
+    void saveSettings();
+    void loadSettings();
+
+    void syntaxHighlighting(QsciLexer* lexers);
+
+    void setMainWindowStyle(QString,QString);
+    void setTabWidgetStyle(QString, QString);
+    void updateHighlighterTheme();
+    void setOverViewStyle(QString, QString);
+    void setLineNumStyle(QString, QString);
+
+    void menuActionGroup();
+    void changeFilename();
 
 
 private slots:
+
+
+    void print(QPrinter *printer);
 
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionOpenDirectory_triggered();
     void on_actionSave_triggered();
     void on_actionSave_AS_triggered();
+    void on_actionSave_All_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPrint_Preview_triggered();
     void on_actionClose_triggered();
     void on_tabWidget_tabCloseRequested(int index);
     void on_actionClose_All_Files_triggered();
@@ -113,8 +145,8 @@ private slots:
     void on_actionMac_triggered();
     void on_actionUnix_triggered();
     void on_actionWindows_triggered();
-    void on_actionShow_Linenumbers_2_triggered();
-    void on_actionStatusBar_2_triggered();
+    void on_actionShow_Linenumbers_triggered();
+    void on_actionStatusBar_triggered();
     void on_actionToolBar_triggered();
 
     //syntax highlightning - lexers
@@ -122,8 +154,8 @@ private slots:
     void on_actionBash_triggered();
     void on_actionBatch_File_triggered();
     void on_actionC_triggered();
-    void on_actionC_3_triggered();
-    void on_actionC_2_triggered();
+    void on_actionCSharp_triggered();
+    void on_actionCpp_triggered();
     void on_actionCSS_triggered();
     void on_actionCMake_triggered();
     void on_actionCoffeeScript_triggered();
@@ -156,17 +188,39 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
+    void setLexer(QsciLexer* lexer);
+    void setLexer(QString lexername);
 
 
 
 
+
+
+    void on_actionWordWrap_triggered();
+
+
+    void on_actionAdd_Indent_triggered();
+
+
+
+
+    //void on_actionSolarizedDark_triggered();
+
+
+
+
+    void on_actionSettings_triggered();
 
 private:
     Ui::MainWindow *ui;
     findDialog *find;
+    Settings *settingsDialog;
     QFileSystemModel *filemodel;
     QStringList filelist;
-    QLabel *linenum;
+    QLabel *lineNumLabel, *fileTypeLabel;
+    QSplitter *statSpitter;
+    QString theme;
+    QColor lineColor;
 
 };
 

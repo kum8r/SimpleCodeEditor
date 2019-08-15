@@ -12,13 +12,17 @@ public:
     bool getTextChanges() const;
     void setTextChanges(bool value);
 
-    QFont getFont() const;
-    void setFont(const QFont &value);
+    void showLinenum(bool);
+
+
+    QString getFileName() const;
+    void setFileName(const QString &value);
 
 private:
 
     bool textChanges = false;
     QFont font;
+    QString fileName = "";
 };
 
 #endif // CODEEDITOR_H

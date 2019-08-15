@@ -55,7 +55,13 @@
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="listWidget"/>
+          <widget class="QListWidget" name="listWidget">
+           <property name="styleSheet">
+            <string notr="true">background-color:#f4f4f4;
+border-color: rgb(244, 244, 244);
+</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -72,7 +78,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QTreeView" name="treeView"/>
+          <widget class="QTreeView" name="treeView">
+           <property name="styleSheet">
+            <string notr="true">background-color:#f4f4f4;</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -107,7 +117,7 @@
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>17</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -119,8 +129,12 @@
     <addaction name="actionOpenDirectory"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_AS"/>
+    <addaction name="actionSave_All"/>
+    <addaction name="actionPrint"/>
+    <addaction name="actionPrint_Preview"/>
     <addaction name="actionNew_Window"/>
     <addaction name="actionClose_Window"/>
+    <addaction name="actionSettings"/>
     <addaction name="actionClose"/>
     <addaction name="actionClose_All_Files"/>
     <addaction name="actionExit"/>
@@ -129,6 +143,13 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <widget class="QMenu" name="menuIndent">
+     <property name="title">
+      <string>Indent</string>
+     </property>
+     <addaction name="actionAdd_Indent"/>
+     <addaction name="actionDecrease_Indent"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -138,6 +159,7 @@
     <addaction name="separator"/>
     <addaction name="actionSelect_All"/>
     <addaction name="actionDeselect"/>
+    <addaction name="menuIndent"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -172,9 +194,9 @@
      <addaction name="actionNormal"/>
      <addaction name="actionBash"/>
      <addaction name="actionBatch_File"/>
-     <addaction name="actionC_3"/>
-     <addaction name="actionC_2"/>
      <addaction name="actionC"/>
+     <addaction name="actionCpp"/>
+     <addaction name="actionCSharp"/>
      <addaction name="actionCMake"/>
      <addaction name="actionCoffeeScript"/>
      <addaction name="actionCSS"/>
@@ -203,7 +225,8 @@
     <addaction name="menuShow_Panels"/>
     <addaction name="menuLine_Ending"/>
     <addaction name="menuSyntax"/>
-    <addaction name="actionShow_Linenumbers_2"/>
+    <addaction name="actionWordWrap"/>
+    <addaction name="actionShow_Linenumbers"/>
     <addaction name="actionToolBar"/>
    </widget>
    <widget class="QMenu" name="menuFind">
@@ -216,11 +239,24 @@
     <addaction name="actionReplace"/>
     <addaction name="actionReplace_All"/>
    </widget>
+   <widget class="QMenu" name="menuPrefrences">
+    <property name="title">
+     <string>Prefrences</string>
+    </property>
+    <widget class="QMenu" name="menuThemes">
+     <property name="title">
+      <string>Themes</string>
+     </property>
+     <addaction name="actionSolarizedDark"/>
+    </widget>
+    <addaction name="menuThemes"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuFind"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuPrefrences"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -466,151 +502,238 @@
    </property>
   </action>
   <action name="actionJSON">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>JSO&amp;N</string>
    </property>
   </action>
   <action name="actionBatch_File">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Batch F&amp;ile</string>
    </property>
   </action>
   <action name="actionCoffeeScript">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>C&amp;offeeScript</string>
    </property>
   </action>
-  <action name="actionC">
+  <action name="actionCSharp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>C#</string>
    </property>
   </action>
   <action name="actionJava">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Java</string>
    </property>
   </action>
   <action name="actionCSS">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>CSS</string>
    </property>
   </action>
   <action name="actionJavaScript">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Ja&amp;vaScript</string>
    </property>
   </action>
   <action name="actionMakeFile">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Ma&amp;keFile</string>
    </property>
   </action>
   <action name="actionMatLab">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>MatLab</string>
    </property>
   </action>
   <action name="actionPascal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Pascal</string>
    </property>
   </action>
   <action name="actionPython">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>P&amp;ython</string>
    </property>
   </action>
   <action name="actionBash">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Bash</string>
    </property>
   </action>
   <action name="actionCMake">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
-    <string>&amp;CMake</string>
+    <string>CMake</string>
    </property>
   </action>
-  <action name="actionC_2">
+  <action name="actionCpp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>C++</string>
    </property>
   </action>
   <action name="actionFortan">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Fortan</string>
    </property>
   </action>
   <action name="actionXML">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;XML</string>
    </property>
   </action>
   <action name="actionLua">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Lua</string>
    </property>
   </action>
   <action name="actionMarkDown">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;MarkDown</string>
    </property>
   </action>
   <action name="actionPerl">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>P&amp;erl</string>
    </property>
   </action>
   <action name="actionRuby">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Ruby</string>
    </property>
   </action>
   <action name="actionSQL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;SQL</string>
    </property>
   </action>
   <action name="actionTeX">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;TeX</string>
    </property>
   </action>
-  <action name="actionC_3">
+  <action name="actionC">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>C</string>
    </property>
   </action>
   <action name="actionYAML">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>YAML</string>
    </property>
   </action>
   <action name="actionNormal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Normal</string>
    </property>
   </action>
   <action name="actionDiff">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Diff</string>
    </property>
   </action>
   <action name="actionFortan77">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Fortan&amp;77</string>
    </property>
   </action>
   <action name="actionD">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;D</string>
    </property>
   </action>
   <action name="actionProperties">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Properties</string>
    </property>
   </action>
-  <action name="actionShow_Linenumbers_2">
+  <action name="actionShow_Linenumbers">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -622,11 +745,14 @@
    </property>
   </action>
   <action name="actionHTML">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>HTML</string>
    </property>
   </action>
-  <action name="actionStatusBar_2">
+  <action name="actionStatusBar">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -635,6 +761,57 @@
    </property>
    <property name="text">
     <string>StatusBar</string>
+   </property>
+  </action>
+  <action name="actionWordWrap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>WordWrap</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionPrint_Preview">
+   <property name="text">
+    <string>Print Preview</string>
+   </property>
+  </action>
+  <action name="actionAdd_Indent">
+   <property name="text">
+    <string>Add Indent</string>
+   </property>
+  </action>
+  <action name="actionDecrease_Indent">
+   <property name="text">
+    <string>Decrease Indent</string>
+   </property>
+  </action>
+  <action name="actionPrefrences">
+   <property name="text">
+    <string>Prefrences</string>
+   </property>
+  </action>
+  <action name="actionSolarizedDark">
+   <property name="text">
+    <string>SolarizedDark</string>
+   </property>
+  </action>
+  <action name="actionSave_All">
+   <property name="text">
+    <string>Save All</string>
    </property>
   </action>
  </widget>

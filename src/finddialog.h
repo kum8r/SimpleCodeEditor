@@ -20,6 +20,9 @@ public:
     QString getReplaceString();
     void setFindString(const QString &value);
     void setReplaceString(const QString &value);
+    void showreplaceWidget();
+    void hidereplaceWidget();
+
 
 signals:
 

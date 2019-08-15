@@ -5,6 +5,7 @@ findDialog::findDialog(QWidget *parent) : QDialog(parent),
     ui(new Ui::findDialog)
 {
     ui->setupUi(this);
+    ui->widget->hide();
 }
 
 findDialog::~findDialog()
@@ -44,6 +45,16 @@ void findDialog::on_findCloseBtn_clicked()
 
 
 void findDialog::on_replaceCloseBtn_clicked()
+{
+    ui->widget->hide();
+}
+
+void findDialog::showreplaceWidget()
+{
+    ui->widget->show();
+}
+
+void findDialog::hidereplaceWidget()
 {
     ui->widget->hide();
 }
