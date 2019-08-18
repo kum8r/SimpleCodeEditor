@@ -2,6 +2,9 @@
 #define CODEEDITOR_H
 
 #include "Qsci/qsciscintilla.h"
+#include "Qsci/qsciapis.h"
+#include <QSettings>
+#include <QDebug>
 
 class codeEditor : public QsciScintilla
 {
@@ -12,17 +15,20 @@ public:
     bool getTextChanges() const;
     void setTextChanges(bool value);
 
-    void showLinenum(bool);
-
+    void loadSettings();
 
     QString getFileName() const;
     void setFileName(const QString &value);
+
+    void autoComplete();
+    void autoCompleteForCpp(QsciLexer *lexer);
 
 private:
 
     bool textChanges = false;
     QFont font;
     QString fileName = "";
+    QSettings *mySettings;
 };
 
 #endif // CODEEDITOR_H

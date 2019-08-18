@@ -103,6 +103,7 @@ public:
     QAction *actionPrefrences;
     QAction *actionSolarizedDark;
     QAction *actionSave_All;
+    QAction *actionDuplicate_Line;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter_2;
@@ -122,6 +123,7 @@ public:
     QMenu *menuFile;
     QMenu *menuEdit;
     QMenu *menuIndent;
+    QMenu *menuLine;
     QMenu *menuHelp;
     QMenu *menuView;
     QMenu *menuShow_Panels;
@@ -420,6 +422,8 @@ public:
         actionSolarizedDark->setObjectName(QString::fromUtf8("actionSolarizedDark"));
         actionSave_All = new QAction(MainWindow);
         actionSave_All->setObjectName(QString::fromUtf8("actionSave_All"));
+        actionDuplicate_Line = new QAction(MainWindow);
+        actionDuplicate_Line->setObjectName(QString::fromUtf8("actionDuplicate_Line"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -449,9 +453,7 @@ public:
 
         listWidget = new QListWidget(layoutWidget);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        listWidget->setStyleSheet(QString::fromUtf8("background-color:#f4f4f4;\n"
-"border-color: rgb(244, 244, 244);\n"
-""));
+        listWidget->setStyleSheet(QString::fromUtf8(""));
 
         openedFiles->addWidget(listWidget);
 
@@ -470,7 +472,7 @@ public:
 
         treeView = new QTreeView(layoutWidget1);
         treeView->setObjectName(QString::fromUtf8("treeView"));
-        treeView->setStyleSheet(QString::fromUtf8("background-color:#f4f4f4;"));
+        treeView->setStyleSheet(QString::fromUtf8(""));
 
         fileExplorer->addWidget(treeView);
 
@@ -503,6 +505,8 @@ public:
         menuEdit->setObjectName(QString::fromUtf8("menuEdit"));
         menuIndent = new QMenu(menuEdit);
         menuIndent->setObjectName(QString::fromUtf8("menuIndent"));
+        menuLine = new QMenu(menuEdit);
+        menuLine->setObjectName(QString::fromUtf8("menuLine"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuView = new QMenu(menuBar);
@@ -557,8 +561,10 @@ public:
         menuEdit->addAction(actionSelect_All);
         menuEdit->addAction(actionDeselect);
         menuEdit->addAction(menuIndent->menuAction());
+        menuEdit->addAction(menuLine->menuAction());
         menuIndent->addAction(actionAdd_Indent);
         menuIndent->addAction(actionDecrease_Indent);
+        menuLine->addAction(actionDuplicate_Line);
         menuHelp->addAction(actionAbout);
         menuHelp->addAction(actionAbout_QT);
         menuView->addAction(menuShow_Panels->menuAction());
@@ -630,21 +636,60 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "SimpleCodeEditor", nullptr));
         actionNew->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
+#if QT_CONFIG(shortcut)
+        actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionOpen->setText(QCoreApplication::translate("MainWindow", "Open", nullptr));
+#if QT_CONFIG(shortcut)
+        actionOpen->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+O", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionSave->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSave->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+S", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionSave_AS->setText(QCoreApplication::translate("MainWindow", "Save As", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSave_AS->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+S", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionExit->setText(QCoreApplication::translate("MainWindow", "Exit", nullptr));
+#if QT_CONFIG(shortcut)
+        actionExit->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Q", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionOpenDirectory->setText(QCoreApplication::translate("MainWindow", "Open Directory", nullptr));
         actionCut->setText(QCoreApplication::translate("MainWindow", "Cut", nullptr));
+#if QT_CONFIG(shortcut)
+        actionCut->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+X", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionCopy->setText(QCoreApplication::translate("MainWindow", "Copy", nullptr));
+#if QT_CONFIG(shortcut)
+        actionCopy->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+C", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionPaste->setText(QCoreApplication::translate("MainWindow", "Paste", nullptr));
+#if QT_CONFIG(shortcut)
+        actionPaste->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+V", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionSelect_All->setText(QCoreApplication::translate("MainWindow", "Select All", nullptr));
+#if QT_CONFIG(shortcut)
+        actionSelect_All->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+A", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionAbout->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
         actionAbout_QT->setText(QCoreApplication::translate("MainWindow", "About QT", nullptr));
         actionClose->setText(QCoreApplication::translate("MainWindow", "Close", nullptr));
+#if QT_CONFIG(shortcut)
+        actionClose->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+W", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionUndo->setText(QCoreApplication::translate("MainWindow", "Undo", nullptr));
+#if QT_CONFIG(shortcut)
+        actionUndo->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Z", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionRedo->setText(QCoreApplication::translate("MainWindow", "Redo", nullptr));
+#if QT_CONFIG(shortcut)
+        actionRedo->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+R", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionDeselect->setText(QCoreApplication::translate("MainWindow", "Deselect", nullptr));
+#if QT_CONFIG(shortcut)
+        actionDeselect->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+A", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionFile_Explorer->setText(QCoreApplication::translate("MainWindow", "File Explorer", nullptr));
         actionOpened_Files->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         actionNew_Window->setText(QCoreApplication::translate("MainWindow", "New Window", nullptr));
@@ -654,6 +699,9 @@ public:
         actionMac->setText(QCoreApplication::translate("MainWindow", "Mac", nullptr));
         actionClose_All_Files->setText(QCoreApplication::translate("MainWindow", "Close All Files", nullptr));
         actionFind->setText(QCoreApplication::translate("MainWindow", "Find", nullptr));
+#if QT_CONFIG(shortcut)
+        actionFind->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+F", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionFind_Next->setText(QCoreApplication::translate("MainWindow", "Find Next", nullptr));
         actionFind_Prev->setText(QCoreApplication::translate("MainWindow", "Find Prev", nullptr));
         actionReplace->setText(QCoreApplication::translate("MainWindow", "Replace", nullptr));
@@ -700,11 +748,13 @@ public:
         actionPrefrences->setText(QCoreApplication::translate("MainWindow", "Prefrences", nullptr));
         actionSolarizedDark->setText(QCoreApplication::translate("MainWindow", "SolarizedDark", nullptr));
         actionSave_All->setText(QCoreApplication::translate("MainWindow", "Save All", nullptr));
+        actionDuplicate_Line->setText(QCoreApplication::translate("MainWindow", "Duplicate Line", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "FileExplorer", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         menuIndent->setTitle(QCoreApplication::translate("MainWindow", "Indent", nullptr));
+        menuLine->setTitle(QCoreApplication::translate("MainWindow", "Line", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
         menuView->setTitle(QCoreApplication::translate("MainWindow", "View", nullptr));
         menuShow_Panels->setTitle(QCoreApplication::translate("MainWindow", "Show Panels", nullptr));

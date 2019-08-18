@@ -57,9 +57,7 @@
          <item>
           <widget class="QListWidget" name="listWidget">
            <property name="styleSheet">
-            <string notr="true">background-color:#f4f4f4;
-border-color: rgb(244, 244, 244);
-</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -80,7 +78,7 @@ border-color: rgb(244, 244, 244);
          <item>
           <widget class="QTreeView" name="treeView">
            <property name="styleSheet">
-            <string notr="true">background-color:#f4f4f4;</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -150,6 +148,12 @@ border-color: rgb(244, 244, 244);
      <addaction name="actionAdd_Indent"/>
      <addaction name="actionDecrease_Indent"/>
     </widget>
+    <widget class="QMenu" name="menuLine">
+     <property name="title">
+      <string>Line</string>
+     </property>
+     <addaction name="actionDuplicate_Line"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -160,6 +164,7 @@ border-color: rgb(244, 244, 244);
     <addaction name="actionSelect_All"/>
     <addaction name="actionDeselect"/>
     <addaction name="menuIndent"/>
+    <addaction name="menuLine"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -286,6 +291,9 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="icon">
@@ -294,6 +302,9 @@ border-color: rgb(244, 244, 244);
    </property>
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionSave">
@@ -304,6 +315,9 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSave_AS">
    <property name="icon">
@@ -313,6 +327,9 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Save As</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="icon">
@@ -321,6 +338,9 @@ border-color: rgb(244, 244, 244);
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionOpenDirectory">
@@ -336,6 +356,9 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Cut</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
   </action>
   <action name="actionCopy">
    <property name="icon">
@@ -344,6 +367,9 @@ border-color: rgb(244, 244, 244);
    </property>
    <property name="text">
     <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionPaste">
@@ -354,10 +380,16 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Paste</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
   </action>
   <action name="actionSelect_All">
    <property name="text">
     <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -378,6 +410,9 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Close</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
   </action>
   <action name="actionUndo">
    <property name="icon">
@@ -386,6 +421,9 @@ border-color: rgb(244, 244, 244);
    </property>
    <property name="text">
     <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -396,10 +434,16 @@ border-color: rgb(244, 244, 244);
    <property name="text">
     <string>Redo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionDeselect">
    <property name="text">
     <string>Deselect</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
    </property>
   </action>
   <action name="actionFile_Explorer">
@@ -468,6 +512,9 @@ border-color: rgb(244, 244, 244);
   <action name="actionFind">
    <property name="text">
     <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionFind_Next">
@@ -812,6 +859,11 @@ border-color: rgb(244, 244, 244);
   <action name="actionSave_All">
    <property name="text">
     <string>Save All</string>
+   </property>
+  </action>
+  <action name="actionDuplicate_Line">
+   <property name="text">
+    <string>Duplicate Line</string>
    </property>
   </action>
  </widget>

@@ -21,6 +21,7 @@
 #include <QTextDocument>
 #include <QSettings>
 #include <QSplitter>
+#include <QSpacerItem>
 
 //lexer
 
@@ -60,6 +61,7 @@ namespace Ui {
 class MainWindow;
 }
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -68,6 +70,11 @@ public:
 
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void saveSettings();
+    void saveWindowsGeomentry();
+    void loadSettings();
+    void loadWindowsGeomentry();
 
     void defaultLocation();
     void statusBar(int, int);
@@ -86,8 +93,7 @@ public:
     void setLexers(QsciLexer* lexers);
 
 
-    void saveSettings();
-    void loadSettings();
+
 
     void syntaxHighlighting(QsciLexer* lexers);
 
@@ -99,6 +105,10 @@ public:
 
     void menuActionGroup();
     void changeFilename();
+
+    void autoComplete();
+
+
 
 
 private slots:
@@ -193,7 +203,7 @@ private slots:
 
 
 
-
+    void lostFocus(QEvent *event);
 
 
     void on_actionWordWrap_triggered();
@@ -211,6 +221,8 @@ private slots:
 
     void on_actionSettings_triggered();
 
+    void on_actionDuplicate_Line_triggered();
+
 private:
     Ui::MainWindow *ui;
     findDialog *find;
@@ -219,8 +231,10 @@ private:
     QStringList filelist;
     QLabel *lineNumLabel, *fileTypeLabel;
     QSplitter *statSpitter;
+    QSpacerItem *spacer;
     QString theme;
     QColor lineColor;
+    QSettings *mySettings;
 
 };
 

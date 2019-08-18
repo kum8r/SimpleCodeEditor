@@ -1047,13 +1047,11 @@ moc_mainwindow.cpp: ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/settings_apperances.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/kumar/Projects/SimpleCodeEditor/build/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/kumar/Projects/SimpleCodeEditor -I/usr/include/qt -I/usr/include/qt/QtPrintSupport -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I. -I/usr/include/c++/8.3.0 -I/usr/include/c++/8.3.0/x86_64-pc-linux-gnu -I/usr/include/c++/8.3.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed -I/usr/include ../src/mainwindow.h -o moc_mainwindow.cpp
 
 moc_settings.cpp: ../src/settings.h \
-		../src/settings_apperances.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/kumar/Projects/SimpleCodeEditor/build/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/kumar/Projects/SimpleCodeEditor -I/usr/include/qt -I/usr/include/qt/QtPrintSupport -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I. -I/usr/include/c++/8.3.0 -I/usr/include/c++/8.3.0/x86_64-pc-linux-gnu -I/usr/include/c++/8.3.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed -I/usr/include ../src/settings.h -o moc_settings.cpp
@@ -1097,20 +1095,17 @@ finddialog.o: ../src/finddialog.cpp ../src/finddialog.h \
 main.o: ../src/main.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
-		../src/settings.h \
-		../src/settings_apperances.h
+		../src/settings.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../src/main.cpp
 
 mainwindow.o: ../src/mainwindow.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/settings_apperances.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../src/mainwindow.cpp
 
 settings.o: ../src/settings.cpp ../src/settings.h \
-		../src/settings_apperances.h \
 		ui_settings.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o settings.o ../src/settings.cpp
 

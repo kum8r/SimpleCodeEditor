@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QSettings>
 
 
 namespace Ui {
@@ -17,11 +18,19 @@ public:
     explicit Settings(QWidget *parent = nullptr);
     ~Settings();
 
+    void loadSettings();
 
 private slots:
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_comboBox_currentIndexChanged(int index);
+
 private:
     Ui::Settings *ui;
+    QSettings *mySettings;
 
 };
 
