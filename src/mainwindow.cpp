@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newTab("untitled"); //creates a new tab
     setEOL();   //set the document end of line
     loadWindowsGeomentry();
-    loadSettings();
+//    loadSettings();
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
 
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::cursorPositionChanged,
@@ -69,11 +69,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    saveWindowsGeomentry();
+//    saveWindowsGeomentry();
     delete ui;
-    delete find;
-    delete filemodel;
-    delete settingsDialog;
+//    delete find;
+//    delete filemodel;
+//    delete settingsDialog;
 
 }
 
@@ -595,8 +595,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_actionClose_All_Files_triggered()
 {
-    int count = ui->tabWidget->count();
-    for (int i=0;i<count;i++)
+    for (int i=0;i<ui->tabWidget->count();i++)
     {
         closeFile(0);
     }
@@ -1394,3 +1393,4 @@ void MainWindow::on_actionDuplicate_Line_triggered()
 {
     //static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla();
 }
+

@@ -7,13 +7,19 @@ codeEditor::codeEditor()
     setMarginWidth(0,"0000");   //margin width is  space
     setIndentationsUseTabs(true);
     setTabWidth(4);
+
+    QFont font("source code pro");
+    font.setStyleHint(QFont::Monospace);
+    this->setFont(font);
+
     setIndentationGuides(false);
     setAutoIndent(true);
-    setCaretForegroundColor(QColor("#ffff7f"));
+//    setCaretForegroundColor(QColor("#ffff7f"));
+    setColor("#00000");
     setBraceMatching(SloppyBraceMatch);
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
-    autoComplete();
-    loadSettings();
+//    autoComplete();
+//    loadSettings();
 }
 
 bool codeEditor::getTextChanges() const

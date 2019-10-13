@@ -26,7 +26,6 @@ public:
 private:
 
     bool textChanges = false;
-    QFont font;
     QString fileName = "";
     QSettings *mySettings;
 };
