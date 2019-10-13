@@ -5,12 +5,6 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
-
-    //need to improve ui design,find all
-    //to add auto complete feature
-    //print working but painter need to change
-    //if saved the * to be removed
-    //autosave
     ui->setupUi(this);
 
     ui->splitter_2->setStretchFactor(1,1);
@@ -41,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setEOL();   //set the document end of line
     loadWindowsGeomentry();
     loadSettings();
+    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
 
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::cursorPositionChanged,
             this,&MainWindow::statusBar);
@@ -517,6 +512,7 @@ void MainWindow::autoComplete()
 void MainWindow::on_actionNew_triggered()
 {
     newTab("untitled");
+    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
 }
 
 void MainWindow::on_actionOpen_triggered()
