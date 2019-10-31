@@ -84,3 +84,13 @@ QString findDialog::getFindString()
     setFindString(ui->findString->text());
     return findString;
 }
+
+void findDialog::on_findString_returnPressed()
+{
+    emit findButton_clicked(ui->findString->text());
+}
+
+void findDialog::on_findString_textChanged(const QString &arg1)
+{
+    emit findStringChanged();
+}

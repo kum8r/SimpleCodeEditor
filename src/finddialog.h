@@ -28,6 +28,7 @@ signals:
 
     void findButton_clicked(QString searchtext);
     void findPrev_clicked(QString searchtext);
+    void findStringChanged();
     void replace_clicked(QString replacetext);
     void replaceAll_clicked(QString searchtext,QString replacetext);
     void closeFindDialog();
@@ -40,6 +41,11 @@ private slots:
     void on_replaceAllBtn_clicked();
     void on_findCloseBtn_clicked();
     void on_replaceCloseBtn_clicked();
+
+    void on_findString_returnPressed();
+
+    void on_findString_textChanged(const QString &arg1);
+
 
 private:
 

@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newTab("untitled"); //creates a new tab
     setEOL();   //set the document end of line
     loadWindowsGeomentry();
-//    loadSettings();
+    loadSettings();
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
 
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::cursorPositionChanged,
@@ -65,21 +65,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(find,SIGNAL(replaceAll_clicked(QString, QString)),
             this,SLOT(replaceAll_clicked(QString, QString)));
+
+    connect(find, SIGNAL(findStringChanged()), this, SLOT(findString_Changed()));
 }
 
 MainWindow::~MainWindow()
 {
-//    saveWindowsGeomentry();
+    saveWindowsGeomentry();
     delete ui;
 //    delete find;
 //    delete filemodel;
 //    delete settingsDialog;
-
 }
 
 void MainWindow::saveWindowsGeomentry()
 {
     mySettings->setValue("geomentry",this->saveGeometry());
+}
+
+void MainWindow::loadWindowsGeomentry()
+{
+    this->restoreGeometry(mySettings->value("geomentry").toByteArray());
 }
 
 void MainWindow::loadSettings()
@@ -89,28 +95,36 @@ void MainWindow::loadSettings()
     QFont font = QFont(fontName,fontSize);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setFont(font);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setTabWidth(mySettings->value("tabWidth").toInt());
-    if (mySettings->value("caretWidth").toInt() == 4) {
+    if (mySettings->value("caretWidth").toInt() == 4)
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCARETSTYLE,2);
     }
-    else {
+    else
+    {
       static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setCaretWidth(mySettings->value("caretWidth").toInt());
     }
-    if (mySettings->value("autoIndent").toBool()) {
+    if (mySettings->value("autoIndent").toBool())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoIndent(true);
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoIndent(false);
     }
-    if (mySettings->value("matchBracket").toInt() == 4) {
+    if (mySettings->value("matchBracket").toInt() == 4)
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setBraceMatching(QsciScintilla::SloppyBraceMatch);
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setBraceMatching(QsciScintilla::NoBraceMatch);
     }
-    if (mySettings->value("lineNumbers").toBool()) {
+    if (mySettings->value("lineNumbers").toBool())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"0000");
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"");
     }
     if (mySettings->value("wordWrap").toBool()) {
@@ -119,17 +133,14 @@ void MainWindow::loadSettings()
     else {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setWrapMode(QsciScintilla::WrapNone);
     }
-    if (mySettings->value("autocomplete").toBool()) {
+    if (mySettings->value("autocomplete").toBool())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoCompletionSource(QsciScintilla::AcsAll);
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoCompletionSource(QsciScintilla::AcsNone);
     }
-}
-
-void MainWindow::loadWindowsGeomentry()
-{
-    this->restoreGeometry(mySettings->value("geomentry").toByteArray());
 }
 
 //default location of the file explorer
@@ -153,16 +164,19 @@ void MainWindow::statusBar(int line, int index)
 
 void MainWindow::setEOL()
 {
-    if ((QSysInfo::productType() == "windows") | (QSysInfo::productType() == "winrt")) {
+    if ((QSysInfo::productType() == "windows") | (QSysInfo::productType() == "winrt"))
+    {
         ui->actionWindows->setChecked(true);
         on_actionWindows_triggered();
 
     }
-    else if (QSysInfo::productType() == "osx") {
+    else if (QSysInfo::productType() == "osx")
+    {
         ui->actionMac->setChecked(true);
         on_actionMac_triggered();
     }
-    else {
+    else
+    {
         ui->actionUnix->setChecked(true);
         on_actionUnix_triggered();
     }
@@ -244,18 +258,22 @@ void MainWindow::openFile(QString filepath)
     if (filepath.isNull()) {
         filepath = QFileDialog::getOpenFileName(this,tr("Open file"),QDir::homePath());
     }
-    for (int i = 0; i < ui->tabWidget->count(); i++) {
-        if(ui->tabWidget->tabWhatsThis(i) == filepath) {
+    for (int i = 0; i < ui->tabWidget->count(); i++)
+    {
+        if(ui->tabWidget->tabWhatsThis(i) == filepath)
+        {
             ui->tabWidget->setCurrentIndex(i);
             return;
         }
     }
     QFile file(filepath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         return;
     }
     QTextStream in(&file);
-    while (!in.atEnd()) {
+    while (!in.atEnd())
+    {
         line = in.readAll();
     }
     texteditor->setText(line);
@@ -276,14 +294,17 @@ void MainWindow::addtoOpenedFiles(QString filename)
 void MainWindow::saveFile(QString filepath)
 {
     QFileInfo fileinfo(filepath);
-    if (fileinfo.exists()) {
+    if (fileinfo.exists())
+    {
         QFile file(filepath);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
             QTextStream out(&file);
             out << static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
         }
     }
-    if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *")) {
+    if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
+    {
         QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
     }
@@ -295,7 +316,8 @@ void MainWindow::saveFileAs(QString fileName)
     QString filepath = QFileDialog::getSaveFileName(this,saveFileName,QDir::homePath());
     if (filepath.isEmpty()) return;
     QFile file(filepath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
         QTextStream out(&file);
         out << static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
     }
@@ -314,9 +336,7 @@ void MainWindow::print(QPrinter *printer)
     QString text = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text(); // your text is here
     QPainter painter;
     painter.begin(printer);
-
     painter.drawText(100, 100, 500, 500, Qt::AlignLeft|Qt::AlignTop, text);
-
     painter.end();
 }
 
@@ -332,13 +352,16 @@ void MainWindow::closeFile(int index)
                                                       QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
                                                       QMessageBox::Cancel);
 
-            if (ask == QMessageBox::Yes) {
-                if (ui->tabWidget->tabWhatsThis(index) == "") {
+            if (ask == QMessageBox::Yes)
+            {
+                if (ui->tabWidget->tabWhatsThis(index) == "")
+                {
                     saveFileAs(ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
                     delete ui->tabWidget->widget(index);
                     ui->listWidget->takeItem(index);
                 }
-                else {
+                else
+                {
                     QString filepath = ui->tabWidget->tabWhatsThis(index);
                     saveFile(filepath);
                     delete ui->tabWidget->widget(index);
@@ -346,20 +369,24 @@ void MainWindow::closeFile(int index)
                 }
             }
 
-            else if (ask == QMessageBox::No) {
+            else if (ask == QMessageBox::No)
+            {
                 delete ui->tabWidget->widget(index);
                 ui->listWidget->takeItem(index);
             }
 
-            else if (ask == QMessageBox::Cancel) {
+            else if (ask == QMessageBox::Cancel)
+            {
                 //do nothing
             }
     }
-    else {
+    else
+    {
         delete ui->tabWidget->widget(index);
         ui->listWidget->takeItem(index);
     }
-    if(ui->tabWidget->count() == 0) {
+    if(ui->tabWidget->count() == 0)
+    {
         newTab("untitled");
     }
 }
@@ -372,13 +399,16 @@ void MainWindow::saveChanges()
 
 void MainWindow::lineNumwidthIncrement(int line, int index)
 {
-    if (line > 100) {
+    if (line > 100)
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"00000");
     }
-    else if (line > 1000) {
+    else if (line > 1000)
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"000000");
     }
-    else if (line > 10000) {
+    else if (line > 10000)
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"0000000");
     }
 }
@@ -489,14 +519,16 @@ void MainWindow::setFiletype(QString file)
 
 void MainWindow::setLexers(QsciLexer *lexer)
 {
+    QFont font = ui->tabWidget->currentWidget()->font();
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
-
+    lexer->setFont(font);
 }
 
 void MainWindow::changeFilename()
 {
     QString tabName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-    if (!tabName.contains("- *")) {
+    if (!tabName.contains("- *"))
+    {
         tabName = ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "- *";
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabName);
     }
@@ -506,8 +538,6 @@ void MainWindow::autoComplete()
 {
 
 }
-
-
 
 void MainWindow::on_actionNew_triggered()
 {
@@ -651,6 +681,7 @@ void MainWindow::on_actionSelect_All_triggered()
 void MainWindow::on_actionDeselect_triggered()
 {
     int curPos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectAll(false);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,curPos);
 }
@@ -685,44 +716,20 @@ void MainWindow::on_actionReplace_All_triggered()
 
 void MainWindow::findButton_clicked(QString searchtext)
 {
-    int curpos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
-    QString document = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
-    int end = document.lastIndexOf(searchtext);
-    if(!searchtext.isEmpty()) {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICSETSTYLE,0,7);
-        int cur = -1;
-        if (end != -1) {
-            while (cur != end) {
-                cur = document.indexOf(searchtext,cur+1);
-                static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
-                            QsciScintillaBase::SCI_INDICATORFILLRANGE,cur,searchtext.length());
-            }
-        }
-    }
-    if (document.length() == static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS)) {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,curpos);
-    }
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->focusWidget();
+    int curPos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,curPos);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+    highlighsearchtext(searchtext);
 }
 
 void MainWindow::findPrev_clicked(QString searchtext)
 {
-    if(!searchtext.isEmpty()) {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICSETSTYLE,0,7);
-        QString document = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
-        int end = document.lastIndexOf(searchtext);
-        int cur = -1;
-        if (end != -1) {
-            while (cur != end) {
-                cur = document.indexOf(searchtext,cur+1);
-                static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
-                            QsciScintillaBase::SCI_INDICATORFILLRANGE,cur,searchtext.length());
-            }
-        }
-    }
-    if(static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,0)) {
+    if(static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,0))
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findNext();
     }
+    highlighsearchtext(searchtext);
 }
 
 void MainWindow::replace_clicked(QString replacetext)
@@ -745,12 +752,12 @@ void MainWindow::replaceAll_clicked(QString searchtext, QString replacetext)
             }
         }
     }
-
 }
 
 void MainWindow::closeFindDialog()
 {
     ui->widget->hide();
+    findString_Changed();
 }
 //--------
 
@@ -830,7 +837,7 @@ void MainWindow::on_actionToolBar_triggered()
 void MainWindow::on_actionNormal_triggered()
 {
     fileTypeLabel->setText("Normal");
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(nullptr);
+    setLexer("Normal");
 }
 
 void MainWindow::on_actionBash_triggered()
@@ -1322,7 +1329,6 @@ void MainWindow::setLexer(QsciLexer *lexer)
 void MainWindow::setLexer(QString lexername)
 {
     QMap <QString,QsciLexer*> languageToLexer = {
-       // {'None', None},
         {"Bash", new QsciLexerBash()},
         {"Batch", new QsciLexerBatch()},
         {"CMake", new QsciLexerCMake()},
@@ -1353,18 +1359,34 @@ void MainWindow::setLexer(QString lexername)
         {"XML", new QsciLexerXML()}
     };
 
+    QFont font = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->font();
     QMap<QString, QsciLexer*>::iterator i = languageToLexer.find(lexername);
-    if (i != languageToLexer.end()) {
+
+    if (i != languageToLexer.end())
+    {
         QsciLexer *lexer = i.value();
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
-        i.value()->setFont(QFont(mySettings->value("font").toString()));
-        lexer->setAutoIndentStyle(true);
-     //   qDebug() << static_cast<codeEditor*>(ui->tabWidget->cornerWidget())->SendScintilla(QsciScintilla::SCI_GETNAMEDSTYLES);
 
-        if (i.key() == "C++") {
+        if (i.key() == "C++")
+        {
             static_cast<codeEditor*>(ui->tabWidget->currentWidget())->autoCompleteForCpp(lexer);
         }
     }
+    if (lexername == "Normal")
+    {
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(nullptr);
+    }
+    QsciLexer *curLexer = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer();
+    if (curLexer == 0)
+    {
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setFont(font);
+    }
+    else
+    {
+        curLexer->setFont(font);
+        curLexer->setAutoIndentStyle(true);
+    }
+
 }
 
 void MainWindow::lostFocus(QEvent *event)
@@ -1394,3 +1416,34 @@ void MainWindow::on_actionDuplicate_Line_triggered()
     //static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla();
 }
 
+void MainWindow::findString_Changed()
+{
+    for (int i = 0;i < searchTextposlist.count() ; i++)
+    {
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICATORCLEARRANGE, searchTextposlist[i], searchString.length());
+    }
+    searchTextposlist.clear();
+}
+
+void MainWindow::highlighsearchtext(QString searchtext)
+{
+    searchString = searchtext;
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICSETSTYLE,0,7);
+    searchTextposlist.clear();
+    QString document = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
+    int end = document.lastIndexOf(searchtext);
+
+    if (!searchtext.isEmpty())
+    {
+        int curpos = -1;
+        if (end != -1)
+        {
+            while (curpos != end)
+            {
+                curpos = document.indexOf(searchtext, curpos + 1);
+                static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICATORFILLRANGE, curpos, searchtext.length());
+                searchTextposlist.append(curpos);
+            }
+        }
+    }
+}

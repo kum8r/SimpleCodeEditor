@@ -25,12 +25,14 @@
 
 //lexer
 
+#include "lexers/cpplexers.h"
+#include "lexers/lexers.h"
+
 #include "Qsci/qscilexer.h"
 #include "Qsci/qscilexerbash.h"
 #include "Qsci/qscilexerbatch.h"
 #include "Qsci/qscilexercmake.h"
 #include "Qsci/qscilexercoffeescript.h"
-#include "Qsci/qscilexercpp.h"
 #include "Qsci/qscilexercsharp.h"
 #include "Qsci/qscilexerd.h"
 #include "Qsci/qscilexerdiff.h"
@@ -109,7 +111,7 @@ public:
     void autoComplete();
 
 
-
+    void highlighsearchtext(QString searchtext);
 
 private slots:
 
@@ -223,6 +225,8 @@ private slots:
 
     void on_actionDuplicate_Line_triggered();
 
+    void findString_Changed();
+
 private:
     Ui::MainWindow *ui;
     findDialog *find;
@@ -235,6 +239,8 @@ private:
     QString theme;
     QColor lineColor;
     QSettings *mySettings;
+    QList<int> searchTextposlist;
+    QString searchString;
 
 };
 

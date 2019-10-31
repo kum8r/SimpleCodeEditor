@@ -22,11 +22,13 @@ public:
 
 private slots:
 
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
 
     void on_comboBox_currentIndexChanged(int index);
+
+
+    void on_saveButton_clicked();
+
+    void on_cancelButton_clicked();
 
 private:
     Ui::Settings *ui;
