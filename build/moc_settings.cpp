@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'settings.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.0)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.13.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'settings.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.13.0. It"
+#error "This file was generated using the moc from 5.13.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -33,16 +33,16 @@ struct qt_meta_stringdata_Settings_t {
 static const qt_meta_stringdata_Settings_t qt_meta_stringdata_Settings = {
     {
 QT_MOC_LITERAL(0, 0, 8), // "Settings"
-QT_MOC_LITERAL(1, 9, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(2, 31, 0), // ""
-QT_MOC_LITERAL(3, 32, 23), // "on_pushButton_2_clicked"
-QT_MOC_LITERAL(4, 56, 31), // "on_comboBox_currentIndexChanged"
-QT_MOC_LITERAL(5, 88, 5) // "index"
+QT_MOC_LITERAL(1, 9, 31), // "on_comboBox_currentIndexChanged"
+QT_MOC_LITERAL(2, 41, 0), // ""
+QT_MOC_LITERAL(3, 42, 5), // "index"
+QT_MOC_LITERAL(4, 48, 21), // "on_saveButton_clicked"
+QT_MOC_LITERAL(5, 70, 23) // "on_cancelButton_clicked"
 
     },
-    "Settings\0on_pushButton_clicked\0\0"
-    "on_pushButton_2_clicked\0"
-    "on_comboBox_currentIndexChanged\0index"
+    "Settings\0on_comboBox_currentIndexChanged\0"
+    "\0index\0on_saveButton_clicked\0"
+    "on_cancelButton_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,14 +60,14 @@ static const uint qt_meta_data_Settings[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   29,    2, 0x08 /* Private */,
-       3,    0,   30,    2, 0x08 /* Private */,
-       4,    1,   31,    2, 0x08 /* Private */,
+       1,    1,   29,    2, 0x08 /* Private */,
+       4,    0,   32,    2, 0x08 /* Private */,
+       5,    0,   33,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    5,
 
        0        // eod
 };
@@ -78,9 +78,9 @@ void Settings::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         auto *_t = static_cast<Settings *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
-        case 1: _t->on_pushButton_2_clicked(); break;
-        case 2: _t->on_comboBox_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->on_comboBox_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->on_saveButton_clicked(); break;
+        case 2: _t->on_cancelButton_clicked(); break;
         default: ;
         }
     }

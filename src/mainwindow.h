@@ -94,6 +94,7 @@ public:
     void setFiletype(QString);
     void setLexers(QsciLexer* lexers);
 
+    void closeEvent(QCloseEvent *event);
 
 
 
@@ -142,7 +143,6 @@ private slots:
     void on_actionDeselect_triggered();
 
     void on_actionFind_triggered();
-    void on_actionFind_Next_triggered();
     void on_actionFind_Prev_triggered();
     void on_actionReplace_triggered();
     void on_actionReplace_All_triggered();
@@ -226,6 +226,10 @@ private slots:
     void on_actionDuplicate_Line_triggered();
 
     void findString_Changed();
+
+    void on_actionUPPER_CASE_triggered();
+
+    void on_actionlower_case_triggered();
 
 private:
     Ui::MainWindow *ui;

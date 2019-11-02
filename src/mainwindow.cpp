@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::textChanged,
             this,&MainWindow::saveChanges);
 
-    connect(this, &MainWindow::focusOutEvent, this, &MainWindow::lostFocus);
+//    connect(this, &MainWindow::focusOutEvent, this, &MainWindow::lostFocus);
 
 
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setWrapMode(QsciScintilla::WrapWord);
@@ -647,6 +647,12 @@ void MainWindow::on_actionExit_triggered()
     qApp->exit();
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "print ";
+    QMainWindow::closeEvent(event);
+}
+
 void MainWindow::on_actionUndo_triggered()
 {
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->undo();
@@ -693,11 +699,6 @@ void MainWindow::on_actionFind_triggered()
     find->hidereplaceWidget();
 }
 
-void MainWindow::on_actionFind_Next_triggered()
-{
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findNext();
-}
-
 void MainWindow::on_actionFind_Prev_triggered()
 {
     findPrev_clicked(find->getFindString());
@@ -716,18 +717,30 @@ void MainWindow::on_actionReplace_All_triggered()
 
 void MainWindow::findButton_clicked(QString searchtext)
 {
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->focusWidget();
+//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->focusWidget();
     int curPos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,curPos);
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+    bool search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+    if (!search)
+    {
+        QMessageBox::warning(this, "Find", "search has ended", QMessageBox::Ok);
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setCursorPosition(0, 0);
+        search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+    }
     highlighsearchtext(searchtext);
 }
 
 void MainWindow::findPrev_clicked(QString searchtext)
 {
-    if(static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,0))
+    bool search;
+    (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,0));
     {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findNext();
+        search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findNext();
+    }
+    if (!search)
+    {
+        QMessageBox::warning(this, "find", "search has ended", QMessageBox::Ok);
+
     }
     highlighsearchtext(searchtext);
 }
@@ -1445,5 +1458,25 @@ void MainWindow::highlighsearchtext(QString searchtext)
                 searchTextposlist.append(curpos);
             }
         }
+    }
+}
+
+void MainWindow::on_actionUPPER_CASE_triggered()
+{
+    QString selectedText = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectedText();
+    if (!selectedText.isEmpty())
+    {
+        QString uppercase_string = selectedText.toUpper();
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->replaceSelectedText(uppercase_string);
+    }
+}
+
+void MainWindow::on_actionlower_case_triggered()
+{
+    QString selectedText = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectedText();
+    if (!selectedText.isEmpty())
+    {
+        QString lowercase_string = selectedText.toLower();
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->replaceSelectedText(lowercase_string);
     }
 }

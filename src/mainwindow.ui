@@ -145,7 +145,7 @@
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>29</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -184,6 +184,13 @@
      </property>
      <addaction name="actionDuplicate_Line"/>
     </widget>
+    <widget class="QMenu" name="menuConvert_to">
+     <property name="title">
+      <string>Convert to</string>
+     </property>
+     <addaction name="actionUPPER_CASE"/>
+     <addaction name="actionlower_case"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -195,6 +202,7 @@
     <addaction name="actionDeselect"/>
     <addaction name="menuIndent"/>
     <addaction name="menuLine"/>
+    <addaction name="menuConvert_to"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -269,7 +277,6 @@
      <string>Find</string>
     </property>
     <addaction name="actionFind"/>
-    <addaction name="actionFind_Next"/>
     <addaction name="actionFind_Prev"/>
     <addaction name="actionReplace"/>
     <addaction name="actionReplace_All"/>
@@ -282,7 +289,6 @@
      <property name="title">
       <string>Themes</string>
      </property>
-     <addaction name="actionSolarizedDark"/>
     </widget>
     <addaction name="menuThemes"/>
    </widget>
@@ -545,11 +551,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
-   </property>
-  </action>
-  <action name="actionFind_Next">
-   <property name="text">
-    <string>Find Next</string>
    </property>
   </action>
   <action name="actionFind_Prev">
@@ -881,11 +882,6 @@
     <string>Prefrences</string>
    </property>
   </action>
-  <action name="actionSolarizedDark">
-   <property name="text">
-    <string>SolarizedDark</string>
-   </property>
-  </action>
   <action name="actionSave_All">
    <property name="text">
     <string>Save All</string>
@@ -894,6 +890,16 @@
   <action name="actionDuplicate_Line">
    <property name="text">
     <string>Duplicate Line</string>
+   </property>
+  </action>
+  <action name="actionUPPER_CASE">
+   <property name="text">
+    <string>UPPER CASE</string>
+   </property>
+  </action>
+  <action name="actionlower_case">
+   <property name="text">
+    <string>lower case</string>
    </property>
   </action>
  </widget>

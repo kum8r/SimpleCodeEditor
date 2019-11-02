@@ -51,3 +51,7 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+win32: header_files.path = win32_include_directory
+linux: header_files.path = linux_include_directory

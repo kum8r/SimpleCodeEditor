@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.13.0
+** Created by: Qt User Interface Compiler version 5.13.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -57,7 +57,6 @@ public:
     QAction *actionMac;
     QAction *actionClose_All_Files;
     QAction *actionFind;
-    QAction *actionFind_Next;
     QAction *actionFind_Prev;
     QAction *actionReplace;
     QAction *actionReplace_All;
@@ -101,9 +100,10 @@ public:
     QAction *actionAdd_Indent;
     QAction *actionDecrease_Indent;
     QAction *actionPrefrences;
-    QAction *actionSolarizedDark;
     QAction *actionSave_All;
     QAction *actionDuplicate_Line;
+    QAction *actionUPPER_CASE;
+    QAction *actionlower_case;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter_2;
@@ -124,6 +124,7 @@ public:
     QMenu *menuEdit;
     QMenu *menuIndent;
     QMenu *menuLine;
+    QMenu *menuConvert_to;
     QMenu *menuHelp;
     QMenu *menuView;
     QMenu *menuShow_Panels;
@@ -292,8 +293,6 @@ public:
         actionClose_All_Files->setObjectName(QString::fromUtf8("actionClose_All_Files"));
         actionFind = new QAction(MainWindow);
         actionFind->setObjectName(QString::fromUtf8("actionFind"));
-        actionFind_Next = new QAction(MainWindow);
-        actionFind_Next->setObjectName(QString::fromUtf8("actionFind_Next"));
         actionFind_Prev = new QAction(MainWindow);
         actionFind_Prev->setObjectName(QString::fromUtf8("actionFind_Prev"));
         actionReplace = new QAction(MainWindow);
@@ -418,12 +417,14 @@ public:
         actionDecrease_Indent->setObjectName(QString::fromUtf8("actionDecrease_Indent"));
         actionPrefrences = new QAction(MainWindow);
         actionPrefrences->setObjectName(QString::fromUtf8("actionPrefrences"));
-        actionSolarizedDark = new QAction(MainWindow);
-        actionSolarizedDark->setObjectName(QString::fromUtf8("actionSolarizedDark"));
         actionSave_All = new QAction(MainWindow);
         actionSave_All->setObjectName(QString::fromUtf8("actionSave_All"));
         actionDuplicate_Line = new QAction(MainWindow);
         actionDuplicate_Line->setObjectName(QString::fromUtf8("actionDuplicate_Line"));
+        actionUPPER_CASE = new QAction(MainWindow);
+        actionUPPER_CASE->setObjectName(QString::fromUtf8("actionUPPER_CASE"));
+        actionlower_case = new QAction(MainWindow);
+        actionlower_case->setObjectName(QString::fromUtf8("actionlower_case"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -433,6 +434,11 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         splitter_2 = new QSplitter(centralWidget);
         splitter_2->setObjectName(QString::fromUtf8("splitter_2"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(splitter_2->sizePolicy().hasHeightForWidth());
+        splitter_2->setSizePolicy(sizePolicy);
         splitter_2->setOrientation(Qt::Horizontal);
         splitter_2->setHandleWidth(0);
         splitter = new QSplitter(splitter_2);
@@ -448,11 +454,18 @@ public:
         openedFiles->setContentsMargins(0, 0, 0, 0);
         label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
+        label_2->setSizePolicy(sizePolicy1);
 
         openedFiles->addWidget(label_2);
 
         listWidget = new QListWidget(layoutWidget);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
+        sizePolicy.setHeightForWidth(listWidget->sizePolicy().hasHeightForWidth());
+        listWidget->setSizePolicy(sizePolicy);
         listWidget->setStyleSheet(QString::fromUtf8(""));
 
         openedFiles->addWidget(listWidget);
@@ -467,11 +480,15 @@ public:
         fileExplorer->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(layoutWidget1);
         label->setObjectName(QString::fromUtf8("label"));
+        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy1);
 
         fileExplorer->addWidget(label);
 
         treeView = new QTreeView(layoutWidget1);
         treeView->setObjectName(QString::fromUtf8("treeView"));
+        sizePolicy.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
+        treeView->setSizePolicy(sizePolicy);
         treeView->setStyleSheet(QString::fromUtf8(""));
 
         fileExplorer->addWidget(treeView);
@@ -498,7 +515,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 720, 23));
+        menuBar->setGeometry(QRect(0, 0, 720, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -507,6 +524,8 @@ public:
         menuIndent->setObjectName(QString::fromUtf8("menuIndent"));
         menuLine = new QMenu(menuEdit);
         menuLine->setObjectName(QString::fromUtf8("menuLine"));
+        menuConvert_to = new QMenu(menuEdit);
+        menuConvert_to->setObjectName(QString::fromUtf8("menuConvert_to"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuView = new QMenu(menuBar);
@@ -562,9 +581,12 @@ public:
         menuEdit->addAction(actionDeselect);
         menuEdit->addAction(menuIndent->menuAction());
         menuEdit->addAction(menuLine->menuAction());
+        menuEdit->addAction(menuConvert_to->menuAction());
         menuIndent->addAction(actionAdd_Indent);
         menuIndent->addAction(actionDecrease_Indent);
         menuLine->addAction(actionDuplicate_Line);
+        menuConvert_to->addAction(actionUPPER_CASE);
+        menuConvert_to->addAction(actionlower_case);
         menuHelp->addAction(actionAbout);
         menuHelp->addAction(actionAbout_QT);
         menuView->addAction(menuShow_Panels->menuAction());
@@ -609,12 +631,10 @@ public:
         menuSyntax->addAction(actionSQL);
         menuSyntax->addAction(actionXML);
         menuFind->addAction(actionFind);
-        menuFind->addAction(actionFind_Next);
         menuFind->addAction(actionFind_Prev);
         menuFind->addAction(actionReplace);
         menuFind->addAction(actionReplace_All);
         menuPrefrences->addAction(menuThemes->menuAction());
-        menuThemes->addAction(actionSolarizedDark);
         mainToolBar->addAction(actionNew);
         mainToolBar->addAction(actionOpen);
         mainToolBar->addAction(actionSave);
@@ -702,7 +722,6 @@ public:
 #if QT_CONFIG(shortcut)
         actionFind->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+F", nullptr));
 #endif // QT_CONFIG(shortcut)
-        actionFind_Next->setText(QCoreApplication::translate("MainWindow", "Find Next", nullptr));
         actionFind_Prev->setText(QCoreApplication::translate("MainWindow", "Find Prev", nullptr));
         actionReplace->setText(QCoreApplication::translate("MainWindow", "Replace", nullptr));
         actionReplace_All->setText(QCoreApplication::translate("MainWindow", "Replace All", nullptr));
@@ -746,15 +765,17 @@ public:
         actionAdd_Indent->setText(QCoreApplication::translate("MainWindow", "Add Indent", nullptr));
         actionDecrease_Indent->setText(QCoreApplication::translate("MainWindow", "Decrease Indent", nullptr));
         actionPrefrences->setText(QCoreApplication::translate("MainWindow", "Prefrences", nullptr));
-        actionSolarizedDark->setText(QCoreApplication::translate("MainWindow", "SolarizedDark", nullptr));
         actionSave_All->setText(QCoreApplication::translate("MainWindow", "Save All", nullptr));
         actionDuplicate_Line->setText(QCoreApplication::translate("MainWindow", "Duplicate Line", nullptr));
+        actionUPPER_CASE->setText(QCoreApplication::translate("MainWindow", "UPPER CASE", nullptr));
+        actionlower_case->setText(QCoreApplication::translate("MainWindow", "lower case", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "FileExplorer", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         menuIndent->setTitle(QCoreApplication::translate("MainWindow", "Indent", nullptr));
         menuLine->setTitle(QCoreApplication::translate("MainWindow", "Line", nullptr));
+        menuConvert_to->setTitle(QCoreApplication::translate("MainWindow", "Convert to", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
         menuView->setTitle(QCoreApplication::translate("MainWindow", "View", nullptr));
         menuShow_Panels->setTitle(QCoreApplication::translate("MainWindow", "Show Panels", nullptr));
