@@ -649,7 +649,20 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    qDebug() << "print ";
+    qDebug() << ui->tabWidget->count();
+    for (int i = 0; i < ui->tabWidget->count(); ++i)
+    {
+        qDebug() << static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
+        if (static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
+        {
+            if (ui->tabWidget->tabWhatsThis(i) != "")
+            {
+                saveFile(ui->tabWidget->tabWhatsThis(i));
+                qDebug() << "closing";
+            }
+        }
+    }
+    qDebug() << "closign";
     QMainWindow::closeEvent(event);
 }
 
@@ -1406,9 +1419,12 @@ void MainWindow::lostFocus(QEvent *event)
 {
     if (event->type() == QEvent::WindowDeactivate)
     {
-        for (int i = 0; i < ui->tabWidget->count(); ++i) {
-            if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges()) {
-                if (ui->tabWidget->tabWhatsThis(i) != "") {
+        for (int i = 0; i < ui->tabWidget->count(); ++i)
+        {
+            if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges())
+            {
+                if (ui->tabWidget->tabWhatsThis(i) != "")
+                {
                     saveFile(ui->tabWidget->tabWhatsThis(i));
                 }
             }
@@ -1426,7 +1442,11 @@ void MainWindow::on_actionSettings_triggered()
 
 void MainWindow::on_actionDuplicate_Line_triggered()
 {
-    //static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla();
+    int pos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    int linepos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION, pos);
+    QString text = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text(linepos);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->insertAt(text + "\n", linepos, 0);
+
 }
 
 void MainWindow::findString_Changed()
