@@ -3,11 +3,15 @@
 
 #include "Qsci/qsciscintilla.h"
 #include "Qsci/qsciapis.h"
+#include "Qsci/qscilexer.h"
 #include <QSettings>
 #include <QDebug>
+#include <QMimeData>
 
 class codeEditor : public QsciScintilla
 {
+
+
 public:
 
     codeEditor();
@@ -22,6 +26,18 @@ public:
 
     void autoComplete();
     void autoCompleteForCpp(QsciLexer *lexer);
+
+    void setStyleSheet();
+    void setWhiteTheme();
+
+    void darkSyntaxTheme();
+
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+
+signals:
+
+    void dropFiles(QString file);
 
 private:
 

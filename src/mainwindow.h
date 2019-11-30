@@ -22,6 +22,8 @@
 #include <QSettings>
 #include <QSplitter>
 #include <QSpacerItem>
+#include <QInputDialog>
+#include <QMimeData>
 
 //lexer
 
@@ -113,6 +115,12 @@ public:
 
 
     void highlighsearchtext(QString searchtext);
+
+    void setStyleSheet();
+
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private slots:
 
@@ -230,6 +238,10 @@ private slots:
     void on_actionUPPER_CASE_triggered();
 
     void on_actionlower_case_triggered();
+
+    void on_actionGo_to_Line_triggered();
+
+    void on_actionDecrease_Indent_triggered();
 
 private:
     Ui::MainWindow *ui;

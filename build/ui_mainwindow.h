@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.13.1
+** Created by: Qt User Interface Compiler version 5.13.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,6 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
@@ -104,6 +105,7 @@ public:
     QAction *actionDuplicate_Line;
     QAction *actionUPPER_CASE;
     QAction *actionlower_case;
+    QAction *actionGo_to_Line;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter_2;
@@ -140,89 +142,93 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(720, 488);
+        MainWindow->resize(720, 544);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/icons/src/icons/SimpleCodeEditor.png"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
+        MainWindow->setStyleSheet(QString::fromUtf8("border:0;"));
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
-        QIcon icon;
-        QString iconThemeName = QString::fromUtf8("document-new");
-        if (QIcon::hasThemeIcon(iconThemeName)) {
-            icon = QIcon::fromTheme(iconThemeName);
-        } else {
-            icon.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
-        }
-        actionNew->setIcon(icon);
-        actionOpen = new QAction(MainWindow);
-        actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon1;
-        iconThemeName = QString::fromUtf8("document-open");
+        QString iconThemeName = QString::fromUtf8("document-new");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon1 = QIcon::fromTheme(iconThemeName);
         } else {
             icon1.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionOpen->setIcon(icon1);
-        actionSave = new QAction(MainWindow);
-        actionSave->setObjectName(QString::fromUtf8("actionSave"));
+        actionNew->setIcon(icon1);
+        actionOpen = new QAction(MainWindow);
+        actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon2;
-        iconThemeName = QString::fromUtf8("document-save");
+        iconThemeName = QString::fromUtf8("document-open");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon2 = QIcon::fromTheme(iconThemeName);
         } else {
             icon2.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionSave->setIcon(icon2);
-        actionSave_AS = new QAction(MainWindow);
-        actionSave_AS->setObjectName(QString::fromUtf8("actionSave_AS"));
+        actionOpen->setIcon(icon2);
+        actionSave = new QAction(MainWindow);
+        actionSave->setObjectName(QString::fromUtf8("actionSave"));
         QIcon icon3;
-        iconThemeName = QString::fromUtf8("document-save-as");
+        iconThemeName = QString::fromUtf8("document-save");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon3 = QIcon::fromTheme(iconThemeName);
         } else {
             icon3.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionSave_AS->setIcon(icon3);
-        actionExit = new QAction(MainWindow);
-        actionExit->setObjectName(QString::fromUtf8("actionExit"));
+        actionSave->setIcon(icon3);
+        actionSave_AS = new QAction(MainWindow);
+        actionSave_AS->setObjectName(QString::fromUtf8("actionSave_AS"));
         QIcon icon4;
-        iconThemeName = QString::fromUtf8("window-close");
+        iconThemeName = QString::fromUtf8("document-save-as");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon4 = QIcon::fromTheme(iconThemeName);
         } else {
             icon4.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionExit->setIcon(icon4);
-        actionOpenDirectory = new QAction(MainWindow);
-        actionOpenDirectory->setObjectName(QString::fromUtf8("actionOpenDirectory"));
-        actionCut = new QAction(MainWindow);
-        actionCut->setObjectName(QString::fromUtf8("actionCut"));
+        actionSave_AS->setIcon(icon4);
+        actionExit = new QAction(MainWindow);
+        actionExit->setObjectName(QString::fromUtf8("actionExit"));
         QIcon icon5;
-        iconThemeName = QString::fromUtf8("edit-cut");
+        iconThemeName = QString::fromUtf8("window-close");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon5 = QIcon::fromTheme(iconThemeName);
         } else {
             icon5.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionCut->setIcon(icon5);
-        actionCopy = new QAction(MainWindow);
-        actionCopy->setObjectName(QString::fromUtf8("actionCopy"));
+        actionExit->setIcon(icon5);
+        actionOpenDirectory = new QAction(MainWindow);
+        actionOpenDirectory->setObjectName(QString::fromUtf8("actionOpenDirectory"));
+        actionCut = new QAction(MainWindow);
+        actionCut->setObjectName(QString::fromUtf8("actionCut"));
         QIcon icon6;
-        iconThemeName = QString::fromUtf8("edit-copy");
+        iconThemeName = QString::fromUtf8("edit-cut");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon6 = QIcon::fromTheme(iconThemeName);
         } else {
             icon6.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionCopy->setIcon(icon6);
-        actionPaste = new QAction(MainWindow);
-        actionPaste->setObjectName(QString::fromUtf8("actionPaste"));
+        actionCut->setIcon(icon6);
+        actionCopy = new QAction(MainWindow);
+        actionCopy->setObjectName(QString::fromUtf8("actionCopy"));
         QIcon icon7;
-        iconThemeName = QString::fromUtf8("edit-paste");
+        iconThemeName = QString::fromUtf8("edit-copy");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon7 = QIcon::fromTheme(iconThemeName);
         } else {
             icon7.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionPaste->setIcon(icon7);
+        actionCopy->setIcon(icon7);
+        actionPaste = new QAction(MainWindow);
+        actionPaste->setObjectName(QString::fromUtf8("actionPaste"));
+        QIcon icon8;
+        iconThemeName = QString::fromUtf8("edit-paste");
+        if (QIcon::hasThemeIcon(iconThemeName)) {
+            icon8 = QIcon::fromTheme(iconThemeName);
+        } else {
+            icon8.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
+        }
+        actionPaste->setIcon(icon8);
         actionSelect_All = new QAction(MainWindow);
         actionSelect_All->setObjectName(QString::fromUtf8("actionSelect_All"));
         actionAbout = new QAction(MainWindow);
@@ -231,34 +237,34 @@ public:
         actionAbout_QT->setObjectName(QString::fromUtf8("actionAbout_QT"));
         actionClose = new QAction(MainWindow);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
-        QIcon icon8;
-        iconThemeName = QString::fromUtf8("document-close");
-        if (QIcon::hasThemeIcon(iconThemeName)) {
-            icon8 = QIcon::fromTheme(iconThemeName);
-        } else {
-            icon8.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
-        }
-        actionClose->setIcon(icon8);
-        actionUndo = new QAction(MainWindow);
-        actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
         QIcon icon9;
-        iconThemeName = QString::fromUtf8("edit-undo");
+        iconThemeName = QString::fromUtf8("document-close");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon9 = QIcon::fromTheme(iconThemeName);
         } else {
             icon9.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionUndo->setIcon(icon9);
-        actionRedo = new QAction(MainWindow);
-        actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
+        actionClose->setIcon(icon9);
+        actionUndo = new QAction(MainWindow);
+        actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
         QIcon icon10;
-        iconThemeName = QString::fromUtf8("edit-redo");
+        iconThemeName = QString::fromUtf8("edit-undo");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon10 = QIcon::fromTheme(iconThemeName);
         } else {
             icon10.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionRedo->setIcon(icon10);
+        actionUndo->setIcon(icon10);
+        actionRedo = new QAction(MainWindow);
+        actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
+        QIcon icon11;
+        iconThemeName = QString::fromUtf8("edit-redo");
+        if (QIcon::hasThemeIcon(iconThemeName)) {
+            icon11 = QIcon::fromTheme(iconThemeName);
+        } else {
+            icon11.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
+        }
+        actionRedo->setIcon(icon11);
         actionDeselect = new QAction(MainWindow);
         actionDeselect->setObjectName(QString::fromUtf8("actionDeselect"));
         actionFile_Explorer = new QAction(MainWindow);
@@ -269,17 +275,17 @@ public:
         actionOpened_Files->setCheckable(true);
         actionNew_Window = new QAction(MainWindow);
         actionNew_Window->setObjectName(QString::fromUtf8("actionNew_Window"));
-        QIcon icon11;
+        QIcon icon12;
         iconThemeName = QString::fromUtf8("window-new");
         if (QIcon::hasThemeIcon(iconThemeName)) {
-            icon11 = QIcon::fromTheme(iconThemeName);
+            icon12 = QIcon::fromTheme(iconThemeName);
         } else {
-            icon11.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
+            icon12.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
         }
-        actionNew_Window->setIcon(icon11);
+        actionNew_Window->setIcon(icon12);
         actionClose_Window = new QAction(MainWindow);
         actionClose_Window->setObjectName(QString::fromUtf8("actionClose_Window"));
-        actionClose_Window->setIcon(icon4);
+        actionClose_Window->setIcon(icon5);
         actionUnix = new QAction(MainWindow);
         actionUnix->setObjectName(QString::fromUtf8("actionUnix"));
         actionUnix->setCheckable(true);
@@ -302,7 +308,7 @@ public:
         actionToolBar = new QAction(MainWindow);
         actionToolBar->setObjectName(QString::fromUtf8("actionToolBar"));
         actionToolBar->setCheckable(true);
-        actionToolBar->setChecked(true);
+        actionToolBar->setChecked(false);
         actionJSON = new QAction(MainWindow);
         actionJSON->setObjectName(QString::fromUtf8("actionJSON"));
         actionJSON->setCheckable(true);
@@ -425,6 +431,8 @@ public:
         actionUPPER_CASE->setObjectName(QString::fromUtf8("actionUPPER_CASE"));
         actionlower_case = new QAction(MainWindow);
         actionlower_case->setObjectName(QString::fromUtf8("actionlower_case"));
+        actionGo_to_Line = new QAction(MainWindow);
+        actionGo_to_Line->setObjectName(QString::fromUtf8("actionGo_to_Line"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -443,6 +451,12 @@ public:
         splitter_2->setHandleWidth(0);
         splitter = new QSplitter(splitter_2);
         splitter->setObjectName(QString::fromUtf8("splitter"));
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy1);
+        splitter->setStyleSheet(QString::fromUtf8(""));
         splitter->setOrientation(Qt::Vertical);
         splitter->setHandleWidth(0);
         layoutWidget = new QWidget(splitter);
@@ -454,11 +468,14 @@ public:
         openedFiles->setContentsMargins(0, 0, 0, 0);
         label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
-        label_2->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
+        label_2->setSizePolicy(sizePolicy2);
+        label_2->setStyleSheet(QString::fromUtf8("\n"
+" text-transform: uppercase;\n"
+""));
 
         openedFiles->addWidget(label_2);
 
@@ -480,8 +497,11 @@ public:
         fileExplorer->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(layoutWidget1);
         label->setObjectName(QString::fromUtf8("label"));
-        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy2);
+        label->setStyleSheet(QString::fromUtf8("text-transform: uppercase;\n"
+"padding-top:5px;\n"
+""));
 
         fileExplorer->addWidget(label);
 
@@ -489,7 +509,13 @@ public:
         treeView->setObjectName(QString::fromUtf8("treeView"));
         sizePolicy.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
         treeView->setSizePolicy(sizePolicy);
-        treeView->setStyleSheet(QString::fromUtf8(""));
+        treeView->setStyleSheet(QString::fromUtf8("QTreeView::item:selected \n"
+"{\n"
+"	background-color: white;\n"
+"	color: rgb(255, 255, 255);\n"
+"}\n"
+""));
+        treeView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
         fileExplorer->addWidget(treeView);
 
@@ -500,7 +526,9 @@ public:
         splitter_3->setOrientation(Qt::Vertical);
         tabWidget = new QTabWidget(splitter_3);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setTabShape(QTabWidget::Triangular);
+        tabWidget->setStyleSheet(QString::fromUtf8(""));
+        tabWidget->setTabShape(QTabWidget::Rounded);
+        tabWidget->setUsesScrollButtons(true);
         tabWidget->setDocumentMode(true);
         tabWidget->setTabsClosable(true);
         tabWidget->setMovable(true);
@@ -545,6 +573,8 @@ public:
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        mainToolBar->setEnabled(true);
+        mainToolBar->setStyleSheet(QString::fromUtf8(""));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -582,6 +612,7 @@ public:
         menuEdit->addAction(menuIndent->menuAction());
         menuEdit->addAction(menuLine->menuAction());
         menuEdit->addAction(menuConvert_to->menuAction());
+        menuEdit->addAction(actionGo_to_Line);
         menuIndent->addAction(actionAdd_Indent);
         menuIndent->addAction(actionDecrease_Indent);
         menuLine->addAction(actionDuplicate_Line);
@@ -769,6 +800,7 @@ public:
         actionDuplicate_Line->setText(QCoreApplication::translate("MainWindow", "Duplicate Line", nullptr));
         actionUPPER_CASE->setText(QCoreApplication::translate("MainWindow", "UPPER CASE", nullptr));
         actionlower_case->setText(QCoreApplication::translate("MainWindow", "lower case", nullptr));
+        actionGo_to_Line->setText(QCoreApplication::translate("MainWindow", "Go to Line", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "FileExplorer", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));

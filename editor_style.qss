@@ -1,0 +1,88 @@
+QMainWindow
+{
+    border:0;
+    background-color: #2f3137;
+}
+
+QTreeView, QLabel, QListWidget
+{
+    background-color: #32363c;
+    color: rgb(255, 255, 255);
+}
+
+QListWidget::item:selected
+{
+    background-color: #3b3d48;
+}
+
+QTreeView::item:selected
+{
+    background-color: #3b3d48;
+}
+
+QTabBar::tab
+{
+    padding: 10% 50% 10% 50%;
+    width: 100%;
+    background-color: #2f3037;
+    border:0;
+}
+
+QTabBar::tab:selected
+{
+        background-color: #363941;
+        color: rgb(255, 255, 255);
+}
+QPushButton
+{
+    color:white;
+    border: 2px solid white;
+    background:#505d6b;
+    padding:10px;
+    border-radius: 5px;
+    margin:0;
+}
+
+QScrollBar
+{
+background-color: #32363c;
+    width: 10px;
+
+}
+
+QScrollBar::handle
+{
+    border-radius:10px;
+    border:10px;
+    background-color: #353b4b;
+}
+
+QScrollBar::sub-page:vertical {
+background-color: #32363c;
+}
+
+QScrollBar::add-page:vertical {
+background-color: #32363c;
+}
+
+
+
+QScrollBar::add-line:vertical {
+width: 0px;
+height: 0px;
+}
+
+QScrollBar::sub-line:vertical
+{
+    width: 0px;
+    height: 0px;
+}
+
+QLineEdit
+{
+
+}
+QToolBar
+{
+padding:5px;
+}

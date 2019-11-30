@@ -49,9 +49,24 @@ FORMS += \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+else: unix:!android: target.path = /opt/$${TARGET}/
+!isEmpty(target.path): INSTALLS += target shortcut config
 
 
 win32: header_files.path = win32_include_directory
 linux: header_files.path = linux_include_directory
+
+config.path = /usr/bin/
+config.extra = ln -sf $$target.path/SimpleCodeEditor $$config.path/
+
+shortcut.path = /usr/share/applications/
+shortcut.files = SimpleCodeEditor.desktop
+
+RESOURCES += \
+    res.qrc
+
+DISTFILES += \
+    SimpleCodeEditor.desktop \
+    editor_style.qss \
+    editor_white_theme
+

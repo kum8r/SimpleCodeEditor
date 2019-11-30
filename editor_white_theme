@@ -1,0 +1,39 @@
+QMainWindow
+{
+    border:0;
+    background-color: rgb(255, 255, 255);
+}
+
+QTreeView, QLabel, QListWidget
+{
+color: #403f42;
+background-color: rgb(255, 255, 255);
+}
+
+QLabel
+{
+border: 1px solid black;
+}
+
+QTabBar::tab
+{
+    padding: 10% 50% 10% 50%;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+}
+
+QTabBar::tab:selected
+{
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+}
+QToolBar
+{
+    padding:5px;
+}
+
+QTabWidget
+{
+border:1px solid black;
+
+}

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/style">
+        <file>editor_style.qss</file>
+        <file>editor_white_theme</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>src/icons/SimpleCodeEditor.png</file>
+    </qresource>
+</RCC>

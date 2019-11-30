@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=SimpleCodeEditor
+Exec=/usr/bin/SimpleCodeEditor
+Icon=SimpleCodeEditor.png
+Categories=Development;
+mime-type=text/plain;
+Comment=A Simple Code Editor

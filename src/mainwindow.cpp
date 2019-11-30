@@ -18,12 +18,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
     defaultLocation();      //sets fileExplorer default location
 
+    setAcceptDrops(true);
+
+    QFile f(":/style/editor_style.qss");
+    if (!f.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        qApp->setStyleSheet(ts.readAll());
+    }
+
     //status bar line number widget
-    lineNumLabel = new QLabel(this);
-    ui->statusBar->addWidget(lineNumLabel);
 
     statSpitter = new QSplitter(this);
     ui->statusBar->addWidget(statSpitter);
+
+    lineNumLabel = new QLabel(this);
+    ui->statusBar->addWidget(lineNumLabel);
+
 
     fileTypeLabel = new QLabel(this);
     ui->statusBar->addWidget(fileTypeLabel);
@@ -36,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loadWindowsGeomentry();
     loadSettings();
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
+    on_actionToolBar_triggered();
 
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::cursorPositionChanged,
             this,&MainWindow::statusBar);
@@ -67,15 +84,25 @@ MainWindow::MainWindow(QWidget *parent) :
             this,SLOT(replaceAll_clicked(QString, QString)));
 
     connect(find, SIGNAL(findStringChanged()), this, SLOT(findString_Changed()));
+
+    codeEditor code;
+    connect(&code, SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
 }
 
 MainWindow::~MainWindow()
 {
     saveWindowsGeomentry();
+    saveSettings();
     delete ui;
 //    delete find;
 //    delete filemodel;
-//    delete settingsDialog;
+    //    delete settingsDialog;
+}
+
+void MainWindow::saveSettings()
+{
+    mySettings->setValue("file explorer", ui->actionFile_Explorer->isChecked());
+        mySettings->setValue("opened files", ui->actionOpened_Files->isChecked());
 }
 
 void MainWindow::saveWindowsGeomentry()
@@ -141,6 +168,10 @@ void MainWindow::loadSettings()
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoCompletionSource(QsciScintilla::AcsNone);
     }
+    ui->actionFile_Explorer->setChecked(mySettings->value("file explorer").toBool());
+    ui->actionOpened_Files->setChecked(mySettings->value("opened files").toBool());
+    on_actionOpened_Files_triggered();
+    on_actionFile_Explorer_triggered();
 }
 
 //default location of the file explorer
@@ -151,6 +182,7 @@ void MainWindow::defaultLocation()
     ui->treeView->setModel(filemodel);
     ui->treeView->setRootIndex(filemodel->index(QDir::homePath()));
 
+    ui->treeView->setHeaderHidden(true);
     //it hides the other columns in treeview
     ui->treeView->setColumnHidden(1, 1);
     ui->treeView->setColumnHidden(2, 1);
@@ -228,6 +260,7 @@ int MainWindow::newTab(QString tabname)
     int tabindex = ui->tabWidget->addTab(texteditor,tabname);
     ui->tabWidget->setCurrentIndex(tabindex);
     ui->listWidget->addItem(tabname);
+    ui->tabWidget->tabBar()->setTabTextColor(tabindex,QColor(137, 143, 159));
     return tabindex;
 }
 
@@ -649,20 +682,20 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    qDebug() << ui->tabWidget->count();
+//    qDebug() << ui->tabWidget->count();
     for (int i = 0; i < ui->tabWidget->count(); ++i)
     {
-        qDebug() << static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
+//        qDebug() << static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
         if (static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
         {
             if (ui->tabWidget->tabWhatsThis(i) != "")
             {
                 saveFile(ui->tabWidget->tabWhatsThis(i));
-                qDebug() << "closing";
+//                qDebug() << "closing";
             }
         }
     }
-    qDebug() << "closign";
+//    qDebug() << "closign";
     QMainWindow::closeEvent(event);
 }
 
@@ -730,15 +763,14 @@ void MainWindow::on_actionReplace_All_triggered()
 
 void MainWindow::findButton_clicked(QString searchtext)
 {
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->focusWidget();
     int curPos = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,curPos);
-    bool search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+    bool search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0);
     if (!search)
     {
         QMessageBox::warning(this, "Find", "search has ended", QMessageBox::Ok);
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setCursorPosition(0, 0);
-        search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0,1);
+        search = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->findFirst(searchtext,0,0,0,0);
     }
     highlighsearchtext(searchtext);
 }
@@ -753,7 +785,6 @@ void MainWindow::findPrev_clicked(QString searchtext)
     if (!search)
     {
         QMessageBox::warning(this, "find", "search has ended", QMessageBox::Ok);
-
     }
     highlighsearchtext(searchtext);
 }
@@ -1154,6 +1185,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
     setFiletype(static_cast<codeEditor*>(ui->tabWidget->widget(index))->getFileName());
 
+
     for (int i = 0; i < ui->tabWidget->count(); ++i) {
         if (i == index) break;
         if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges()) {
@@ -1189,7 +1221,7 @@ void MainWindow::on_actionAdd_Indent_triggered()
                 QsciScintilla::SCI_GETCURRENTPOS);
     int line = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
                 QsciScintilla::SCI_LINEFROMPOSITION,pos);
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_SETINDENT,4);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setIndentation(line, 4);
 
 }
 
@@ -1388,6 +1420,7 @@ void MainWindow::setLexer(QString lexername)
     QFont font = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->font();
     QMap<QString, QsciLexer*>::iterator i = languageToLexer.find(lexername);
 
+
     if (i != languageToLexer.end())
     {
         QsciLexer *lexer = i.value();
@@ -1403,7 +1436,7 @@ void MainWindow::setLexer(QString lexername)
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(nullptr);
     }
     QsciLexer *curLexer = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer();
-    if (curLexer == 0)
+    if (curLexer == nullptr)
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setFont(font);
     }
@@ -1412,7 +1445,8 @@ void MainWindow::setLexer(QString lexername)
         curLexer->setFont(font);
         curLexer->setAutoIndentStyle(true);
     }
-
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setStyleSheet();
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->darkSyntaxTheme();
 }
 
 void MainWindow::lostFocus(QEvent *event)
@@ -1481,6 +1515,37 @@ void MainWindow::highlighsearchtext(QString searchtext)
     }
 }
 
+void MainWindow::setStyleSheet()
+{
+    QString stylesheet = "QsciScintilla ";
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+     event->accept();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("text/uri-list"))
+    {
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.isEmpty())
+        return;
+
+    QString fileName = urls.first().toLocalFile();
+    if (fileName.isEmpty())
+        return;
+
+    openFile(fileName);
+}
+}
+
 void MainWindow::on_actionUPPER_CASE_triggered()
 {
     QString selectedText = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectedText();
@@ -1499,4 +1564,20 @@ void MainWindow::on_actionlower_case_triggered()
         QString lowercase_string = selectedText.toLower();
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->replaceSelectedText(lowercase_string);
     }
+}
+
+void MainWindow::on_actionGo_to_Line_triggered()
+{
+    int line = QInputDialog::getInt(this, "Go to Line", "enter the line");
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setCursorPosition(line, 0);
+
+}
+
+void MainWindow::on_actionDecrease_Indent_triggered()
+{
+    int pos =  static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
+                QsciScintilla::SCI_GETCURRENTPOS);
+    int line = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
+                QsciScintilla::SCI_LINEFROMPOSITION,pos);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->unindent(line);
 }
