@@ -20,7 +20,7 @@ codeEditor::codeEditor()
 //    setColor("#00000");
     setBraceMatching(SloppyBraceMatch);
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
-    setStyleSheet();
+//    setStyleSheet();
 //    autoComplete();
 //    loadSettings();
 }

@@ -20,17 +20,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setAcceptDrops(true);
 
-    QFile f(":/style/editor_style.qss");
-    if (!f.exists())
-    {
-        printf("Unable to set stylesheet, file not found\n");
-    }
-    else
-    {
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-        qApp->setStyleSheet(ts.readAll());
-    }
+//    QFile f(":/style/editor_style.qss");
+//    if (!f.exists())
+//    {
+//        printf("Unable to set stylesheet, file not found\n");
+//    }
+//    else
+//    {
+//        f.open(QFile::ReadOnly | QFile::Text);
+//        QTextStream ts(&f);
+//        qApp->setStyleSheet(ts.readAll());
+//    }
 
     //status bar line number widget
 
@@ -1445,8 +1445,8 @@ void MainWindow::setLexer(QString lexername)
         curLexer->setFont(font);
         curLexer->setAutoIndentStyle(true);
     }
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setStyleSheet();
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->darkSyntaxTheme();
+//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setStyleSheet();
+//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->darkSyntaxTheme();
 }
 
 void MainWindow::lostFocus(QEvent *event)
