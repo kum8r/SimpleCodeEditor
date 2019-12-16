@@ -25,7 +25,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 qscintilla2
 
 SOURCES += \
-        src/lexers/cpplexers.cpp \
         src/codeeditor.cpp \
         src/finddialog.cpp \
         src/lexers/lexers.cpp \
@@ -35,7 +34,6 @@ SOURCES += \
 
 
 HEADERS += \
-        src/lexers/cpplexers.h \
         src/codeeditor.h \
         src/finddialog.h \
         src/lexers/lexers.h \

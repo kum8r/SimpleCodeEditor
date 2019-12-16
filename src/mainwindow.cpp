@@ -20,20 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setAcceptDrops(true);
 
-//    QFile f(":/style/editor_style.qss");
-//    if (!f.exists())
-//    {
-//        printf("Unable to set stylesheet, file not found\n");
-//    }
-//    else
-//    {
-//        f.open(QFile::ReadOnly | QFile::Text);
-//        QTextStream ts(&f);
-//        qApp->setStyleSheet(ts.readAll());
-//    }
-
     //status bar line number widget
-
     statSpitter = new QSplitter(this);
     ui->statusBar->addWidget(statSpitter);
 
@@ -60,11 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::cursorPositionChanged,
             this,&MainWindow::lineNumwidthIncrement);
 
-    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::textChanged,
-            this,&MainWindow::saveChanges);
-
 //    connect(this, &MainWindow::focusOutEvent, this, &MainWindow::lostFocus);
-
 
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setWrapMode(QsciScintilla::WrapWord);
 
@@ -94,15 +77,12 @@ MainWindow::~MainWindow()
     saveWindowsGeomentry();
     saveSettings();
     delete ui;
-//    delete find;
-//    delete filemodel;
-    //    delete settingsDialog;
 }
 
 void MainWindow::saveSettings()
 {
     mySettings->setValue("file explorer", ui->actionFile_Explorer->isChecked());
-        mySettings->setValue("opened files", ui->actionOpened_Files->isChecked());
+    mySettings->setValue("opened files", ui->actionOpened_Files->isChecked());
 }
 
 void MainWindow::saveWindowsGeomentry()
@@ -256,7 +236,7 @@ void MainWindow::menuActionGroup()
 
 int MainWindow::newTab(QString tabname)
 {
-    codeEditor *texteditor = new codeEditor;
+    codeEditor *texteditor = new codeEditor(this);
     int tabindex = ui->tabWidget->addTab(texteditor,tabname);
     ui->tabWidget->setCurrentIndex(tabindex);
     ui->listWidget->addItem(tabname);
@@ -286,7 +266,7 @@ void MainWindow::openDirectory()
 
 void MainWindow::openFile(QString filepath)
 {
-    codeEditor *texteditor = new codeEditor();
+    codeEditor *texteditor = new codeEditor(this);
     QString line;
     if (filepath.isNull()) {
         filepath = QFileDialog::getOpenFileName(this,tr("Open file"),QDir::homePath());
@@ -424,11 +404,6 @@ void MainWindow::closeFile(int index)
     }
 }
 
-// it collects the text is changed or not
-void MainWindow::saveChanges()
-{
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(true);
-}
 
 void MainWindow::lineNumwidthIncrement(int line, int index)
 {
@@ -451,110 +426,122 @@ void MainWindow::setFiletype(QString file)
     QFileInfo fileinfo(file);
     QString extension = fileinfo.suffix();
     extension = extension.toLower();
-    if (extension == "txt") {
+    if (extension == "txt")
+    {
         on_actionNormal_triggered();
-        //setLexers(nullptr);
         fileTypeLabel->setText("Normal");
     }
-    else if (extension == "sh") {
+    else if (extension == "sh")
+    {
       on_actionBash_triggered();
-        //  setLexers(lexer);
         fileTypeLabel->setText("Bash File");
     }
-    else if (extension == "bat") {
+    else if (extension == "bat")
+    {
         on_actionBatch_File_triggered();
-        //  setLexers(lexer);
         fileTypeLabel->setText("Batch File");
     }
     else if ((extension == "c") or (extension == "cpp") or (extension == "h") or (extension == "cxx")
-             or (extension == "hpp") or (extension == "hxx" )) {
+             or (extension == "hpp") or (extension == "hxx" ))
+    {
         on_actionCpp_triggered();
-        //  setLexers(lexer);
         fileTypeLabel->setText("C++");
     }
-    else if (extension == "cs" ) {
+    else if (extension == "cs" )
+    {
         on_actionCSharp_triggered();
         fileTypeLabel->setText("CSharp");
     }
-    else if (extension == "css") {
+    else if (extension == "css")
+    {
         on_actionCSS_triggered();
         fileTypeLabel->setText("CSS");
     }
-    else if (extension == "d") {
+    else if (extension == "d")
+    {
         on_actionD_triggered();
         fileTypeLabel->setText("D");
     }
-    else if (extension == "f") {
+    else if (extension == "f")
+    {
         on_actionFortan_triggered();
         fileTypeLabel->setText("Fortan");
     }
-    else if (extension == "html") {
+    else if (extension == "html")
+    {
         on_actionHTML_triggered();
         fileTypeLabel->setText("HTML");
     }
-    else if (extension == "java") {
+    else if (extension == "java")
+    {
         on_actionJava_triggered();
         fileTypeLabel->setText("Java");
     }
-    else if (extension == "js") {
+    else if (extension == "js")
+    {
         on_actionJavaScript_triggered();
         fileTypeLabel->setText("Javascript");
     }
-    else if (extension == "json") {
+    else if (extension == "json")
+    {
         on_actionJSON_triggered();
         fileTypeLabel->setText("JSON");
     }
-    else if (extension == "lua") {
+    else if (extension == "lua")
+    {
         on_actionLua_triggered();
         fileTypeLabel->setText("Lua");
     }
-    else if (extension == "md") {
+    else if (extension == "md")
+    {
         on_actionMarkDown_triggered();
         fileTypeLabel->setText("Markdown");
     }
-    else if (extension == "mlx") {
+    else if (extension == "mlx")
+    {
         on_actionMatLab_triggered();
         fileTypeLabel->setText("Matlab");
     }
-    else if (extension == "pas") {
+    else if (extension == "pas")
+    {
         on_actionPascal_triggered();
         fileTypeLabel->setText("Pascal");
     }
-    else if (extension == "pl") {
+    else if (extension == "pl")
+    {
         on_actionPerl_triggered();
         fileTypeLabel->setText("Perl");
     }
-    else if (extension == "py") {
+    else if (extension == "py")
+    {
         on_actionPython_triggered();
         fileTypeLabel->setText("Python");
     }
-    else if (extension == "rb") {
+    else if (extension == "rb")
+    {
         on_actionRuby_triggered();
         fileTypeLabel->setText("Ruby");
     }
-    else if (extension == "sql" or extension == "sqlite") {
+    else if (extension == "sql" or extension == "sqlite")
+    {
         on_actionSQL_triggered();
         fileTypeLabel->setText("SQL");
     }
-    else if (extension == "yaml") {
+    else if (extension == "yaml")
+    {
         on_actionYAML_triggered();
         fileTypeLabel->setText("YAML");
     }
-    else if (extension == "xml") {
+    else if (extension == "xml")
+    {
         on_actionXML_triggered();
         fileTypeLabel->setText("XML");
     }
-    else {
+    else
+    {
         on_actionNormal_triggered();
         fileTypeLabel->setText("Normal");
     }    
-}
-
-void MainWindow::setLexers(QsciLexer *lexer)
-{
-    QFont font = ui->tabWidget->currentWidget()->font();
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
-    lexer->setFont(font);
 }
 
 void MainWindow::changeFilename()
@@ -565,11 +552,6 @@ void MainWindow::changeFilename()
         tabName = ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "- *";
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabName);
     }
-}
-
-void MainWindow::autoComplete()
-{
-
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -590,10 +572,12 @@ void MainWindow::on_actionOpenDirectory_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    if (ui->tabWidget->tabWhatsThis(ui->tabWidget->currentIndex()) == "") {
-    saveFileAs(ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
+    if (ui->tabWidget->tabWhatsThis(ui->tabWidget->currentIndex()) == "")
+    {
+        saveFileAs(ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
     }
-    else {
+    else
+    {
         QString filepath = ui->tabWidget->tabWhatsThis(ui->tabWidget->currentIndex());
         saveFile(filepath);
     }
@@ -607,12 +591,20 @@ void MainWindow::on_actionSave_AS_triggered()
 void MainWindow::on_actionSave_All_triggered()
 {
     int curIndex = ui->tabWidget->currentIndex();
-    for (int i =0;i < ui->tabWidget->count();i++) {
-        if (ui->tabWidget->tabWhatsThis(i) == "") {
-            saveFileAs(ui->tabWidget->tabText(i));
-        }
-        else {
-            QString filepath = ui->tabWidget->tabWhatsThis(i);
+    for (int i =0;i < ui->tabWidget->count();i++)
+    {
+        bool textchanged = static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
+        if (textchanged)
+        {
+            if (ui->tabWidget->tabWhatsThis(i) == "")
+            {
+                saveFileAs(ui->tabWidget->tabText(i));
+            }
+            else
+            {
+                QString filepath = ui->tabWidget->tabWhatsThis(i);
+                saveFile(filepath);
+            }
         }
     }
     ui->tabWidget->setCurrentIndex(curIndex);
@@ -658,9 +650,10 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_actionClose_All_Files_triggered()
 {
-    for (int i=0;i<ui->tabWidget->count();i++)
+    int tabcount = ui->tabWidget->count();
+    for (int i = 0;i < tabcount; i++)
     {
-        closeFile(0);
+        closeFile(i);
     }
 }
 
@@ -682,21 +675,22 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-//    qDebug() << ui->tabWidget->count();
+    QMessageBox::StandardButton ask = QMessageBox::question(this,tr(""),tr("Save changes before close"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
+    if (ask == QMessageBox::No)
+    {
+        return;
+    }
     for (int i = 0; i < ui->tabWidget->count(); ++i)
     {
-//        qDebug() << static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
         if (static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
         {
             if (ui->tabWidget->tabWhatsThis(i) != "")
             {
                 saveFile(ui->tabWidget->tabWhatsThis(i));
-//                qDebug() << "closing";
             }
         }
     }
-//    qDebug() << "closign";
-    QMainWindow::closeEvent(event);
+    event->accept();
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -727,7 +721,6 @@ void MainWindow::on_actionPaste_triggered()
 void MainWindow::on_actionSelect_All_triggered()
 {
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectAll();
-//    int curLine = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION,curPos);
 }
 
 void MainWindow::on_actionDeselect_triggered()
@@ -799,12 +792,14 @@ void MainWindow::replaceAll_clicked(QString searchtext, QString replacetext)
     QString document = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
     document.replace(searchtext,replacetext);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setText(document);
-    if(!replacetext.isEmpty()) {
+    if(!replacetext.isEmpty())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_INDICSETSTYLE,0,7);
         int end = document.lastIndexOf(replacetext);
         int cur = -1;
         if (end != -1) {
-            while (cur != end) {
+            while (cur != end)
+            {
                 cur = document.indexOf(replacetext,cur+1);
             }
         }
@@ -824,7 +819,8 @@ void MainWindow::on_actionOpened_Files_triggered()
         ui->listWidget->show();
         ui->label_2->show();
     }
-    else {
+    else
+    {
         ui->listWidget->hide();
         ui->label_2->hide();
     }
@@ -836,7 +832,8 @@ void MainWindow::on_actionFile_Explorer_triggered()
         ui->treeView->show();
         ui->label->show();
     }
-    else {
+    else
+    {
         ui->treeView->hide();
         ui->label->hide();
     }
@@ -862,30 +859,36 @@ void MainWindow::on_actionWindows_triggered()
 
 void MainWindow::on_actionShow_Linenumbers_triggered()
 {
-    if (ui->actionShow_Linenumbers->isChecked()) {
+    if (ui->actionShow_Linenumbers->isChecked())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"0000");
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"");
     }
 }
 
 void MainWindow::on_actionStatusBar_triggered()
 {
-    if (ui->actionStatusBar->isChecked()) {
+    if (ui->actionStatusBar->isChecked())
+    {
         ui->statusBar->show();
     }
-    else {
+    else
+    {
         ui->statusBar->hide();
     }
 }
 
 void MainWindow::on_actionToolBar_triggered()
 {
-    if (ui->actionToolBar->isChecked()) {
+    if (ui->actionToolBar->isChecked())
+    {
         ui->mainToolBar->show();
     }
-    else {
+    else
+    {
         ui->mainToolBar->hide();
     }
 }
@@ -901,17 +904,11 @@ void MainWindow::on_actionBash_triggered()
 {
     fileTypeLabel->setText("Bash");
     setLexer("Bash");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
 }
 
 void MainWindow::on_actionBatch_File_triggered()
 {
     fileTypeLabel->setText("Batch");
-//    QsciLexerBatch *lexer = new QsciLexerBatch (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
     this->setLexer("Bash");
 }
 
@@ -919,249 +916,168 @@ void MainWindow::on_actionC_triggered()
 {
     fileTypeLabel->setText("C");
     setLexer("C++");
-//    QsciLexerCPP *lexer = new QsciLexerCPP (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
 }
 
 void MainWindow::on_actionCSharp_triggered()
 {
     fileTypeLabel->setText("CSharp");
     setLexer("C#");
-//    QsciLexerCSharp *lexer = new QsciLexerCSharp (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
 }
 
 void MainWindow::on_actionCpp_triggered()
 {
     fileTypeLabel->setText("Cpp");
     setLexer("C++");
-    //QsciLexerCPP *lexer =  new QsciLexerCPP(this);
-  //  static_cast<codeEditor*>(ui->tabWidget->currentWidget())->autoCompleteForCpp(lexer);
-    //static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
 }
 
 void MainWindow::on_actionCSS_triggered()
 {
     fileTypeLabel->setText("CSS");
     setLexer("CSS");
-    /*QsciLexerBash *lexer = new QsciLexerBash (this);
-    lexer->setFont(QFont(mySettings->value("font").toString()));
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerCSS(this));*/
 }
 
 void MainWindow::on_actionCMake_triggered()
 {
     fileTypeLabel->setText("CMake");
     setLexer("CMake");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerCMake(this));
 }
 
 void MainWindow::on_actionCoffeeScript_triggered()
 {
     fileTypeLabel->setText("CoffeeScript");
     setLexer("CoffeeScript");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerCoffeeScript(this));
 }
 
 void MainWindow::on_actionD_triggered()
 {
     fileTypeLabel->setText("D");
     setLexer("D");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerD(this));
 }
 
 void MainWindow::on_actionDiff_triggered()
 {
     fileTypeLabel->setText("Diff");
     setLexer("Diff");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerDiff(this));
 }
 
 void MainWindow::on_actionFortan_triggered()
 {
     fileTypeLabel->setText("Fortran");
     setLexer("Fortran");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerFortran(this));
 }
 
 void MainWindow::on_actionFortan77_triggered()
 {
     fileTypeLabel->setText("Fortran77");
     setLexer("Fortran77");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerFortran77(this));
 }
 
 void MainWindow::on_actionHTML_triggered()
 {
     fileTypeLabel->setText("HTML");
     setLexer("HTML");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerHTML(this));
 }
 
 void MainWindow::on_actionJava_triggered()
 {
     fileTypeLabel->setText("Java");
     setLexer("Java");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerJava(this));
 }
 
 void MainWindow::on_actionJavaScript_triggered()
 {
     fileTypeLabel->setText("JavaScript");
     setLexer("JavaScript");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerJavaScript(this));
 }
 
 void MainWindow::on_actionJSON_triggered()
 {
     fileTypeLabel->setText("JSON");
     setLexer("JSON");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerJSON(this));
 }
 
 void MainWindow::on_actionLua_triggered()
 {
     fileTypeLabel->setText("Lua");
     setLexer("Lua");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerLua(this));
 }
 
 void MainWindow::on_actionMarkDown_triggered()
 {
     fileTypeLabel->setText("MarkDown");
     setLexer("Markdown");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerMarkdown(this));
 }
 
 void MainWindow::on_actionMakeFile_triggered()
 {
     fileTypeLabel->setText("MakeFile");
     setLexer("Makefile");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerMakefile(this));
 }
 
 void MainWindow::on_actionMatLab_triggered()
 {
     fileTypeLabel->setText("MatLab");
     setLexer("Matlab");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerMatlab(this));
 }
 
 void MainWindow::on_actionPascal_triggered()
 {
     fileTypeLabel->setText("Pascal");
     setLexer("Pascal");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerPascal(this));
 }
 
 void MainWindow::on_actionPython_triggered()
 {
     fileTypeLabel->setText("Python");
     setLexer("Python");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerPython(this));
 }
 
 void MainWindow::on_actionPerl_triggered()
 {
     fileTypeLabel->setText("Perl");
     setLexer("Perl");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerPerl(this));
 }
 
 void MainWindow::on_actionProperties_triggered()
 {
     fileTypeLabel->setText("Properties");
     setLexer("Properties");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerProperties(this));
 }
 
 void MainWindow::on_actionRuby_triggered()
 {
     fileTypeLabel->setText("Ruby");
     setLexer("Ruby");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerRuby(this));
 }
 
 void MainWindow::on_actionSQL_triggered()
 {
     fileTypeLabel->setText("SQL");
     setLexer("SQL");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerSQL(this));
 }
 
 void MainWindow::on_actionTeX_triggered()
 {
     fileTypeLabel->setText("TeX");
     setLexer("TeX");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerTeX(this));
 }
 
 void MainWindow::on_actionXML_triggered()
 {
     fileTypeLabel->setText("XML");
     setLexer("XML");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerXML(this));
 }
 
 void MainWindow::on_actionYAML_triggered()
 {
     fileTypeLabel->setText("YAML");
     setLexer("YAML");
-//    QsciLexerBash *lexer = new QsciLexerBash (this);
-//    lexer->setFont(QFont(mySettings->value("font").toString()));
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(new QsciLexerYAML(this));
 }
 //--------------
 
 void MainWindow::on_actionAbout_triggered()
 {
-    QMessageBox::about(this,tr("About Text editor"),tr(" "));
+    QMessageBox::about(this,tr("About code editor"),tr(" "));
 }
 
 void MainWindow::on_actionAbout_QT_triggered()
@@ -1186,10 +1102,13 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     setFiletype(static_cast<codeEditor*>(ui->tabWidget->widget(index))->getFileName());
 
 
-    for (int i = 0; i < ui->tabWidget->count(); ++i) {
+    for (int i = 0; i < ui->tabWidget->count(); ++i)
+    {
         if (i == index) break;
-        if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges()) {
-            if (ui->tabWidget->tabWhatsThis(i) != "") {
+        if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges())
+        {
+            if (ui->tabWidget->tabWhatsThis(i) != "")
+            {
                 saveFile(ui->tabWidget->tabWhatsThis(i));
             }
         }
@@ -1205,10 +1124,12 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void MainWindow::on_actionWordWrap_triggered()
 {
-    if(ui->actionWordWrap->isChecked()) {
+    if(ui->actionWordWrap->isChecked())
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setWrapMode(QsciScintilla::WrapWord);
     }
-    else {
+    else
+    {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setWrapMode(QsciScintilla::WrapNone);
     }
 }
@@ -1222,166 +1143,6 @@ void MainWindow::on_actionAdd_Indent_triggered()
     int line = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
                 QsciScintilla::SCI_LINEFROMPOSITION,pos);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setIndentation(line, 4);
-
-}
-
-
-/*
-//themes
-void MainWindow::on_actionSolarizedDark_triggered()
-{
-    theme = "solarized";
-    settings.setValue("theme", "solarized");
-
-    QString fgc = "#839496";
-    QString bgc = "#fdf6e3";
-    QString lc = "#eee7d5";
-
-    setMainWindowStyle(bgc, lc);
-    setTabWidgetStyle(fgc, bgc);
-    setLineNumStyle(lc, fgc);
-    setOverViewStyle(lc, fgc);
-
-    updateHighlighterTheme();
-
-    lineColor = QColor(238, 232, 213);
-}
-
-void MainWindow::setMainWindowStyle(QString backgroundColor, QString lineColor){
-    QString stylesheet = "QMenu {"
-                "background-color: rgb(48, 47, 54);"
-                "color:white;"
-                "selection-background-color: #404f4f;"
-                "border: 1px solid #404f4f;"
-                "border-radius: 3px 3px 3px 3px;"
-             "}"
-             "QMenuBar::item {"
-                "background:#262626;"
-             "}"
-             "QMenuBar::item:selected {"
-                "background: #232629;"
-             "}"
-             "QMessageBox {"
-                "color:white;"
-             "}"
-             "QLineEdit {"
-                "border: 1px solid #676767;"
-                "border-radius: 5px 5px 5px 5px;"
-             "}"
-             "QScrollBar::sub-page:vertical {"
-                "background: " +  backgroundColor + ";"
-             "}"
-             "QScrollBar::add-page:vertical {"
-                "background: " +  backgroundColor + ";"
-             "}"
-             "QScrollBar::sub-page:horizonal {"
-                "background: " +  backgroundColor +";"
-             "}"
-             "QScrollBar::add-page:horizontal {"
-                "background: " +  backgroundColor +";"
-             "}"
-             "QScrollBar:vertical{"
-                "background: white;"
-                "width:12px;margin: 0px 0px 0px 0px;"
-             "}"
-             "QScrollBar::handle:vertical {"
-                "background:" + lineColor  +";"
-                "border: 2px solid " +  backgroundColor  +";"
-                "border-radius: 5px 5px 5px 5px;"
-                "min-height: 30px;"
-             "}"
-             "QScrollBar:horizontal{"
-                "background: white;"
-                "height:12px;"
-                "margin: 0px 0px 0px 0px;"
-             "}"
-             "QScrollBar::handle:horizontal {"
-                "background:" + lineColor  +";"
-             "border: 2px solid " +  backgroundColor  +";"
-             "border-radius: 5px 5px 5px 5px;"
-             "min-height: 30px;"
-             "}";
-
-    MainWindow::setStyleSheet(stylesheet);
-
-}
-
-void MainWindow::setTabWidgetStyle(QString foregroundColor, QString backgroundColor){
-   QString stylesheet = "QPlainTextEdit {"
-                "background-color: " +  backgroundColor  +";"
-                "color:" + foregroundColor  +";"
-                "border: 0px;"
-                "padding-left: 1px;"
-                "selection-background-color: #404f4f;"
-                "font-family: \"Anonymous Pro\";"
-                "font-size:11pt;"
-             "}"
-             "QScrollBar:vertical{"
-                "background: " +  backgroundColor  +";"
-             "}"
-             "QScrollBar:horizontal{"
-                "background: " +  backgroundColor  +";"
-             "}"
-             "QTabBar::tab:selected{"
-                "color: white;"
-                "border-bottom: 3px solid #2F4F4F;"
-             "}"
-             "QTabBar::tab {"
-                "height: 22px; width: 160px;"
-                "color: #676767;"
-                "font-size:9pt;"
-                "margin: 0 -2px;"
-                "padding: 1px 5px;"
-                "background-color: #262626;"
-                "border-bottom: 3px solid #212121;"
-             "}";
-   ui->tabWidget->setStyleSheet(stylesheet);
-
-}
-
-void MainWindow::setLineNumStyle(QString lineColor, QString foregroundColor){
-   QString stylesheet = "background-color: " + lineColor  +";"
-            "margin-top: 30px;"
-            "padding-left: 5px;"
-            "padding-right: 1px;"
-            "color: " + foregroundColor  +";"
-            "border: none;"
-            "font: 11pt \"Anonymous Pro\";";
-    ui->listWidget->setStyleSheet(stylesheet);
-}
-
-
-void MainWindow::setOverViewStyle(QString lineColor, QString foregroundColor){
-    QString stylesheet = "font-family: \"Anonymous Pro\";"
-            "font-size: 1pt;"
-            "color:" + foregroundColor  +";"
-            "margin-top: 28px;"
-            "background-color:" + lineColor  +";"
-            "border: 0px;";
-    //codeeditor stylesheet
-   // ui->fileOverview->setStyleSheet(stylesheet);
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->codeEditorTheme(lineColor,foregroundColor);
-
-}
-
-void MainWindow::updateHighlighterTheme(){
-    int current = ui->tabWidget->currentIndex();
-    int numOpenTabs = ui->tabWidget->count();
-    for(int i = 0; i < numOpenTabs; i++){
-        ui->tabWidget->setCurrentIndex(i);
-
-     //   currentEditorWidget->setHighlighterTheme(theme);
-    }
-    ui->tabWidget->setCurrentIndex(current);
-}
-
-*/
-
-
-//!important
-void MainWindow::setLexer(QsciLexer *lexer)
-{
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
 }
 
 void MainWindow::setLexer(QString lexername)
@@ -1420,16 +1181,13 @@ void MainWindow::setLexer(QString lexername)
     QFont font = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->font();
     QMap<QString, QsciLexer*>::iterator i = languageToLexer.find(lexername);
 
+    QsciLexer *lexer;
 
     if (i != languageToLexer.end())
     {
-        QsciLexer *lexer = i.value();
+        lexer = i.value();
+        setStyleSheet(lexer);
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
-
-        if (i.key() == "C++")
-        {
-            static_cast<codeEditor*>(ui->tabWidget->currentWidget())->autoCompleteForCpp(lexer);
-        }
     }
     if (lexername == "Normal")
     {
@@ -1445,21 +1203,22 @@ void MainWindow::setLexer(QString lexername)
         curLexer->setFont(font);
         curLexer->setAutoIndentStyle(true);
     }
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setStyleSheet();
-//    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->darkSyntaxTheme();
 }
 
 void MainWindow::lostFocus(QEvent *event)
 {
-    if (event->type() == QEvent::WindowDeactivate)
+    if (false)
     {
-        for (int i = 0; i < ui->tabWidget->count(); ++i)
+        if (event->type() == QEvent::WindowDeactivate)
         {
-            if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges())
+            for (int i = 0; i < ui->tabWidget->count(); ++i)
             {
-                if (ui->tabWidget->tabWhatsThis(i) != "")
+                if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges())
                 {
-                    saveFile(ui->tabWidget->tabWhatsThis(i));
+                    if (ui->tabWidget->tabWhatsThis(i) != "")
+                    {
+                        saveFile(ui->tabWidget->tabWhatsThis(i));
+                    }
                 }
             }
         }
@@ -1515,10 +1274,6 @@ void MainWindow::highlighsearchtext(QString searchtext)
     }
 }
 
-void MainWindow::setStyleSheet()
-{
-    QString stylesheet = "QsciScintilla ";
-}
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -1580,4 +1335,27 @@ void MainWindow::on_actionDecrease_Indent_triggered()
     int line = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
                 QsciScintilla::SCI_LINEFROMPOSITION,pos);
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->unindent(line);
+}
+
+void MainWindow::setStyleSheet(QsciLexer *lexer, QMap<QString, QString> themes)
+{
+    if (themes.isEmpty())
+    {
+        lexer->setDefaultColor(QColor("white"));
+        lexer->setDefaultPaper(QColor("#363941"));
+    }
+}
+
+void MainWindow::setStyleSheet(QsciLexer *lexer)
+{
+    if (lexer == nullptr)
+    {
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setColor(QColor("white"));
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setPaper(QColor("#363941"));
+    }
+    else
+    {
+        lexer->setDefaultColor(QColor("white"));
+        lexer->setDefaultPaper(QColor("#363941"));
+    }
 }

@@ -10,14 +10,11 @@
 
 class codeEditor : public QsciScintilla
 {
-
-
 public:
-
-    codeEditor();
+    codeEditor(QWidget *parent = nullptr);
 
     bool getTextChanges() const;
-    void setTextChanges(bool value);
+    void setTextChanges();
 
     void loadSettings();
 

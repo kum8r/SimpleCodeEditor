@@ -27,7 +27,6 @@
 
 //lexer
 
-#include "lexers/cpplexers.h"
 #include "lexers/lexers.h"
 
 #include "Qsci/qscilexer.h"
@@ -91,12 +90,8 @@ public:
     void saveFileAs(QString fileName);
     void closeFile();
     void closeFile(int index);
-    void saveChanges();
     void lineNumwidthIncrement(int ,int);
     void setFiletype(QString);
-    void setLexers(QsciLexer* lexers);
-
-    void closeEvent(QCloseEvent *event);
 
 
 
@@ -112,11 +107,7 @@ public:
     void changeFilename();
 
     void autoComplete();
-
-
     void highlighsearchtext(QString searchtext);
-
-    void setStyleSheet();
 
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
@@ -126,6 +117,7 @@ private slots:
 
 
     void print(QPrinter *printer);
+    void lostFocus(QEvent *event);
 
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
@@ -208,39 +200,16 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
-    void setLexer(QsciLexer* lexer);
     void setLexer(QString lexername);
 
-
-
-    void lostFocus(QEvent *event);
-
-
     void on_actionWordWrap_triggered();
-
-
     void on_actionAdd_Indent_triggered();
-
-
-
-
-    //void on_actionSolarizedDark_triggered();
-
-
-
-
     void on_actionSettings_triggered();
-
     void on_actionDuplicate_Line_triggered();
-
     void findString_Changed();
-
     void on_actionUPPER_CASE_triggered();
-
     void on_actionlower_case_triggered();
-
     void on_actionGo_to_Line_triggered();
-
     void on_actionDecrease_Indent_triggered();
 
 private:
@@ -257,6 +226,12 @@ private:
     QSettings *mySettings;
     QList<int> searchTextposlist;
     QString searchString;
+
+    void setStyleSheet(QsciLexer *lexer, QMap <QString, QString> themes);
+    void setStyleSheet(QsciLexer *lexer);
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 };
 

@@ -52,8 +52,7 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../src/lexers/cpplexers.cpp \
-		../src/codeeditor.cpp \
+SOURCES       = ../src/codeeditor.cpp \
 		../src/finddialog.cpp \
 		../src/lexers/lexers.cpp \
 		../src/main.cpp \
@@ -62,8 +61,7 @@ SOURCES       = ../src/lexers/cpplexers.cpp \
 		moc_finddialog.cpp \
 		moc_mainwindow.cpp \
 		moc_settings.cpp
-OBJECTS       = cpplexers.o \
-		codeeditor.o \
+OBJECTS       = codeeditor.o \
 		finddialog.o \
 		lexers.o \
 		main.o \
@@ -351,13 +349,11 @@ DIST          = ../SimpleCodeEditor.desktop \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		../../SimpleCodeEditor.pro ../src/lexers/cpplexers.h \
-		../src/codeeditor.h \
+		../../SimpleCodeEditor.pro ../src/codeeditor.h \
 		../src/finddialog.h \
 		../src/lexers/lexers.h \
 		../src/mainwindow.h \
-		../src/settings.h ../src/lexers/cpplexers.cpp \
-		../src/codeeditor.cpp \
+		../src/settings.h ../src/codeeditor.cpp \
 		../src/finddialog.cpp \
 		../src/lexers/lexers.cpp \
 		../src/main.cpp \
@@ -945,8 +941,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../res.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/lexers/cpplexers.h ../src/codeeditor.h ../src/finddialog.h ../src/lexers/lexers.h ../src/mainwindow.h ../src/settings.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/lexers/cpplexers.cpp ../src/codeeditor.cpp ../src/finddialog.cpp ../src/lexers/lexers.cpp ../src/main.cpp ../src/mainwindow.cpp ../src/settings.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/codeeditor.h ../src/finddialog.h ../src/lexers/lexers.h ../src/mainwindow.h ../src/settings.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/codeeditor.cpp ../src/finddialog.cpp ../src/lexers/lexers.cpp ../src/main.cpp ../src/mainwindow.cpp ../src/settings.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../src/finddialog.ui ../src/mainwindow.ui ../src/settings.ui $(DISTDIR)/
 
 
@@ -999,7 +995,6 @@ moc_mainwindow.cpp: ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/cpplexers.h \
 		../src/lexers/lexers.h \
 		moc_predefs.h \
 		/usr/bin/moc
@@ -1039,9 +1034,6 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-cpplexers.o: ../src/lexers/cpplexers.cpp ../src/lexers/cpplexers.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cpplexers.o ../src/lexers/cpplexers.cpp
-
 codeeditor.o: ../src/codeeditor.cpp ../src/codeeditor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o codeeditor.o ../src/codeeditor.cpp
 
@@ -1056,7 +1048,6 @@ main.o: ../src/main.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/cpplexers.h \
 		../src/lexers/lexers.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../src/main.cpp
 
@@ -1064,7 +1055,6 @@ mainwindow.o: ../src/mainwindow.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/cpplexers.h \
 		../src/lexers/lexers.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../src/mainwindow.cpp
