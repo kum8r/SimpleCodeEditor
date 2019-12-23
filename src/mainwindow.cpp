@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addWidget(fileTypeLabel);
 
     //minimap
-    Mmap = new minimap (this);
+    Mmap = new minimap ();
     ui->widget_2->setLayout(Mmap->layout());
 
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
@@ -79,6 +79,8 @@ MainWindow::~MainWindow()
 {
     saveWindowsGeomentry();
     saveSettings();
+    delete find;
+    delete Mmap;
     delete ui;
 }
 
@@ -1099,8 +1101,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
     if (showMinimap)
     {
-        QsciDocument document = static_cast<codeEditor*>(ui->tabWidget->widget(index))->document();
-        Mmap->getText()->setDocument(document);
+        setTextinMinimap();
     }
 
 //    for (int i = 0; i < ui->tabWidget->count(); ++i)

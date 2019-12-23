@@ -22,7 +22,7 @@ install [Qt](https://qt.io "Qt")  and [qscintilla](https://www.riverbankcomputin
 
 <b>Screenshot</b>
 <p align="center">
-	<img src="./Screenshot/screenshot1.png" title="SimpleCodeEditor">
+	<img src="./Screenshot/screenshot2.png" title="SimpleCodeEditor">
 </p>
 
 [qt]: http://qt.io

@@ -6,21 +6,22 @@ minimap::minimap(QWidget *parent) :
     ui(new Ui::minimap)
 {
     ui->setupUi(this);
-    MinimapText *textEdit = new MinimapText ();
-    ui->gridLayout->addWidget(textEdit);
-    text = textEdit;
+    text = ui->textEdit;
+    ui->textEdit->setMarginWidth(0,0);
+    ui->textEdit->setMargins(0);
+    ui->textEdit->setReadOnly(0);
+    ui->textEdit->setWrapMode(QsciScintilla::WrapNone);
 
-//    text->set
     QFont font("monospace",1);
-    if (textEdit->lexer() == nullptr)
+    if (text->lexer() == nullptr)
     {
-        textEdit->setColor(QColor("black"));
-        textEdit->setPaper(QColor("#cbcdce"));
-        textEdit->setFont(font);
+        text->setColor(QColor("black"));
+        text->setPaper(QColor("#cbcdce"));
+        text->setFont(font);
     }
     else
     {
-        QsciLexer *lexer = textEdit->lexer();
+        QsciLexer *lexer = text->lexer();
         lexer->setDefaultColor(QColor("black"));
         lexer->setDefaultPaper(QColor("#cbcdce"));
         lexer->setDefaultFont(font);
