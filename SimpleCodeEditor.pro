@@ -25,22 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 qscintilla2
 
 SOURCES += \
+        src/minimap.cpp \
         src/codeeditor.cpp \
         src/finddialog.cpp \
-        src/lexers/lexers.cpp \
         src/main.cpp \
         src/mainwindow.cpp \
         src/settings.cpp
 
 
 HEADERS += \
+        src/minimap.h \
         src/codeeditor.h \
         src/finddialog.h \
-        src/lexers/lexers.h \
         src/mainwindow.h \
         src/settings.h
 
 FORMS += \
+        src/minimap.ui \
         src/finddialog.ui \
         src/mainwindow.ui \
         src/settings.ui

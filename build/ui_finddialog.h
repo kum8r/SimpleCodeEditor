@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -37,16 +38,20 @@ public:
     QLineEdit *replaceText;
     QPushButton *replaceBtn;
     QPushButton *replaceAllBtn;
+    QPushButton *AdvacndBtn;
+    QWidget *widget_2;
+    QHBoxLayout *horizontalLayout_3;
+    QCheckBox *csChkBox;
+    QCheckBox *woChkBox;
+    QCheckBox *reChkBox;
 
     void setupUi(QDialog *findDialog)
     {
         if (findDialog->objectName().isEmpty())
             findDialog->setObjectName(QString::fromUtf8("findDialog"));
-        findDialog->resize(596, 119);
+        findDialog->resize(596, 159);
         gridLayout_2 = new QGridLayout(findDialog);
-        gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        gridLayout_2->setContentsMargins(0, 0, 0, 0);
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -71,7 +76,7 @@ public:
         horizontalLayout->addWidget(FindPrevBtn);
 
 
-        gridLayout_2->addLayout(horizontalLayout, 1, 0, 1, 2);
+        gridLayout_2->addLayout(horizontalLayout, 0, 0, 1, 1);
 
         widget = new QWidget(findDialog);
         widget->setObjectName(QString::fromUtf8("widget"));
@@ -102,11 +107,38 @@ public:
 
         horizontalLayout_2->addWidget(replaceAllBtn);
 
+        AdvacndBtn = new QPushButton(widget);
+        AdvacndBtn->setObjectName(QString::fromUtf8("AdvacndBtn"));
+
+        horizontalLayout_2->addWidget(AdvacndBtn);
+
 
         gridLayout->addLayout(horizontalLayout_2, 0, 0, 1, 1);
 
 
-        gridLayout_2->addWidget(widget, 2, 1, 1, 1);
+        gridLayout_2->addWidget(widget, 1, 0, 1, 1);
+
+        widget_2 = new QWidget(findDialog);
+        widget_2->setObjectName(QString::fromUtf8("widget_2"));
+        horizontalLayout_3 = new QHBoxLayout(widget_2);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        csChkBox = new QCheckBox(widget_2);
+        csChkBox->setObjectName(QString::fromUtf8("csChkBox"));
+
+        horizontalLayout_3->addWidget(csChkBox);
+
+        woChkBox = new QCheckBox(widget_2);
+        woChkBox->setObjectName(QString::fromUtf8("woChkBox"));
+
+        horizontalLayout_3->addWidget(woChkBox);
+
+        reChkBox = new QCheckBox(widget_2);
+        reChkBox->setObjectName(QString::fromUtf8("reChkBox"));
+
+        horizontalLayout_3->addWidget(reChkBox);
+
+
+        gridLayout_2->addWidget(widget_2, 2, 0, 1, 1);
 
 
         retranslateUi(findDialog);
@@ -123,6 +155,10 @@ public:
         replaceCloseBtn->setText(QCoreApplication::translate("findDialog", "x", nullptr));
         replaceBtn->setText(QCoreApplication::translate("findDialog", "Replace", nullptr));
         replaceAllBtn->setText(QCoreApplication::translate("findDialog", "Replace All", nullptr));
+        AdvacndBtn->setText(QCoreApplication::translate("findDialog", "Advanced", nullptr));
+        csChkBox->setText(QCoreApplication::translate("findDialog", "case sensitive", nullptr));
+        woChkBox->setText(QCoreApplication::translate("findDialog", "whole word", nullptr));
+        reChkBox->setText(QCoreApplication::translate("findDialog", "regular expression", nullptr));
     } // retranslateUi
 
 };

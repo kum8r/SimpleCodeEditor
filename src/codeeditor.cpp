@@ -12,20 +12,16 @@ codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
     QFont font("source code pro");
     font.setStyleHint(QFont::Monospace);
     this->setFont(font);
-    this->setPaper(QColor("#363941"));
-    this->setColor(QColor("white"));
-
-
     setIndentationGuides(false);
     setAutoIndent(true);
-//    setCaretForegroundColor(QColor("#ffff7f"));
     setBraceMatching(SloppyBraceMatch);
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
-//    setStyleSheet();
-//    autoComplete();
-//    loadSettings();
+    connect(this, SIGNAL(textChanged()), this, SLOT(setTextChanges()));
+}
 
-    connect(this, &codeEditor::textChanged, this, &codeEditor::setTextChanges);
+codeEditor::~codeEditor()
+{
+
 }
 
 bool codeEditor::getTextChanges() const
@@ -36,6 +32,11 @@ bool codeEditor::getTextChanges() const
 void codeEditor::setTextChanges()
 {
     textChanges = true;
+}
+
+void codeEditor::setTextChanges(bool value)
+{
+    textChanges = value;
 }
 
 void codeEditor::loadSettings()
@@ -114,7 +115,6 @@ void codeEditor::setWhiteTheme()
     }
 }
 
-
 void codeEditor::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("text/plain"))
@@ -123,7 +123,7 @@ void codeEditor::dragEnterEvent(QDragEnterEvent *event)
 
 void codeEditor::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasFormat("text/plain"))
+//    if (event->mimeData()->hasFormat("text/plain"))
     {
     QList<QUrl> urls = event->mimeData()->urls();
     if (urls.isEmpty())
@@ -133,7 +133,6 @@ void codeEditor::dropEvent(QDropEvent *event)
     if (fileName.isEmpty())
         return;
 
-//    emit dropFiles(fileName);
-
+    emit dropFiles(fileName);
     }
 }

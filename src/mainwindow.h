@@ -4,6 +4,7 @@
 #include "finddialog.h"
 #include "codeeditor.h"
 #include "settings.h"
+#include "minimap.h"
 
 #include <QMainWindow>
 #include <QList>
@@ -24,11 +25,9 @@
 #include <QSpacerItem>
 #include <QInputDialog>
 #include <QMimeData>
+#include <QSizePolicy>
 
 //lexer
-
-#include "lexers/lexers.h"
-
 #include "Qsci/qscilexer.h"
 #include "Qsci/qscilexerbash.h"
 #include "Qsci/qscilexerbatch.h"
@@ -84,7 +83,6 @@ public:
     void setEOL();
     int newTab(QString tabname);
     void openDirectory();
-    void openFile(QString filepath = nullptr);
     void addtoOpenedFiles(QString);
     void saveFile(QString);
     void saveFileAs(QString fileName);
@@ -92,8 +90,6 @@ public:
     void closeFile(int index);
     void lineNumwidthIncrement(int ,int);
     void setFiletype(QString);
-
-
 
     void syntaxHighlighting(QsciLexer* lexers);
 
@@ -113,8 +109,11 @@ public:
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
 
+    void multiedit();
+
 private slots:
 
+//    void openFile(QString filepath = nullptr);
 
     void print(QPrinter *printer);
     void lostFocus(QEvent *event);
@@ -212,10 +211,22 @@ private slots:
     void on_actionGo_to_Line_triggered();
     void on_actionDecrease_Indent_triggered();
 
+    void setTextinMinimap();
+
+    void on_actionShow_Minimap_triggered();
+
+    void on_actionDark_triggered();
+
+    void on_actionLight_triggered();
+
+public slots:
+    void openFile(QString filepath = nullptr);
+
 private:
     Ui::MainWindow *ui;
     findDialog *find;
     Settings *settingsDialog;
+    minimap *Mmap;
     QFileSystemModel *filemodel;
     QStringList filelist;
     QLabel *lineNumLabel, *fileTypeLabel;
@@ -227,8 +238,14 @@ private:
     QList<int> searchTextposlist;
     QString searchString;
 
+    bool showMinimap;
+    bool isAutoSave;
+
+    codeEditor* getCodeEditor(QWidget *widget);
     void setStyleSheet(QsciLexer *lexer, QMap <QString, QString> themes);
     void setStyleSheet(QsciLexer *lexer);
+    void setDarktheme(QsciLexer *lexer);
+    void setLighttheme(QsciLexer *lexer);
 
 protected:
     void closeEvent(QCloseEvent *event);

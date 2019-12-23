@@ -52,22 +52,26 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../src/codeeditor.cpp \
+SOURCES       = ../src/minimap.cpp \
+		../src/codeeditor.cpp \
 		../src/finddialog.cpp \
-		../src/lexers/lexers.cpp \
 		../src/main.cpp \
 		../src/mainwindow.cpp \
 		../src/settings.cpp qrc_res.cpp \
+		moc_minimap.cpp \
+		moc_codeeditor.cpp \
 		moc_finddialog.cpp \
 		moc_mainwindow.cpp \
 		moc_settings.cpp
-OBJECTS       = codeeditor.o \
+OBJECTS       = minimap.o \
+		codeeditor.o \
 		finddialog.o \
-		lexers.o \
 		main.o \
 		mainwindow.o \
 		settings.o \
 		qrc_res.o \
+		moc_minimap.o \
+		moc_codeeditor.o \
 		moc_finddialog.o \
 		moc_mainwindow.o \
 		moc_settings.o
@@ -349,13 +353,13 @@ DIST          = ../SimpleCodeEditor.desktop \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		../../SimpleCodeEditor.pro ../src/codeeditor.h \
+		../../SimpleCodeEditor.pro ../src/minimap.h \
+		../src/codeeditor.h \
 		../src/finddialog.h \
-		../src/lexers/lexers.h \
 		../src/mainwindow.h \
-		../src/settings.h ../src/codeeditor.cpp \
+		../src/settings.h ../src/minimap.cpp \
+		../src/codeeditor.cpp \
 		../src/finddialog.cpp \
-		../src/lexers/lexers.cpp \
 		../src/main.cpp \
 		../src/mainwindow.cpp \
 		../src/settings.cpp
@@ -367,7 +371,7 @@ TARGET        = SimpleCodeEditor
 first: all
 ####### Build rules
 
-SimpleCodeEditor: ui_finddialog.h ui_mainwindow.h ui_settings.h $(OBJECTS)  
+SimpleCodeEditor: ui_minimap.h ui_finddialog.h ui_mainwindow.h ui_settings.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../SimpleCodeEditor.pro /usr/lib/qt/mkspecs/linux-g++/qmake.conf /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -941,9 +945,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../res.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/codeeditor.h ../src/finddialog.h ../src/lexers/lexers.h ../src/mainwindow.h ../src/settings.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/codeeditor.cpp ../src/finddialog.cpp ../src/lexers/lexers.cpp ../src/main.cpp ../src/mainwindow.cpp ../src/settings.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/finddialog.ui ../src/mainwindow.ui ../src/settings.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/minimap.h ../src/codeeditor.h ../src/finddialog.h ../src/mainwindow.h ../src/settings.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/minimap.cpp ../src/codeeditor.cpp ../src/finddialog.cpp ../src/main.cpp ../src/mainwindow.cpp ../src/settings.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/minimap.ui ../src/finddialog.ui ../src/mainwindow.ui ../src/settings.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -974,7 +978,7 @@ qrc_res.cpp: ../res.qrc \
 		/usr/bin/rcc \
 		../editor_white_theme \
 		../editor_style.qss \
-		../src/icons/SimpleCodeEditor.png
+		../SimpleCodeEditor.png
 	/usr/bin/rcc -name res ../res.qrc -o qrc_res.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -983,9 +987,19 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_finddialog.cpp moc_mainwindow.cpp moc_settings.cpp
+compiler_moc_header_make_all: moc_minimap.cpp moc_codeeditor.cpp moc_finddialog.cpp moc_mainwindow.cpp moc_settings.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_finddialog.cpp moc_mainwindow.cpp moc_settings.cpp
+	-$(DEL_FILE) moc_minimap.cpp moc_codeeditor.cpp moc_finddialog.cpp moc_mainwindow.cpp moc_settings.cpp
+moc_minimap.cpp: ../src/minimap.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include /home/kumar/Projects/SimpleCodeEditor/build/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/kumar/Projects/SimpleCodeEditor -I/usr/include/qt -I/usr/include/qt/QtPrintSupport -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I. -I/usr/include/c++/9.2.0 -I/usr/include/c++/9.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/9.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed -I/usr/include ../src/minimap.h -o moc_minimap.cpp
+
+moc_codeeditor.cpp: ../src/codeeditor.h \
+		moc_predefs.h \
+		/usr/bin/moc
+	/usr/bin/moc $(DEFINES) --include /home/kumar/Projects/SimpleCodeEditor/build/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/kumar/Projects/SimpleCodeEditor -I/usr/include/qt -I/usr/include/qt/QtPrintSupport -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I. -I/usr/include/c++/9.2.0 -I/usr/include/c++/9.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/9.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed -I/usr/include ../src/codeeditor.h -o moc_codeeditor.cpp
+
 moc_finddialog.cpp: ../src/finddialog.h \
 		moc_predefs.h \
 		/usr/bin/moc
@@ -995,7 +1009,7 @@ moc_mainwindow.cpp: ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/lexers.h \
+		../src/minimap.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/kumar/Projects/SimpleCodeEditor/build/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/kumar/Projects/SimpleCodeEditor -I/usr/include/qt -I/usr/include/qt/QtPrintSupport -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I. -I/usr/include/c++/9.2.0 -I/usr/include/c++/9.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/9.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed -I/usr/include ../src/mainwindow.h -o moc_mainwindow.cpp
@@ -1009,9 +1023,13 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_finddialog.h ui_mainwindow.h ui_settings.h
+compiler_uic_make_all: ui_minimap.h ui_finddialog.h ui_mainwindow.h ui_settings.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_finddialog.h ui_mainwindow.h ui_settings.h
+	-$(DEL_FILE) ui_minimap.h ui_finddialog.h ui_mainwindow.h ui_settings.h
+ui_minimap.h: ../src/minimap.ui \
+		/usr/bin/uic
+	/usr/bin/uic ../src/minimap.ui -o ui_minimap.h
+
 ui_finddialog.h: ../src/finddialog.ui \
 		/usr/bin/uic
 	/usr/bin/uic ../src/finddialog.ui -o ui_finddialog.h
@@ -1034,6 +1052,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
+minimap.o: ../src/minimap.cpp ../src/minimap.h \
+		ui_minimap.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o minimap.o ../src/minimap.cpp
+
 codeeditor.o: ../src/codeeditor.cpp ../src/codeeditor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o codeeditor.o ../src/codeeditor.cpp
 
@@ -1041,21 +1063,18 @@ finddialog.o: ../src/finddialog.cpp ../src/finddialog.h \
 		ui_finddialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o finddialog.o ../src/finddialog.cpp
 
-lexers.o: ../src/lexers/lexers.cpp ../src/lexers/lexers.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lexers.o ../src/lexers/lexers.cpp
-
 main.o: ../src/main.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/lexers.h
+		../src/minimap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../src/main.cpp
 
 mainwindow.o: ../src/mainwindow.cpp ../src/mainwindow.h \
 		../src/finddialog.h \
 		../src/codeeditor.h \
 		../src/settings.h \
-		../src/lexers/lexers.h \
+		../src/minimap.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../src/mainwindow.cpp
 
@@ -1065,6 +1084,12 @@ settings.o: ../src/settings.cpp ../src/settings.h \
 
 qrc_res.o: qrc_res.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_res.o qrc_res.cpp
+
+moc_minimap.o: moc_minimap.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_minimap.o moc_minimap.cpp
+
+moc_codeeditor.o: moc_codeeditor.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_codeeditor.o moc_codeeditor.cpp
 
 moc_finddialog.o: moc_finddialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_finddialog.o moc_finddialog.cpp

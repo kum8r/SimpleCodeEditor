@@ -22,7 +22,9 @@ public:
     void setReplaceString(const QString &value);
     void showreplaceWidget();
     void hidereplaceWidget();
-
+    bool getRegexp() const;
+    bool getCasesensitive() const;
+    bool getWholeword() const;
 
 signals:
 
@@ -41,17 +43,18 @@ private slots:
     void on_replaceAllBtn_clicked();
     void on_findCloseBtn_clicked();
     void on_replaceCloseBtn_clicked();
-
     void on_findString_returnPressed();
-
     void on_findString_textChanged(const QString &arg1);
-
+    void on_AdvacndBtn_clicked();
 
 private:
 
     Ui::findDialog *ui;
     QString findString;
     QString replaceString;
+    bool wholeword;
+    bool casesensitive;
+    bool regexp;
 };
 
 #endif // FINDDIALOG_H

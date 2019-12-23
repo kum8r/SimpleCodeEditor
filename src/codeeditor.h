@@ -7,33 +7,34 @@
 #include <QSettings>
 #include <QDebug>
 #include <QMimeData>
+#include <QObject>
 
 class codeEditor : public QsciScintilla
 {
+    Q_OBJECT
+
 public:
-    codeEditor(QWidget *parent = nullptr);
+    explicit codeEditor(QWidget *parent = nullptr);
+    ~codeEditor();
+
+    void loadSettings();
+    void autoComplete();
+    void autoCompleteForCpp(QsciLexer *lexer);
+    void setStyleSheet();
+    void setWhiteTheme();
+    void darkSyntaxTheme();
+    void setCodeFolding();
 
     bool getTextChanges() const;
     void setTextChanges();
-
-    void loadSettings();
-
+    void setTextChanges(bool value);
     QString getFileName() const;
     void setFileName(const QString &value);
-
-    void autoComplete();
-    void autoCompleteForCpp(QsciLexer *lexer);
-
-    void setStyleSheet();
-    void setWhiteTheme();
-
-    void darkSyntaxTheme();
 
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 
 signals:
-
     void dropFiles(QString file);
 
 private:

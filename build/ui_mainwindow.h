@@ -14,6 +14,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListWidget>
@@ -106,6 +107,9 @@ public:
     QAction *actionUPPER_CASE;
     QAction *actionlower_case;
     QAction *actionGo_to_Line;
+    QAction *actionShow_Minimap;
+    QAction *actionDark;
+    QAction *actionLight;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter_2;
@@ -119,7 +123,10 @@ public:
     QLabel *label;
     QTreeView *treeView;
     QSplitter *splitter_3;
+    QWidget *widget_3;
+    QHBoxLayout *horizontalLayout;
     QTabWidget *tabWidget;
+    QWidget *widget_2;
     QWidget *widget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -144,7 +151,7 @@ public:
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(720, 544);
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/icons/src/icons/SimpleCodeEditor.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/icons/SimpleCodeEditor.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
         MainWindow->setStyleSheet(QString::fromUtf8("border:0;"));
         actionNew = new QAction(MainWindow);
@@ -433,6 +440,12 @@ public:
         actionlower_case->setObjectName(QString::fromUtf8("actionlower_case"));
         actionGo_to_Line = new QAction(MainWindow);
         actionGo_to_Line->setObjectName(QString::fromUtf8("actionGo_to_Line"));
+        actionShow_Minimap = new QAction(MainWindow);
+        actionShow_Minimap->setObjectName(QString::fromUtf8("actionShow_Minimap"));
+        actionDark = new QAction(MainWindow);
+        actionDark->setObjectName(QString::fromUtf8("actionDark"));
+        actionLight = new QAction(MainWindow);
+        actionLight->setObjectName(QString::fromUtf8("actionLight"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -442,20 +455,14 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         splitter_2 = new QSplitter(centralWidget);
         splitter_2->setObjectName(QString::fromUtf8("splitter_2"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(splitter_2->sizePolicy().hasHeightForWidth());
-        splitter_2->setSizePolicy(sizePolicy);
         splitter_2->setOrientation(Qt::Horizontal);
-        splitter_2->setHandleWidth(0);
         splitter = new QSplitter(splitter_2);
         splitter->setObjectName(QString::fromUtf8("splitter"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
-        splitter->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy);
         splitter->setStyleSheet(QString::fromUtf8(""));
         splitter->setOrientation(Qt::Vertical);
         splitter->setHandleWidth(0);
@@ -468,11 +475,11 @@ public:
         openedFiles->setContentsMargins(0, 0, 0, 0);
         label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
-        label_2->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
+        label_2->setSizePolicy(sizePolicy1);
         label_2->setStyleSheet(QString::fromUtf8("\n"
 " text-transform: uppercase;\n"
 ""));
@@ -481,8 +488,11 @@ public:
 
         listWidget = new QListWidget(layoutWidget);
         listWidget->setObjectName(QString::fromUtf8("listWidget"));
-        sizePolicy.setHeightForWidth(listWidget->sizePolicy().hasHeightForWidth());
-        listWidget->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(listWidget->sizePolicy().hasHeightForWidth());
+        listWidget->setSizePolicy(sizePolicy2);
         listWidget->setStyleSheet(QString::fromUtf8(""));
 
         openedFiles->addWidget(listWidget);
@@ -497,8 +507,8 @@ public:
         fileExplorer->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(layoutWidget1);
         label->setObjectName(QString::fromUtf8("label"));
-        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy1);
         label->setStyleSheet(QString::fromUtf8("text-transform: uppercase;\n"
 "padding-top:5px;\n"
 ""));
@@ -507,8 +517,8 @@ public:
 
         treeView = new QTreeView(layoutWidget1);
         treeView->setObjectName(QString::fromUtf8("treeView"));
-        sizePolicy.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
-        treeView->setSizePolicy(sizePolicy);
+        sizePolicy2.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
+        treeView->setSizePolicy(sizePolicy2);
         treeView->setStyleSheet(QString::fromUtf8("QTreeView::item:selected \n"
 "{\n"
 "	background-color: white;\n"
@@ -516,6 +526,7 @@ public:
 "}\n"
 ""));
         treeView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        treeView->setHeaderHidden(true);
 
         fileExplorer->addWidget(treeView);
 
@@ -524,7 +535,14 @@ public:
         splitter_3 = new QSplitter(splitter_2);
         splitter_3->setObjectName(QString::fromUtf8("splitter_3"));
         splitter_3->setOrientation(Qt::Vertical);
-        tabWidget = new QTabWidget(splitter_3);
+        widget_3 = new QWidget(splitter_3);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        horizontalLayout = new QHBoxLayout(widget_3);
+        horizontalLayout->setSpacing(0);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        tabWidget = new QTabWidget(widget_3);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setStyleSheet(QString::fromUtf8(""));
         tabWidget->setTabShape(QTabWidget::Rounded);
@@ -532,7 +550,18 @@ public:
         tabWidget->setDocumentMode(true);
         tabWidget->setTabsClosable(true);
         tabWidget->setMovable(true);
-        splitter_3->addWidget(tabWidget);
+
+        horizontalLayout->addWidget(tabWidget);
+
+        widget_2 = new QWidget(widget_3);
+        widget_2->setObjectName(QString::fromUtf8("widget_2"));
+        sizePolicy2.setHeightForWidth(widget_2->sizePolicy().hasHeightForWidth());
+        widget_2->setSizePolicy(sizePolicy2);
+        widget_2->setMaximumSize(QSize(110, 16777215));
+
+        horizontalLayout->addWidget(widget_2);
+
+        splitter_3->addWidget(widget_3);
         widget = new QWidget(splitter_3);
         widget->setObjectName(QString::fromUtf8("widget"));
         splitter_3->addWidget(widget);
@@ -543,7 +572,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 720, 22));
+        menuBar->setGeometry(QRect(0, 0, 720, 28));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -568,8 +597,10 @@ public:
         menuFind->setObjectName(QString::fromUtf8("menuFind"));
         menuPrefrences = new QMenu(menuBar);
         menuPrefrences->setObjectName(QString::fromUtf8("menuPrefrences"));
+        menuPrefrences->setEnabled(true);
         menuThemes = new QMenu(menuPrefrences);
         menuThemes->setObjectName(QString::fromUtf8("menuThemes"));
+        menuThemes->setEnabled(true);
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -626,6 +657,7 @@ public:
         menuView->addAction(actionWordWrap);
         menuView->addAction(actionShow_Linenumbers);
         menuView->addAction(actionToolBar);
+        menuView->addAction(actionShow_Minimap);
         menuShow_Panels->addAction(actionFile_Explorer);
         menuShow_Panels->addAction(actionOpened_Files);
         menuLine_Ending->addAction(actionWindows);
@@ -666,6 +698,8 @@ public:
         menuFind->addAction(actionReplace);
         menuFind->addAction(actionReplace_All);
         menuPrefrences->addAction(menuThemes->menuAction());
+        menuThemes->addAction(actionDark);
+        menuThemes->addAction(actionLight);
         mainToolBar->addAction(actionNew);
         mainToolBar->addAction(actionOpen);
         mainToolBar->addAction(actionSave);
@@ -801,6 +835,9 @@ public:
         actionUPPER_CASE->setText(QCoreApplication::translate("MainWindow", "UPPER CASE", nullptr));
         actionlower_case->setText(QCoreApplication::translate("MainWindow", "lower case", nullptr));
         actionGo_to_Line->setText(QCoreApplication::translate("MainWindow", "Go to Line", nullptr));
+        actionShow_Minimap->setText(QCoreApplication::translate("MainWindow", "Show Minimap", nullptr));
+        actionDark->setText(QCoreApplication::translate("MainWindow", "Dark", nullptr));
+        actionLight->setText(QCoreApplication::translate("MainWindow", "Light", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "FileExplorer", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));

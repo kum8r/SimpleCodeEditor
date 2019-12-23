@@ -4,6 +4,6 @@
         <file>editor_white_theme</file>
     </qresource>
     <qresource prefix="/icons">
-        <file>src/icons/SimpleCodeEditor.png</file>
+        <file>SimpleCodeEditor.png</file>
     </qresource>
 </RCC>
