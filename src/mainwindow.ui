@@ -69,8 +69,7 @@
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true">
- text-transform: uppercase;
+            <string notr="true"> text-transform: uppercase;
 </string>
            </property>
            <property name="text">
@@ -88,6 +87,12 @@
            </property>
            <property name="styleSheet">
             <string notr="true"/>
+           </property>
+           <property name="movement">
+            <enum>QListView::Free</enum>
+           </property>
+           <property name="resizeMode">
+            <enum>QListView::Adjust</enum>
            </property>
           </widget>
          </item>
@@ -125,12 +130,7 @@ padding-top:5px;
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true">QTreeView::item:selected 
-{
-	background-color: white;
-	color: rgb(255, 255, 255);
-}
-</string>
+            <string notr="true"/>
            </property>
            <property name="verticalScrollBarPolicy">
             <enum>Qt::ScrollBarAsNeeded</enum>
@@ -216,13 +216,19 @@ padding-top:5px;
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuRecent_files">
+     <property name="title">
+      <string>Recent files</string>
+     </property>
+     <addaction name="actionclear"/>
+    </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionOpenDirectory"/>
@@ -231,6 +237,7 @@ padding-top:5px;
     <addaction name="actionSave_All"/>
     <addaction name="actionPrint"/>
     <addaction name="actionPrint_Preview"/>
+    <addaction name="menuRecent_files"/>
     <addaction name="actionNew_Window"/>
     <addaction name="actionClose_Window"/>
     <addaction name="actionSettings"/>
@@ -254,6 +261,7 @@ padding-top:5px;
       <string>Line</string>
      </property>
      <addaction name="actionDuplicate_Line"/>
+     <addaction name="actionComment"/>
     </widget>
     <widget class="QMenu" name="menuConvert_to">
      <property name="title">
@@ -593,6 +601,9 @@ padding-top:5px;
    <property name="text">
     <string>New Window</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
   </action>
   <action name="actionClose_Window">
    <property name="icon">
@@ -601,6 +612,9 @@ padding-top:5px;
    </property>
    <property name="text">
     <string>Close Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
   <action name="actionUnix">
@@ -1007,6 +1021,22 @@ padding-top:5px;
   <action name="actionLight">
    <property name="text">
     <string>Light</string>
+   </property>
+  </action>
+  <action name="actionclear">
+   <property name="text">
+    <string>clear</string>
+   </property>
+  </action>
+  <action name="actionComment">
+   <property name="text">
+    <string>Toogle Comment</string>
+   </property>
+   <property name="toolTip">
+    <string>Toogle Comment</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+/</string>
    </property>
   </action>
  </widget>

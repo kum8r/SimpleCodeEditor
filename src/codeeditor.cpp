@@ -45,40 +45,47 @@ void codeEditor::loadSettings()
     int fontSize = mySettings->value("fontSize").toInt();
     this->setFont(QFont(fontName,fontSize));
     this->setTabWidth(mySettings->value("tabSize").toInt());
-    if (mySettings->value("caretWidth")==4) {
+    if (mySettings->value("caretWidth")==4)
+    {
         SendScintilla(SCI_SETCARETSTYLE,2);
     }
     else {
         this->setCaretWidth(mySettings->value("caretWidth").toInt());
     }
-    if (mySettings->value("autoIndent").toBool()) {
+    if (mySettings->value("autoIndent").toBool())
+    {
         setAutoIndent(true);
     }
     else {
         setAutoIndent(false);
     }
-    if (mySettings->value("matchBracket").toBool()) {
+    if (mySettings->value("matchBracket").toBool())
+    {
         setBraceMatching(SloppyBraceMatch);
     }
     else {
        setBraceMatching(NoBraceMatch);
     }
-    if (mySettings->value("lineNumber").toBool()) {
+    if (mySettings->value("lineNumber").toBool())
+    {
         setMarginWidth(0, "0000");
     }
     else {
        setMarginWidth(0, "");
     }
-    if (mySettings->value("wordWrap").toBool()) {
+    if (mySettings->value("wordWrap").toBool())
+    {
         setWrapMode(WrapWord);
     }
     else {
        setWrapMode(WrapNone);
     }
-    if (mySettings->value("autoComplete").toBool()) {
+    if (mySettings->value("autoComplete").toBool())
+    {
         setAutoCompletionSource(AcsAll);
     }
-    else {
+    else
+    {
        setAutoCompletionSource(AcsNone);
     }
 }
@@ -100,20 +107,6 @@ void codeEditor::autoComplete()
     setAutoCompletionCaseSensitivity(false);
 }
 
-void codeEditor::setWhiteTheme()
-{
-    this->setPaper(QColor(255, 255, 255));
-    this->setMarginsBackgroundColor(QColor(243, 245, 247));
-    this->setMarginsForegroundColor(QColor(0, 0, 0));
-    this->setCaretForegroundColor(QColor(0, 0, 0));
-    this->setCaretLineBackgroundColor(QColor(0, 0, 0));
-    this->setColor(QColor(0,0,0));
-    if (this->lexer() != 0)
-    {
-        QsciLexer *lexer = this->lexer();
-        lexer->setDefaultPaper(QColor(255, 255, 255));
-    }
-}
 
 void codeEditor::dragEnterEvent(QDragEnterEvent *event)
 {

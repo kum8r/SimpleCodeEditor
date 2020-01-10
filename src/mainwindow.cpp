@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     defaultLocation();      //sets fileExplorer default location
 
-    setAcceptDrops(true);
-
     //status bar line number widget
     statSpitter = new QSplitter(this);
     lineNumLabel = new QLabel(this);
@@ -35,15 +33,15 @@ MainWindow::MainWindow(QWidget *parent) :
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
 
     menuActionGroup();
-    newTab("untitled"); //creates a new tab
-    setEOL();   //set the document end of line
+//    newTab("untitled"); //creates a new tab
+//    setEOL();   //set the document end of line
     loadWindowsGeomentry();
-    loadSettings();
-    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
-    on_actionToolBar_triggered();
-
-    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
-    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), &QsciScintilla::cursorPositionChanged, this, &MainWindow::lineNumwidthIncrement);
+//    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
+//    on_actionToolBar_triggered();
+    createRecentAction();
+    connect(ui->menuRecent_files, &QMenu::aboutToShow, this, &MainWindow::updateRecentActionList);
+//    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
+//    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), &QsciScintilla::cursorPositionChanged, this, &MainWindow::lineNumwidthIncrement);
     connect(this, &MainWindow::focusOutEvent, this, &MainWindow::lostFocus);
 
     //find dialog
@@ -56,21 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(find, SIGNAL(replaceAll_clicked(QString, QString)), this, SLOT(replaceAll_clicked(QString, QString)));
     connect(find, SIGNAL(findStringChanged()), this, SLOT(findString_Changed()));
 
-    codeEditor code;
-    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
+//    codeEditor code;
+//    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
 
-    if (showMinimap)
-    {
-        ui->widget_2->show();
-    }
-    else
-    {
-        ui->widget_2->hide();
-    }
-    if (showMinimap)
-    {
-        connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::textChanged, this,&MainWindow::setTextinMinimap);
-    }
+    on_actionShow_Minimap_triggered();
     isAutoSave = false;
     searchTextposlist.clear();
 }
@@ -100,7 +87,7 @@ void MainWindow::loadWindowsGeomentry()
     this->restoreGeometry(mySettings->value("geomentry").toByteArray());
 }
 
-void MainWindow::loadSettings()
+void MainWindow::loadCodeEditorSettings()
 {
     QString fontName = mySettings->value("font").toString();
     int fontSize = mySettings->value("fontSize").toInt();
@@ -148,6 +135,10 @@ void MainWindow::loadSettings()
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoCompletionSource(QsciScintilla::AcsNone);
     }
+}
+
+void MainWindow::loadSettings()
+{
     ui->actionFile_Explorer->setChecked(mySettings->value("file explorer").toBool());
     ui->actionOpened_Files->setChecked(mySettings->value("opened files").toBool());
     on_actionOpened_Files_triggered();
@@ -300,6 +291,24 @@ void MainWindow::openFile(QString filepath)
     setFiletype(filename);
     static_cast<codeEditor*>(ui->tabWidget->widget(tabindex))->setFileName(filename);
     static_cast<codeEditor*>(ui->tabWidget->widget(tabindex))->setTextChanges(false);
+    updateRecentFileList(filepath);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+//    switch (event->key())
+//    {
+//        case (Qt::Key_Backslash):
+//        qDebug() << "bs";
+//        if (event->modifiers() & Qt::ControlModifier)
+//        {
+//            qDebug() << "ba";
+//            comment *c = new comment (static_cast<codeEditor*>(ui->tabWidget->currentWidget()));
+//            c->toggleComment();
+//        }
+//        break;
+//    }
+
 }
 
 void MainWindow::addtoOpenedFiles(QString filename)
@@ -363,7 +372,8 @@ void MainWindow::closeFile()
 
 void MainWindow::closeFile(int index)
 {
-    if(static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges()) {
+    if(static_cast<codeEditor*>(ui->tabWidget->currentWidget())->getTextChanges())
+    {
             QMessageBox::StandardButton ask = QMessageBox::question(this,tr(""),tr("Save changes before close"),
                                                       QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
                                                       QMessageBox::Cancel);
@@ -401,6 +411,7 @@ void MainWindow::closeFile(int index)
         delete ui->tabWidget->widget(index);
         ui->listWidget->takeItem(index);
     }
+    ui->widget->hide();
     if(ui->tabWidget->count() == 0)
     {
         newTab("untitled");
@@ -421,6 +432,9 @@ void MainWindow::lineNumwidthIncrement(int line, int index)
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setMarginWidth(0,"0000000");
     }
+    Mmap->setFocusPolicy(Qt::NoFocus);
+    if (Mmap->hasFocus())
+        Mmap->clearFocus();
 }
 
 void MainWindow::setFiletype(QString file)
@@ -660,6 +674,7 @@ void MainWindow::on_actionNew_Window_triggered()
 {
     MainWindow *newwindow = new MainWindow();
     newwindow->show();
+    newwindow->on_actionNew_triggered();
 }
 
 void MainWindow::on_actionClose_Window_triggered()
@@ -1091,11 +1106,16 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::cursorPositionChanged,
-            this,&MainWindow::statusBar);
+    if (ui->tabWidget->count() <= 0)
+        return;
 
-    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged,
-            this,&MainWindow::changeFilename);
+    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
+
+    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged, this, &MainWindow::changeFilename);
+
+    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), &QsciScintilla::cursorPositionChanged, this, &MainWindow::lineNumwidthIncrement);
+
+    connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
 
     setFiletype(static_cast<codeEditor*>(ui->tabWidget->widget(index))->getFileName());
 
@@ -1103,6 +1123,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     {
         setTextinMinimap();
     }
+    loadCodeEditorSettings();
+    setEOL();
+    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
+    on_actionToolBar_triggered();
 
 //    for (int i = 0; i < ui->tabWidget->count(); ++i)
 //    {
@@ -1140,11 +1164,12 @@ void MainWindow::on_actionWordWrap_triggered()
 //not working
 void MainWindow::on_actionAdd_Indent_triggered()
 {
+
     int pos =  static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
                 QsciScintilla::SCI_GETCURRENTPOS);
     int line = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
                 QsciScintilla::SCI_LINEFROMPOSITION,pos);
-    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setIndentation(line, 4);
+    static_cast<codeEditor*>(ui->tabWidget->currentWidget())->indent(line);
 }
 
 void MainWindow::setLexer(QString lexername)
@@ -1184,27 +1209,18 @@ void MainWindow::setLexer(QString lexername)
     QMap<QString, QsciLexer*>::iterator i = languageToLexer.find(lexername);
 
     QsciLexer *lexer;
-
     if (i != languageToLexer.end())
     {
         lexer = i.value();
-        setDarktheme(lexer);
+        lexer->setDefaultFont(font);
+        lexer->setAutoIndentStyle(true);
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
     }
     if (lexername == "Normal")
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setLexer(nullptr);
     }
-    QsciLexer *curLexer = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer();
-    if (curLexer == nullptr)
-    {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setFont(font);
-    }
-    else
-    {
-        curLexer->setFont(font);
-        curLexer->setAutoIndentStyle(true);
-    }
+    Mmap->getText()->setLexer(0);
 }
 
 void MainWindow::lostFocus(QEvent *event)
@@ -1324,6 +1340,32 @@ void MainWindow::multiedit()
     textedit->SendScintilla(textedit->SCI_ADDSELECTION, offset, offset);
 }
 
+void MainWindow::commentString()
+{
+
+    QsciScintilla *codeeditor = static_cast<codeEditor*>(ui->tabWidget->currentWidget());
+    QString comment_string = "//";
+    QString line_ending = "\n";
+
+    codeeditor->SendScintilla(codeeditor->SCI_SETMULTIPLESELECTION, 1);
+    codeeditor->SendScintilla(codeeditor->SCI_SETADDITIONALSELECTIONTYPING, true);
+
+    QList <QMap <int, int>> *selectedRegions = new QList <QMap <int, int>>();
+
+    int selectedParts = codeeditor->SendScintilla(codeeditor->SCI_GETSELECTIONS);
+
+    for (int i = 0;i < selectedParts ;i++ )
+    {
+        QMap <int , int> temp;
+        temp.insert(codeeditor->SendScintilla(codeeditor->SCI_GETSELECTIONNSTART), codeeditor->SendScintilla(codeeditor->SCI_GETSELECTIONNEND));
+        selectedRegions->append(temp);
+        temp.clear();
+    }
+//            # Check if the selections are valid
+
+//
+}
+
 void MainWindow::on_actionUPPER_CASE_triggered()
 {
     QString selectedText = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->selectedText();
@@ -1367,141 +1409,194 @@ void MainWindow::setTextinMinimap()
     Mmap->getText()->setDocument(text);
 }
 
-void MainWindow::setStyleSheet(QsciLexer *lexer, QMap<QString, QString> themes)
+void MainWindow::setStyleSheet(QsciLexer *lexer, QString themeFileName)
 {
-    QMapIterator<QString, QString> themeIterator(themes);
+    curThemeFile = themeFileName;
+    QFile themeFile(themeFileName);
+    if (!themeFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "not open";
+    }
+
+    QXmlStreamReader xmlFile(&themeFile);
     if (lexer == 0)
     {
-        while (themeIterator.hasNext())
+        while (!xmlFile.atEnd())
         {
-            themeIterator.next();
-            if (themeIterator.key().toUpper() == "BACKGROUND")
+            xmlFile.readNext();
+            if (xmlFile.name() == "style")
             {
-                static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setPaper(QColor("#363941"));
+                QsciScintilla *codeeditor = static_cast<codeEditor*>(ui->tabWidget->currentWidget());
+                if (xmlFile.attributes().value("name") == "Text")
+                {
+                    if (xmlFile.attributes().hasAttribute("foreground"))
+                    {
+                        codeeditor->setColor(QColor(xmlFile.attributes().value("foreground")));
+//                        lexer->setDefaultColor(QColor(xmlFile.attributes().value("foreground")));
+                    }
+                    if (xmlFile.attributes().hasAttribute("background"))
+                    {
+                        codeeditor->setPaper(QColor(xmlFile.attributes().value("background")));
+//                        lexer->setDefaultPaper(QColor(xmlFile.attributes().value("background")));
+                    }
+                }
             }
-            else if (themeIterator.key().toUpper() == "FOREGROUND")
-            {
-                static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setColor(QColor("white"));
-            }
-        }
+    }
         return;
     }
-    while (themeIterator.hasNext())
+    while (!xmlFile.atEnd())
     {
-        themeIterator.next();
-        if (themeIterator.key().toUpper() == "COMMENT")
+        xmlFile.readNext();
+        if (xmlFile.name() == "style")
         {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::Comment);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::Comment);
-        }
-        else if (themeIterator.key().toUpper() == "KEYWORD")
-        {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::Keyword);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::Keyword);
-
-        }
-        else if (themeIterator.key().toUpper() == "FUNCTION")
-        {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerPython::FunctionMethodName);
-            lexer->setPaper(QColor("#363941"), QsciLexerPython::FunctionMethodName);
-        }
-        else if (themeIterator.key().toUpper() == "STRING")
-        {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::DoubleQuotedString);
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::RawString);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::DoubleQuotedString);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::RawString);
-        }
-        else if (themeIterator.key().toUpper() == "IDENTIFIER")
-        {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::Identifier);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::Identifier);
-        }
-        else if (themeIterator.key().toUpper() == "OPERATOR")
-        {
-            lexer->setColor(QColor(themeIterator.value()), QsciLexerCPP::Operator);
-            lexer->setPaper(QColor("#363941"), QsciLexerCPP::Operator);
-        }
-        else if (themeIterator.key().toUpper() == "BACKGROUND")
-        {
-            lexer->setDefaultPaper(QColor("#363941"));
-            static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setPaper(QColor("#363941"));
-        }
-        else if (themeIterator.key().toUpper() == "FOREGROUND")
-        {
-            lexer->setDefaultColor(QColor("white"));
-            static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setColor(QColor("white"));
+            if (xmlFile.attributes().value("name") == "Comment")
+            {
+                if (xmlFile.attributes().hasAttribute("foreground"))
+                    lexer->setColor(QColor(xmlFile.attributes().value("foreground")), QsciLexerCPP::Comment);
+                if (xmlFile.attributes().hasAttribute("background"))
+                    lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Comment);
+            }
+            else if (xmlFile.attributes().value("name") == "Text")
+            {
+                if (xmlFile.attributes().hasAttribute("foreground"))
+                {
+                    lexer->setColor(QColor(xmlFile.attributes().value("foreground")));
+                    lexer->setDefaultColor(QColor(xmlFile.attributes().value("foreground")));
+                }
+                if (xmlFile.attributes().hasAttribute("background"))
+                {
+                    lexer->setPaper(QColor(xmlFile.attributes().value("background")));
+                    lexer->setDefaultPaper(QColor(xmlFile.attributes().value("background")));
+                }
+            }
+            else if (xmlFile.attributes().value("name") == "String")
+            {
+                if (xmlFile.attributes().hasAttribute("foreground"))
+                {
+                    lexer->setColor(QColor(xmlFile.attributes().value("foreground")), QsciLexerCPP::RawString);
+                }
+                if (xmlFile.attributes().hasAttribute("background"))
+                {
+                    lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::RawString);
+                }
+            }
+            else if (xmlFile.attributes().value("name") == "Number")
+            {
+                if (xmlFile.attributes().hasAttribute("foreground"))
+                {
+                    lexer->setColor(QColor(xmlFile.attributes().value("foreground")), QsciLexerCPP::Number);
+                }
+                if (xmlFile.attributes().hasAttribute("background"))
+                {
+                    lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Number);
+                }
+            }
+            else if (xmlFile.attributes().value("name") == "Keyword")
+            {
+                if (xmlFile.attributes().hasAttribute("foreground"))
+                {
+                    lexer->setColor(QColor(xmlFile.attributes().value("foreground")), QsciLexerCPP::Keyword);
+                }
+                if (xmlFile.attributes().hasAttribute("background"))
+                {
+                    lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Keyword);
+                }
+            }
         }
     }
+
 }
 
-void MainWindow::setStyleSheet(QsciLexer *lexer)
+void MainWindow::updateRecentActionList()
 {
-    if (lexer == nullptr)
-    {
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setColor(QColor("white"));
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setPaper(QColor("#363941"));
-    }
+    QStringList recentFilePaths = mySettings->value("recentFiles").toStringList();
+
+    auto itEnd = 0u;
+    if(recentFilePaths.size() <= maxRecentFiles)
+        itEnd = recentFilePaths.size();
     else
+        itEnd = maxRecentFiles;
+
+    for (auto i = 0u; i < itEnd; ++i)
     {
-        lexer->setDefaultColor(QColor("white"));
-        lexer->setDefaultPaper(QColor("#363941"));
+        QString strippedName = QFileInfo(recentFilePaths.at(i)).fileName();
+        recentFileActionList.at(i)->setText(strippedName);
+        recentFileActionList.at(i)->setData(recentFilePaths.at(i));
+        recentFileActionList.at(i)->setVisible(true);
+    }
+
+    for (auto i = itEnd; i < maxRecentFiles; ++i)
+        recentFileActionList.at(i)->setVisible(false);
+}
+
+void MainWindow::createRecentAction()
+{
+    QAction* recentFileAction = 0;
+    for(auto i = 0; i < maxRecentFiles; ++i)
+    {
+        recentFileAction = new QAction(this);
+        recentFileAction->setVisible(false);
+        connect(recentFileAction, &QAction::triggered, this, &MainWindow::openRecent);
+        recentFileActionList.append(recentFileAction);
+        ui->menuRecent_files->addAction(recentFileAction);
     }
 }
 
-void MainWindow::setDarktheme(QsciLexer *lexer)
+void MainWindow::updateRecentFileList(QString recentFilePath)
 {
-    QMap<QString, QString> themes;
-    themes["COMMENT"] = "#008000";
-    themes["KEYWORD"] = "#808000";
-    themes["IDENTIFIER"] = "#23eac3";
-    themes["STRING"] = "#008000";
-    themes["FUNCTION"] = "#ffffff";
-    themes["background"] = "white";
-    themes["foreground"] = "black";
-    themes["NUMBER"] = "#000080";
-    setStyleSheet(lexer, themes);
+    QStringList recentFilePaths = mySettings->value("recentFiles").toStringList();
+    recentFilePaths.removeAll(recentFilePath);
+    recentFilePaths.prepend(recentFilePath);
+    while (recentFilePaths.size() > maxRecentFiles)
+        recentFilePaths.removeLast();
+    mySettings->setValue("recentFiles", recentFilePaths);
+
+    // see note
+    updateRecentActionList();
 }
 
-void MainWindow::setLighttheme(QsciLexer *lexer)
-{
-    QMap<QString, QString> themes;
-    themes["COMMENT"] = "#666d6f";
-    themes["KEYWORD"] = "#6ff100";
-    themes["IDENTIFIER"] = "#23eac3";
-    themes["STRING"] = "#f9c98d";
-    themes["FUNCTION"] = "#ffea00";
-    themes["background"] = "#363941";
-    themes["foreground"] = "white";
-    setStyleSheet(lexer, themes);
-}
+
 
 void MainWindow::on_actionShow_Minimap_triggered()
 {
     if (ui->actionShow_Minimap->text() == "Show Minimap")
     {
         ui->actionShow_Minimap->setText("Hide Minimap");
-        showMinimap = false;
-        ui->widget_2->hide();
+        showMinimap = true;
+        ui->widget_2->show();
     }
     else
     {
         ui->actionShow_Minimap->setText("Show Minimap");
-        showMinimap = true;
-        ui->widget_2->show();
-        connect(static_cast<codeEditor*>(ui->tabWidget->currentWidget()),&QsciScintilla::textChanged,
-                this,&MainWindow::setTextinMinimap);
+        showMinimap = false;
+        ui->widget_2->hide();
     }
 }
 
 void MainWindow::on_actionDark_triggered()
 {
     QsciLexer *lexer = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer();
-    setDarktheme(lexer);
+//    setStyleSheet(lexer, ":/style/src/icons/creator-dark.xml");
 }
 
 void MainWindow::on_actionLight_triggered()
 {
     QsciLexer *lexer = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer();
-    setLighttheme(lexer);
+//    setStyleSheet(lexer, ":/style/src/icons/default_classic.xml");
+}
+
+void MainWindow::on_actionComment_triggered()
+{
+    if (static_cast<codeEditor*>(ui->tabWidget->currentWidget())->lexer() != 0)
+    {
+        comment *com = new comment (static_cast<codeEditor*>(ui->tabWidget->currentWidget()));
+        com->toggleComment();
+    }
+}
+
+void MainWindow::openRecent()
+{
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+        openFile(action->data().toString());
 }

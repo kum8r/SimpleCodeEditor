@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11 qscintilla2
 
 SOURCES += \
+        src/comment.cpp \
         src/minimap.cpp \
         src/codeeditor.cpp \
         src/finddialog.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 
 HEADERS += \
+        src/comment.h \
         src/minimap.h \
         src/codeeditor.h \
         src/finddialog.h \

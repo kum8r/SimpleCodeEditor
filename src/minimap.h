@@ -16,9 +16,9 @@ class minimap : public QWidget
 public:
     explicit minimap(QWidget *parent = nullptr);
     ~minimap();
-
+    void focusInEvent (QFocusEvent *e);
+    void mousePressEvent(QMouseEvent *event);
     QsciScintilla *getText() const;
-
 
 private:
     Ui::minimap *ui;

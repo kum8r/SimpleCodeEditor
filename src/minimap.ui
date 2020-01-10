@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>122</width>
+    <width>256</width>
     <height>476</height>
    </rect>
   </property>
@@ -53,7 +53,7 @@
       <string/>
      </property>
      <property name="styleSheet">
-      <string notr="true">margin-top:30px;</string>
+      <string notr="true">margin-top:40px;</string>
      </property>
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>

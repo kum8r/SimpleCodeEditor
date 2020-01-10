@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'settings.ui'
 **
-** Created by: Qt User Interface Compiler version 5.13.2
+** Created by: Qt User Interface Compiler version 5.14.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -61,6 +61,15 @@ public:
     QLineEdit *lineEdit_3;
     QCheckBox *checkBox;
     QLabel *label_5;
+    QWidget *texteditor;
+    QGridLayout *gridLayout_4;
+    QFormLayout *formLayout_3;
+    QLabel *label_12;
+    QFontComboBox *fontComboBox_2;
+    QLabel *label_14;
+    QLineEdit *lineEdit_4;
+    QLabel *label_13;
+    QComboBox *comboBox_3;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
     QPushButton *saveButton;
@@ -70,7 +79,7 @@ public:
     {
         if (Settings->objectName().isEmpty())
             Settings->setObjectName(QString::fromUtf8("Settings"));
-        Settings->resize(606, 488);
+        Settings->resize(606, 504);
         Settings->setStyleSheet(QString::fromUtf8(""));
         gridLayout = new QGridLayout(Settings);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -220,6 +229,48 @@ public:
         gridLayout_2->addWidget(groupBox, 1, 0, 1, 1);
 
         tabWidget->addTab(tab, QString());
+        texteditor = new QWidget();
+        texteditor->setObjectName(QString::fromUtf8("texteditor"));
+        gridLayout_4 = new QGridLayout(texteditor);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        formLayout_3 = new QFormLayout();
+        formLayout_3->setObjectName(QString::fromUtf8("formLayout_3"));
+        label_12 = new QLabel(texteditor);
+        label_12->setObjectName(QString::fromUtf8("label_12"));
+
+        formLayout_3->setWidget(0, QFormLayout::LabelRole, label_12);
+
+        fontComboBox_2 = new QFontComboBox(texteditor);
+        fontComboBox_2->setObjectName(QString::fromUtf8("fontComboBox_2"));
+
+        formLayout_3->setWidget(0, QFormLayout::FieldRole, fontComboBox_2);
+
+        label_14 = new QLabel(texteditor);
+        label_14->setObjectName(QString::fromUtf8("label_14"));
+
+        formLayout_3->setWidget(1, QFormLayout::LabelRole, label_14);
+
+        lineEdit_4 = new QLineEdit(texteditor);
+        lineEdit_4->setObjectName(QString::fromUtf8("lineEdit_4"));
+
+        formLayout_3->setWidget(1, QFormLayout::FieldRole, lineEdit_4);
+
+        label_13 = new QLabel(texteditor);
+        label_13->setObjectName(QString::fromUtf8("label_13"));
+
+        formLayout_3->setWidget(2, QFormLayout::LabelRole, label_13);
+
+        comboBox_3 = new QComboBox(texteditor);
+        comboBox_3->addItem(QString());
+        comboBox_3->addItem(QString());
+        comboBox_3->setObjectName(QString::fromUtf8("comboBox_3"));
+
+        formLayout_3->setWidget(2, QFormLayout::FieldRole, comboBox_3);
+
+
+        gridLayout_4->addLayout(formLayout_3, 0, 0, 1, 1);
+
+        tabWidget->addTab(texteditor, QString());
 
         gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
 
@@ -285,6 +336,13 @@ public:
         checkBox->setText(QString());
         label_5->setText(QCoreApplication::translate("Settings", "Auto Indent", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Settings", "General", nullptr));
+        label_12->setText(QCoreApplication::translate("Settings", "Font", nullptr));
+        label_14->setText(QCoreApplication::translate("Settings", "Font Size", nullptr));
+        label_13->setText(QCoreApplication::translate("Settings", "Color Scheme", nullptr));
+        comboBox_3->setItemText(0, QCoreApplication::translate("Settings", "Default", nullptr));
+        comboBox_3->setItemText(1, QCoreApplication::translate("Settings", "Default Dark", nullptr));
+
+        tabWidget->setTabText(tabWidget->indexOf(texteditor), QCoreApplication::translate("Settings", "TextEditor", nullptr));
         saveButton->setText(QCoreApplication::translate("Settings", "Save", nullptr));
         cancelButton->setText(QCoreApplication::translate("Settings", "Cancel", nullptr));
     } // retranslateUi

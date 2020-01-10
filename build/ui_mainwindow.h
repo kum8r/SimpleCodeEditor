@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.13.2
+** Created by: Qt User Interface Compiler version 5.14.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -110,6 +110,8 @@ public:
     QAction *actionShow_Minimap;
     QAction *actionDark;
     QAction *actionLight;
+    QAction *actionclear;
+    QAction *actionComment;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QSplitter *splitter_2;
@@ -130,6 +132,7 @@ public:
     QWidget *widget;
     QMenuBar *menuBar;
     QMenu *menuFile;
+    QMenu *menuRecent_files;
     QMenu *menuEdit;
     QMenu *menuIndent;
     QMenu *menuLine;
@@ -446,6 +449,10 @@ public:
         actionDark->setObjectName(QString::fromUtf8("actionDark"));
         actionLight = new QAction(MainWindow);
         actionLight->setObjectName(QString::fromUtf8("actionLight"));
+        actionclear = new QAction(MainWindow);
+        actionclear->setObjectName(QString::fromUtf8("actionclear"));
+        actionComment = new QAction(MainWindow);
+        actionComment->setObjectName(QString::fromUtf8("actionComment"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -480,8 +487,7 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
         label_2->setSizePolicy(sizePolicy1);
-        label_2->setStyleSheet(QString::fromUtf8("\n"
-" text-transform: uppercase;\n"
+        label_2->setStyleSheet(QString::fromUtf8(" text-transform: uppercase;\n"
 ""));
 
         openedFiles->addWidget(label_2);
@@ -494,6 +500,8 @@ public:
         sizePolicy2.setHeightForWidth(listWidget->sizePolicy().hasHeightForWidth());
         listWidget->setSizePolicy(sizePolicy2);
         listWidget->setStyleSheet(QString::fromUtf8(""));
+        listWidget->setMovement(QListView::Free);
+        listWidget->setResizeMode(QListView::Adjust);
 
         openedFiles->addWidget(listWidget);
 
@@ -519,12 +527,7 @@ public:
         treeView->setObjectName(QString::fromUtf8("treeView"));
         sizePolicy2.setHeightForWidth(treeView->sizePolicy().hasHeightForWidth());
         treeView->setSizePolicy(sizePolicy2);
-        treeView->setStyleSheet(QString::fromUtf8("QTreeView::item:selected \n"
-"{\n"
-"	background-color: white;\n"
-"	color: rgb(255, 255, 255);\n"
-"}\n"
-""));
+        treeView->setStyleSheet(QString::fromUtf8(""));
         treeView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         treeView->setHeaderHidden(true);
 
@@ -572,9 +575,11 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 720, 28));
+        menuBar->setGeometry(QRect(0, 0, 720, 22));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
+        menuRecent_files = new QMenu(menuFile);
+        menuRecent_files->setObjectName(QString::fromUtf8("menuRecent_files"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QString::fromUtf8("menuEdit"));
         menuIndent = new QMenu(menuEdit);
@@ -625,12 +630,14 @@ public:
         menuFile->addAction(actionSave_All);
         menuFile->addAction(actionPrint);
         menuFile->addAction(actionPrint_Preview);
+        menuFile->addAction(menuRecent_files->menuAction());
         menuFile->addAction(actionNew_Window);
         menuFile->addAction(actionClose_Window);
         menuFile->addAction(actionSettings);
         menuFile->addAction(actionClose);
         menuFile->addAction(actionClose_All_Files);
         menuFile->addAction(actionExit);
+        menuRecent_files->addAction(actionclear);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
@@ -647,6 +654,7 @@ public:
         menuIndent->addAction(actionAdd_Indent);
         menuIndent->addAction(actionDecrease_Indent);
         menuLine->addAction(actionDuplicate_Line);
+        menuLine->addAction(actionComment);
         menuConvert_to->addAction(actionUPPER_CASE);
         menuConvert_to->addAction(actionlower_case);
         menuHelp->addAction(actionAbout);
@@ -778,7 +786,13 @@ public:
         actionFile_Explorer->setText(QCoreApplication::translate("MainWindow", "File Explorer", nullptr));
         actionOpened_Files->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         actionNew_Window->setText(QCoreApplication::translate("MainWindow", "New Window", nullptr));
+#if QT_CONFIG(shortcut)
+        actionNew_Window->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+N", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionClose_Window->setText(QCoreApplication::translate("MainWindow", "Close Window", nullptr));
+#if QT_CONFIG(shortcut)
+        actionClose_Window->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Shift+W", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionUnix->setText(QCoreApplication::translate("MainWindow", "Unix", nullptr));
         actionWindows->setText(QCoreApplication::translate("MainWindow", "Windows", nullptr));
         actionMac->setText(QCoreApplication::translate("MainWindow", "Mac", nullptr));
@@ -838,9 +852,18 @@ public:
         actionShow_Minimap->setText(QCoreApplication::translate("MainWindow", "Show Minimap", nullptr));
         actionDark->setText(QCoreApplication::translate("MainWindow", "Dark", nullptr));
         actionLight->setText(QCoreApplication::translate("MainWindow", "Light", nullptr));
+        actionclear->setText(QCoreApplication::translate("MainWindow", "clear", nullptr));
+        actionComment->setText(QCoreApplication::translate("MainWindow", "Toogle Comment", nullptr));
+#if QT_CONFIG(tooltip)
+        actionComment->setToolTip(QCoreApplication::translate("MainWindow", "Toogle Comment", nullptr));
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(shortcut)
+        actionComment->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+/", nullptr));
+#endif // QT_CONFIG(shortcut)
         label_2->setText(QCoreApplication::translate("MainWindow", "Opened Files", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "FileExplorer", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
+        menuRecent_files->setTitle(QCoreApplication::translate("MainWindow", "Recent files", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         menuIndent->setTitle(QCoreApplication::translate("MainWindow", "Indent", nullptr));
         menuLine->setTitle(QCoreApplication::translate("MainWindow", "Line", nullptr));

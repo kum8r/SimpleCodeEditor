@@ -6,17 +6,17 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-//    QFile f(":/style/editor_style.qss");
-//    if (!f.exists())
-//    {
-//        printf("Unable to set stylesheet, file not found\n");
-//    }
-//    else
-//    {
-//        f.open(QFile::ReadOnly | QFile::Text);
-//        QTextStream ts(&f);
-//        qApp->setStyleSheet(ts.readAll());
-//    }
+    QFile f(":/style/editor_style.qss");
+    if (!f.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        qApp->setStyleSheet(ts.readAll());
+    }
     MainWindow w;
    if (argc > 1)
    {
@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
                 w.openFile(QString::fromStdString(argv[i]));
             }
         }
+   }
+   else
+   {
+        w.newTab("untitled");
    }
     w.show();
 

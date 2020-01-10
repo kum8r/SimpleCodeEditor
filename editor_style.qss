@@ -1,10 +1,10 @@
 QMainWindow
 {
     border:0;
-    background-color: #2f3137;
+    background-color: #32363e;
 }
 
-QTreeView, QLabel, QListWidget
+QTreeView, QLabel, QListWidget, QWidget, QFileDialog
 {
     background-color: #32363c;
     color: rgb(255, 255, 255);
@@ -24,30 +24,31 @@ QTabBar::tab
 {
     padding: 10% 50% 10% 50%;
     width: 100%;
-    background-color: #2f3037;
+    background-color: #2f3039;
     border:0;
+    color: #565b67;
 }
 
 QTabBar::tab:selected
 {
-        background-color: #363941;
-        color: rgb(255, 255, 255);
+    background-color: #363941;
+    color: rgb(255, 255, 255);
 }
-QPushButton
+
+QPushButton, QToolButton
 {
     color:white;
-    border: 2px solid white;
-    background:#505d6b;
-    padding:10px;
+    border: 2px solid #45455f;
+    background:#45455f;
+    padding:2px;
     border-radius: 5px;
-    margin:0;
+    margin:5px;
 }
 
 QScrollBar
 {
-background-color: #32363c;
+    background-color: #32363c;
     width: 10px;
-
 }
 
 QScrollBar::handle
@@ -57,19 +58,20 @@ QScrollBar::handle
     background-color: #353b4b;
 }
 
-QScrollBar::sub-page:vertical {
-background-color: #32363c;
+QScrollBar::sub-page:vertical
+{
+    background-color: #32363c;
 }
 
-QScrollBar::add-page:vertical {
-background-color: #32363c;
+QScrollBar::add-page:vertical
+{
+    background-color: #32363c;
 }
 
-
-
-QScrollBar::add-line:vertical {
-width: 0px;
-height: 0px;
+QScrollBar::add-line:vertical
+{
+    width: 0px;
+    height: 0px;
 }
 
 QScrollBar::sub-line:vertical
@@ -80,9 +82,14 @@ QScrollBar::sub-line:vertical
 
 QLineEdit
 {
-
+    background-color: #64737e;
+    color: white;
+    padding:7px;
+    border-radius: 5px;
+    margin:10px;
 }
+
 QToolBar
 {
-padding:5px;
+    padding:2px;
 }

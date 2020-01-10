@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QMimeData>
 #include <QObject>
+#include <QDragEnterEvent>
 
 class codeEditor : public QsciScintilla
 {
@@ -20,13 +21,9 @@ public:
     void loadSettings();
     void autoComplete();
     void autoCompleteForCpp(QsciLexer *lexer);
-    void setStyleSheet();
-    void setWhiteTheme();
-    void darkSyntaxTheme();
     void setCodeFolding();
 
     bool getTextChanges() const;
-    void setTextChanges();
     void setTextChanges(bool value);
     QString getFileName() const;
     void setFileName(const QString &value);
@@ -36,6 +33,9 @@ public:
 
 signals:
     void dropFiles(QString file);
+
+private slots:
+    void setTextChanges();
 
 private:
 

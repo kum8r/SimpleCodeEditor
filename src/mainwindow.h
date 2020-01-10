@@ -5,6 +5,7 @@
 #include "codeeditor.h"
 #include "settings.h"
 #include "minimap.h"
+#include "comment.h"
 
 #include <QMainWindow>
 #include <QList>
@@ -25,7 +26,7 @@
 #include <QSpacerItem>
 #include <QInputDialog>
 #include <QMimeData>
-#include <QSizePolicy>
+#include <QXmlStreamReader>
 
 //lexer
 #include "Qsci/qscilexer.h"
@@ -77,6 +78,7 @@ public:
     void saveWindowsGeomentry();
     void loadSettings();
     void loadWindowsGeomentry();
+    void loadCodeEditorSettings();
 
     void defaultLocation();
     void statusBar(int, int);
@@ -110,6 +112,7 @@ public:
     void dropEvent(QDropEvent *event);
 
     void multiedit();
+    void commentString();
 
 private slots:
 
@@ -212,12 +215,12 @@ private slots:
     void on_actionDecrease_Indent_triggered();
 
     void setTextinMinimap();
-
     void on_actionShow_Minimap_triggered();
-
     void on_actionDark_triggered();
-
     void on_actionLight_triggered();
+    void on_actionComment_triggered();
+
+    void openRecent();
 
 public slots:
     void openFile(QString filepath = nullptr);
@@ -237,15 +240,21 @@ private:
     QSettings *mySettings;
     QList<int> searchTextposlist;
     QString searchString;
+    QString curThemeFile;
+
+    static const int maxRecentFiles = 10;
+    QList <QAction*> recentFileActionList;
 
     bool showMinimap;
     bool isAutoSave;
 
+    void keyPressEvent(QKeyEvent *event);
+
     codeEditor* getCodeEditor(QWidget *widget);
-    void setStyleSheet(QsciLexer *lexer, QMap <QString, QString> themes);
-    void setStyleSheet(QsciLexer *lexer);
-    void setDarktheme(QsciLexer *lexer);
-    void setLighttheme(QsciLexer *lexer);
+    void setStyleSheet(QsciLexer *lexer, QString themeFile);
+    void updateRecentActionList();
+    void createRecentAction();
+    void updateRecentFileList(QString recentFilePath);
 
 protected:
     void closeEvent(QCloseEvent *event);
