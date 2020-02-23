@@ -6,6 +6,7 @@
 #include "settings.h"
 #include "minimap.h"
 #include "comment.h"
+#include "stylesheet.h"
 
 #include <QMainWindow>
 #include <QList>
@@ -58,6 +59,7 @@
 #include "Qsci/qscilexertex.h"
 #include "Qsci/qscilexerxml.h"
 #include "Qsci/qscilexeryaml.h"
+#include "Qsci/qsciprinter.h"
 
 
 namespace Ui {
@@ -84,7 +86,7 @@ public:
     void statusBar(int, int);
     void setEOL();
     int newTab(QString tabname);
-    void openDirectory();
+    void openDirectory(QString filedir);
     void addtoOpenedFiles(QString);
     void saveFile(QString);
     void saveFileAs(QString fileName);
@@ -112,7 +114,6 @@ public:
     void dropEvent(QDropEvent *event);
 
     void multiedit();
-    void commentString();
 
 private slots:
 
@@ -201,9 +202,7 @@ private slots:
     void on_treeView_doubleClicked(const QModelIndex &index);
     void on_tabWidget_currentChanged(int index);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-
     void setLexer(QString lexername);
-
     void on_actionWordWrap_triggered();
     void on_actionAdd_Indent_triggered();
     void on_actionSettings_triggered();
@@ -213,14 +212,16 @@ private slots:
     void on_actionlower_case_triggered();
     void on_actionGo_to_Line_triggered();
     void on_actionDecrease_Indent_triggered();
-
     void setTextinMinimap();
     void on_actionShow_Minimap_triggered();
     void on_actionDark_triggered();
     void on_actionLight_triggered();
     void on_actionComment_triggered();
-
     void openRecent();
+    void clearRecent();
+    void on_actionDisplay_EOL_triggered();
+    void on_actionDisplay_White_Space_triggered();
+    void on_actionStatusbar_triggered();
 
 public slots:
     void openFile(QString filepath = nullptr);
@@ -235,20 +236,15 @@ private:
     QLabel *lineNumLabel, *fileTypeLabel;
     QSplitter *statSpitter;
     QSpacerItem *spacer;
-    QString theme;
     QColor lineColor;
     QSettings *mySettings;
     QList<int> searchTextposlist;
-    QString searchString;
-    QString curThemeFile;
-
-    static const int maxRecentFiles = 10;
-    QList <QAction*> recentFileActionList;
-
+    QString searchString, curThemeFile;
     bool showMinimap;
     bool isAutoSave;
 
-    void keyPressEvent(QKeyEvent *event);
+    static const int maxRecentFiles = 10;
+    QList <QAction*> recentFileActionList;
 
     codeEditor* getCodeEditor(QWidget *widget);
     void setStyleSheet(QsciLexer *lexer, QString themeFile);
@@ -258,6 +254,7 @@ private:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 };
 

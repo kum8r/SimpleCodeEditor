@@ -11,6 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = SimpleCodeEditor
 TEMPLATE = app
 
+
+#ccache for speedup the build process
+#QMAKE_CXX = ccache $$QMAKE_CXX
+
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -31,7 +36,8 @@ SOURCES += \
         src/finddialog.cpp \
         src/main.cpp \
         src/mainwindow.cpp \
-        src/settings.cpp
+        src/settings.cpp \
+        src/stylesheet.cpp
 
 
 HEADERS += \
@@ -40,7 +46,8 @@ HEADERS += \
         src/codeeditor.h \
         src/finddialog.h \
         src/mainwindow.h \
-        src/settings.h
+        src/settings.h \
+        src/stylesheet.h
 
 FORMS += \
         src/minimap.ui \

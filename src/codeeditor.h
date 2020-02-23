@@ -18,16 +18,16 @@ public:
     explicit codeEditor(QWidget *parent = nullptr);
     ~codeEditor();
 
+    QString defaultFont;
+
     void loadSettings();
     void autoComplete();
     void autoCompleteForCpp(QsciLexer *lexer);
     void setCodeFolding();
-
     bool getTextChanges() const;
     void setTextChanges(bool value);
     QString getFileName() const;
     void setFileName(const QString &value);
-
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 

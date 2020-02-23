@@ -1,6 +1,7 @@
 #include "codeeditor.h"
 #include <Qsci/qscilexercpp.h>
 
+
 codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
 {
     setWrapMode(this->WrapWord); // wrapword
@@ -9,14 +10,21 @@ codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
     setIndentationsUseTabs(true);
     setTabWidth(4);
     this->setAcceptDrops(true);
-    QFont font("source code pro");
-    font.setStyleHint(QFont::Monospace);
+
+    defaultFont = "monaco";
+    QFont font(defaultFont);
+    font.setFixedPitch(true);
+    font.setPointSize(13);
     this->setFont(font);
+
     setIndentationGuides(false);
     setAutoIndent(true);
     setBraceMatching(SloppyBraceMatch);
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
     connect(this, SIGNAL(textChanged()), this, SLOT(setTextChanges()));
+//    setMarginsBackgroundColor(QColor("#404244"));
+//    setMarginsForegroundColor(QColor("grey"));
+    setFoldMarginColors(QColor("grey"), QColor("#404244"));
 }
 
 codeEditor::~codeEditor()

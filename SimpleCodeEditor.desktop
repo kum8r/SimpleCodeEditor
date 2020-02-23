@@ -2,8 +2,9 @@
 Version=1.0
 Type=Application
 Name=SimpleCodeEditor
-Exec=/usr/bin/SimpleCodeEditor
+Exec=SimpleCodeEditor %f
 Icon=SimpleCodeEditor.png
-Categories=Development;
+Categories=Utility;TextEditor;Development;
 mime-type=text/plain;
+terminal=false;
 Comment=A Simple Code Editor

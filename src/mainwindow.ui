@@ -21,6 +21,9 @@
    <string notr="true">border:0;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -39,8 +42,14 @@
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter_2">
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="handleWidth">
+       <number>0</number>
       </property>
       <widget class="QSplitter" name="splitter">
        <property name="sizePolicy">
@@ -93,6 +102,9 @@
            </property>
            <property name="resizeMode">
             <enum>QListView::Adjust</enum>
+           </property>
+           <property name="uniformItemSizes">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -148,6 +160,9 @@ padding-top:5px;
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QWidget" name="widget_3" native="true">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="spacing">
           <number>0</number>
@@ -167,7 +182,22 @@ padding-top:5px;
          <item>
           <widget class="QTabWidget" name="tabWidget">
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">        QTabWidget::pane {background: #272727;}
+        QTabWidget::tab-bar:top {top: 1px;}
+        QTabWidget::tab-bar:bottom {bottom: 1px;}
+        QTabWidget::tab-bar:left {right: 1px;}
+        QTabWidget::tab-bar:right {left: 1px;}
+        QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
+
+        QTabBar::tab {border: 1px #1b1b1b;}
+        QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}
+        QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}
+        QTabBar::tab:bottom:!selected {margin-bottom: 3px;}
+        QTabBar::tab:top, QTabBar::tab:bottom {
+            min-width: 8ex;
+            margin-right: -1px;
+            padding: 5px 10px 5px 10px;}
+</string>
            </property>
            <property name="tabShape">
             <enum>QTabWidget::Rounded</enum>
@@ -188,6 +218,9 @@ padding-top:5px;
          </item>
          <item>
           <widget class="QWidget" name="widget_2" native="true">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -199,6 +232,10 @@ padding-top:5px;
              <width>110</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(27, 27, 27);
+margin-top:1px;</string>
            </property>
           </widget>
          </item>
@@ -227,7 +264,6 @@ padding-top:5px;
      <property name="title">
       <string>Recent files</string>
      </property>
-     <addaction name="actionclear"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -345,6 +381,13 @@ padding-top:5px;
      <addaction name="actionSQL"/>
      <addaction name="actionXML"/>
     </widget>
+    <widget class="QMenu" name="menuInvisible_Characters">
+     <property name="title">
+      <string>Invisible Characters</string>
+     </property>
+     <addaction name="actionDisplay_EOL"/>
+     <addaction name="actionDisplay_White_Space"/>
+    </widget>
     <addaction name="menuShow_Panels"/>
     <addaction name="menuLine_Ending"/>
     <addaction name="menuSyntax"/>
@@ -352,6 +395,8 @@ padding-top:5px;
     <addaction name="actionShow_Linenumbers"/>
     <addaction name="actionToolBar"/>
     <addaction name="actionShow_Minimap"/>
+    <addaction name="menuInvisible_Characters"/>
+    <addaction name="actionStatusbar"/>
    </widget>
    <widget class="QMenu" name="menuFind">
     <property name="title">
@@ -1037,6 +1082,33 @@ padding-top:5px;
    </property>
    <property name="shortcut">
     <string>Ctrl+/</string>
+   </property>
+  </action>
+  <action name="actionDisplay_EOL">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display EOL</string>
+   </property>
+  </action>
+  <action name="actionDisplay_White_Space">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display White Space</string>
+   </property>
+  </action>
+  <action name="actionStatusbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Statusbar</string>
    </property>
   </action>
  </widget>

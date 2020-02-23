@@ -17,17 +17,18 @@ minimap::minimap(QWidget *parent) :
     QFont font("monospace",1);
     if (text->lexer() == nullptr)
     {
-        text->setColor(QColor("black"));
-        text->setPaper(QColor("#cbcdce"));
+        text->setColor(QColor("white"));
+        text->setPaper(QColor("#393d44"));
         text->setFont(font);
     }
     else
     {
         QsciLexer *lexer = text->lexer();
-        lexer->setDefaultColor(QColor("black"));
-        lexer->setDefaultPaper(QColor("#cbcdce"));
+        lexer->setDefaultColor(QColor("white"));
+        lexer->setDefaultPaper(QColor("#393d44"));
         lexer->setDefaultFont(font);
     }
+
     this->setFocusPolicy(Qt::NoFocus);
 }
 

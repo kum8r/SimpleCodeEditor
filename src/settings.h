@@ -19,6 +19,9 @@ public:
     ~Settings();
 
     void loadSettings();
+    void saveSettings();
+    void loadStartUpSettings();
+    void saveStartUpSettings(QWidget *parent);
 
 private slots:
 
