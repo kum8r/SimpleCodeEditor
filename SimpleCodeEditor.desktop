@@ -2,9 +2,9 @@
 Version=1.0
 Type=Application
 Name=SimpleCodeEditor
-Exec=SimpleCodeEditor %f
-Icon=SimpleCodeEditor.png
+Exec=SimpleCodeEditor %F
+Icon=SimpleCodeEditor
 Categories=Utility;TextEditor;Development;
-mime-type=text/plain;
-terminal=false;
 Comment=A Simple Code Editor
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-adasrc;text/x-chdr;text/x-csrc;text/css;application/x-desktop;text/x-patch;text/x-fortran;text/html;text/x-javas;text/x-objcsrc;application/x-perl;application/x-php;text/vnd.wap.wml;text/x-python;application/x-ruby;text/sgml;application/xml;model/vrml;image/svg+xml;application/json;
+
