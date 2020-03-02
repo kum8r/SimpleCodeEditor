@@ -12,7 +12,7 @@ Written in C++ and QT
 **Install**:
 
 **Binary**
-Download from <a src="https://github.com/kum8r/SimpleCodeEditor/releases">Release</a>
+Download from [Releases](https://github.com/kum8r/SimpleCodeEditor/releases)
 
 **Build From Source**
 install [Qt](https://qt.io "Qt")  and [qscintilla](https://www.riverbankcomputing.com "qscintilla")
