@@ -104,7 +104,7 @@ public:
     void setLineNumStyle(QString, QString);
 
     void menuActionGroup();
-    void changeFilename();
+    void changeTabNameIfFileChanges();
 
     void autoComplete();
     void highlighsearchtext(QString searchtext);
@@ -242,7 +242,6 @@ private:
     QString searchString, curThemeFile;
     bool showMinimap;
     bool isAutoSave;
-
     static const int maxRecentFiles = 10;
     QList <QAction*> recentFileActionList;
 
@@ -251,6 +250,9 @@ private:
     void updateRecentActionList();
     void createRecentAction();
     void updateRecentFileList(QString recentFilePath);
+    void setFileTypeInStatusBar(QString strFileName);
+    void removeTextChanged();
+    void changeTabName();
 
 protected:
     void closeEvent(QCloseEvent *event);

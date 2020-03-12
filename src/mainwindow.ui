@@ -18,7 +18,7 @@
     <normaloff>:/icons/SimpleCodeEditor.png</normaloff>:/icons/SimpleCodeEditor.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">border:0;</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
@@ -78,8 +78,8 @@
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true"> text-transform: uppercase;
-</string>
+            <string notr="true">text-transform: uppercase;
+text-align:center;</string>
            </property>
            <property name="text">
             <string>Opened Files</string>
@@ -125,8 +125,7 @@
            </property>
            <property name="styleSheet">
             <string notr="true">text-transform: uppercase;
-padding-top:5px;
-</string>
+text-align:center;</string>
            </property>
            <property name="text">
             <string>FileExplorer</string>
@@ -182,21 +181,46 @@ padding-top:5px;
          <item>
           <widget class="QTabWidget" name="tabWidget">
            <property name="styleSheet">
-            <string notr="true">        QTabWidget::pane {background: #272727;}
-        QTabWidget::tab-bar:top {top: 1px;}
-        QTabWidget::tab-bar:bottom {bottom: 1px;}
-        QTabWidget::tab-bar:left {right: 1px;}
-        QTabWidget::tab-bar:right {left: 1px;}
-        QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
+            <string notr="true">
+QTabWidget::pane {background: #272727;}
+        
+QTabWidget::tab-bar:top {top: 1px;}
+        
+QTabWidget::tab-bar:bottom {bottom: 1px;}
+        
+QTabWidget::tab-bar:left {right: 1px;}
+        
+QTabWidget::tab-bar:right {left: 1px;}
+        
+QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
 
-        QTabBar::tab {border: 1px #1b1b1b;}
-        QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}
-        QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}
-        QTabBar::tab:bottom:!selected {margin-bottom: 3px;}
-        QTabBar::tab:top, QTabBar::tab:bottom {
+       
+ QTabBar::tab {border: 1px #1b1b1b;}
+       
+  QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}
+        
+  QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}
+        
+  QTabBar::tab:bottom:!selected {margin-bottom: 3px;}
+        
+  QTabBar::tab:top, QTabBar::tab:bottom {
             min-width: 8ex;
             margin-right: -1px;
-            padding: 5px 10px 5px 10px;}
+            padding: 5px 10px 5px 10px;
+}
+
+QTabBar::tear
+{
+	background-color: #222222;
+}
+
+QTabBar::QToolButton 
+{
+	display: none; 
+}
+
+
+
 </string>
            </property>
            <property name="tabShape">
@@ -234,8 +258,7 @@ padding-top:5px;
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(27, 27, 27);
-margin-top:1px;</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -276,7 +299,6 @@ margin-top:1px;</string>
     <addaction name="menuRecent_files"/>
     <addaction name="actionNew_Window"/>
     <addaction name="actionClose_Window"/>
-    <addaction name="actionSettings"/>
     <addaction name="actionClose"/>
     <addaction name="actionClose_All_Files"/>
     <addaction name="actionExit"/>
@@ -425,6 +447,7 @@ margin-top:1px;</string>
      <addaction name="actionLight"/>
     </widget>
     <addaction name="menuThemes"/>
+    <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>

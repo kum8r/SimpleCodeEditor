@@ -1,95 +1,70 @@
-QMainWindow
+*
 {
-    border:0;
-    background-color: #32363e;
-}
-
-QTreeView, QLabel, QListWidget, QWidget, QFileDialog
-{
-    background-color: #32363c;
-    color: rgb(255, 255, 255);
-}
-
-QListWidget::item:selected
-{
-    background-color: #3b3d48;
-}
-
-QTreeView::item:selected
-{
-    background-color: #3b3d48;
-}
-
-QTabBar::tab
-{
-    padding: 10% 50% 10% 50%;
-    width: 100%;
-    background-color: #2f3039;
-    border:0;
-    color: #565b67;
-}
-
-QTabBar::tab:selected
-{
-    background-color: #363941;
-    color: rgb(255, 255, 255);
-}
-
-QPushButton, QToolButton
-{
-    color:white;
-    border: 2px solid #45455f;
-    background:#45455f;
-    padding:2px;
-    border-radius: 5px;
-    margin:5px;
-}
-
-QScrollBar
-{
-    background-color: #32363c;
-    width: 10px;
-}
-
-QScrollBar::handle
-{
-    border-radius:10px;
-    border:10px;
-    background-color: #353b4b;
-}
-
-QScrollBar::sub-page:vertical
-{
-    background-color: #32363c;
-}
-
-QScrollBar::add-page:vertical
-{
-    background-color: #32363c;
-}
-
-QScrollBar::add-line:vertical
-{
-    width: 0px;
-    height: 0px;
-}
-
-QScrollBar::sub-line:vertical
-{
-    width: 0px;
-    height: 0px;
-}
-
-QLineEdit
-{
-    background-color: #64737e;
+    background-color: #222222;
     color: white;
-    padding:7px;
-    border-radius: 5px;
-    margin:10px;
 }
 
-QToolBar
-{
-    padding:2px;
+QScrollBar {
+    border: 2px solid #222222;
+    border-radius: 10px;
+    background: #222222;
+    width: 15px;
+    margin: 22px 0 22px 0;
 }
+QScrollBar::handle {
+    background: #4e4e4e;
+    border-radius: 20px;
+    min-height: 20px;
+}
+QScrollBar::add-line {
+    border: 2px solid #222222;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line {
+    border: 2px solid #222222;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+QScrollBar::up-arrow, QScrollBar::down-arrow {
+    border: 2px solid #222222;
+    width: 0px;
+    height: 0px;
+    background: #222222;
+}
+
+
+QTabWidget::pane
+{
+    background: #272727;
+}
+
+QTabWidget::tab-bar:top
+{
+    top: 1px;
+}
+/*
+QTabWidget::tab-bar:bottom
+{
+    bottom: 1px;
+}
+QTabWidget::tab-bar:left
+{
+    right: 1px;
+}
+QTabWidget::tab-bar:right
+{
+    left: 1px;
+}
+QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
+ QTabBar::tab {border: 1px #1b1b1b;}\n
+  QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}\n
+  QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}\n
+  QTabBar::tab:bottom:!selected {margin-bottom: 3px;}\n
+  QTabBar::tab:top, QTabBar::tab:bottom {\n            min-width: 8ex;\n            margin-right: -1px;\n            padding: 5px 10px 5px 10px;}\n
+*/

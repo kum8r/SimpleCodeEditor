@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     menuActionGroup();
     loadWindowsGeomentry();
+    loadSettings();
     createRecentAction();
     connect(ui->menuRecent_files, &QMenu::aboutToShow, this, &MainWindow::updateRecentActionList);
     connect(this, &MainWindow::focusOutEvent, this, &MainWindow::lostFocus);
@@ -49,12 +50,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     on_actionShow_Minimap_triggered();
     isAutoSave = false;
     searchTextposlist.clear();
+
+    ui->mainToolBar->hide();
 }
 
 MainWindow::~MainWindow()
 {
     saveWindowsGeomentry();
-    saveSettings();
+//    saveSettings();
 //    delete find;
 //    delete Mmap;
 //    delete filemodel;
@@ -179,8 +182,6 @@ void MainWindow::loadCodeEditorSettings()
     {
         static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setAutoCompletionSource(QsciScintilla::AcsNone);
     }
-
-    curThemeFile = mySettings->value("Current Theme").toString();
 }
 
 void MainWindow::loadSettings()
@@ -189,6 +190,7 @@ void MainWindow::loadSettings()
     ui->actionOpened_Files->setChecked(mySettings->value("opened files").toBool());
     on_actionOpened_Files_triggered();
     on_actionFile_Explorer_triggered();
+    curThemeFile = mySettings->value("Current Theme").toString();
 }
 
 //default location of the file explorer
@@ -280,6 +282,9 @@ int MainWindow::newTab(QString tabname)
     ui->tabWidget->setCurrentIndex(tabindex);
     ui->listWidget->addItem(tabname);
     ui->tabWidget->currentWidget()->setFocus();
+    qDebug() << curThemeFile;
+    loadCodeEditorSettings();
+    setStyleSheet(texteditor->lexer(), curThemeFile);
     return tabindex;
 }
 
@@ -342,6 +347,8 @@ void MainWindow::openFile(QString filepath)
     static_cast<codeEditor*>(ui->tabWidget->widget(tabindex))->setFileName(filename);
     static_cast<codeEditor*>(ui->tabWidget->widget(tabindex))->setTextChanges(false);
     updateRecentFileList(filepath);
+    setStyleSheet(texteditor->lexer(), curThemeFile);
+    loadCodeEditorSettings();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -380,6 +387,7 @@ void MainWindow::saveFile(QString filepath)
     {
         QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(true);
     }
 }
 
@@ -631,7 +639,129 @@ void MainWindow::setFiletype(QString file)
     }    
 }
 
-void MainWindow::changeFilename()
+void MainWindow::setFileTypeInStatusBar(QString strFileName)
+{
+    QFileInfo fileinfo(strFileName);
+    QString extension = fileinfo.suffix();
+    extension = extension.toLower();
+    if (extension == "txt")
+    {
+        ui->actionNormal->setChecked(true);
+        fileTypeLabel->setText("Normal");
+    }
+    else if (extension == "sh")
+    {
+        ui->actionBash->setChecked(true);
+        fileTypeLabel->setText("Bash File");
+    }
+    else if (extension == "bat")
+    {
+        ui->actionBatch_File->setChecked(true);
+        fileTypeLabel->setText("Batch File");
+    }
+    else if ((extension == "c") or (extension == "cpp") or (extension == "h") or (extension == "cxx")
+             or (extension == "hpp") or (extension == "hxx" ))
+    {
+        ui->actionC->setChecked(true);
+        fileTypeLabel->setText("C++");
+    }
+    else if (extension == "cs" )
+    {
+        ui->actionCSharp->setChecked(true);
+        fileTypeLabel->setText("CSharp");
+    }
+    else if (extension == "css")
+    {
+        ui->actionCSS->setChecked(true);
+        fileTypeLabel->setText("CSS");
+    }
+    else if (extension == "d")
+    {
+        ui->actionD->setChecked(true);
+        fileTypeLabel->setText("D");
+    }
+    else if (extension == "f")
+    {
+        fileTypeLabel->setText("Fortan");
+    }
+    else if (extension == "html")
+    {
+        ui->actionHTML->setChecked(true);
+        fileTypeLabel->setText("HTML");
+    }
+    else if (extension == "java")
+    {
+        ui->actionJava->setChecked(true);
+        fileTypeLabel->setText("Java");
+    }
+    else if (extension == "js")
+    {
+        ui->actionJavaScript->setChecked(true);
+        fileTypeLabel->setText("Javascript");
+    }
+    else if (extension == "json")
+    {
+        ui->actionJSON->setChecked(true);
+        fileTypeLabel->setText("JSON");
+    }
+    else if (extension == "lua")
+    {
+        fileTypeLabel->setText("Lua");
+    }
+    else if (extension == "md")
+    {
+        ui->actionMarkDown->setChecked(true);
+        fileTypeLabel->setText("Markdown");
+    }
+    else if (extension == "mlx")
+    {
+        ui->actionMatLab->setChecked(true);
+        fileTypeLabel->setText("Matlab");
+    }
+    else if (extension == "pas")
+    {
+        fileTypeLabel->setText("Pascal");
+    }
+    else if (extension == "pl")
+    {
+        ui->actionPerl->setChecked(true);
+        fileTypeLabel->setText("Perl");
+    }
+    else if (extension == "py")
+    {
+        ui->actionPython->setChecked(true);
+        fileTypeLabel->setText("Python");
+    }
+    else if (extension == "rb")
+    {
+        ui->actionRuby->setChecked(true);
+        on_actionRuby_triggered();
+        fileTypeLabel->setText("Ruby");
+    }
+    else if (extension == "sql" or extension == "sqlite")
+    {
+        ui->actionSQL->setChecked(true);
+        fileTypeLabel->setText("SQL");
+    }
+    else if (extension == "yaml")
+    {
+        ui->actionYAML->setChecked(true);
+        fileTypeLabel->setText("YAML");
+    }
+    else if (extension == "xml")
+    {
+        ui->actionXML->setChecked(true);
+        fileTypeLabel->setText("XML");
+    }
+    else
+    {
+        ui->actionNormal->setChecked(true);
+        fileTypeLabel->setText("Normal");
+    }
+}
+
+
+void MainWindow::changeTabNameIfFileChanges()
 {
     QString tabName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
     if (!tabName.contains("- *"))
@@ -1183,21 +1313,21 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         return;
 
     connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
-    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged, this, &MainWindow::changeFilename);
+    connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged, this, &MainWindow::changeTabNameIfFileChanges);
     connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::lineNumwidthIncrement);
     connect(static_cast<codeEditor*>(ui->tabWidget->widget(index)), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
-    setFiletype(static_cast<codeEditor*>(ui->tabWidget->widget(index))->getFileName());
+    setFileTypeInStatusBar(static_cast<codeEditor*>(ui->tabWidget->widget(index))->getFileName());
 
     if (showMinimap)
     {
         setTextinMinimap();
     }
-    loadCodeEditorSettings();
-    setEOL();
-    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
-    on_actionToolBar_triggered();
-    QsciLexer *lexer = static_cast<codeEditor*>(ui->tabWidget->widget(index))->lexer();
-    setStyleSheet(lexer, curThemeFile);
+////    loadCodeEditorSettings();
+////    setEOL();
+//    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
+//    on_actionToolBar_triggered();
+//    QsciLexer *lexer = static_cast<codeEditor*>(ui->tabWidget->widget(index))->lexer();
+//    setStyleSheet(lexer, curThemeFile);
 //    for (int i = 0; i < ui->tabWidget->count(); ++i)
 //    {
 //        if (i == index) break;
@@ -1483,8 +1613,6 @@ void MainWindow::updateRecentFileList(QString recentFilePath)
     // see note
     updateRecentActionList();
 }
-
-
 
 void MainWindow::on_actionShow_Minimap_triggered()
 {
