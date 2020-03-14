@@ -5,14 +5,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    ui->splitter_2->setStretchFactor(1,1);
+    ui->splitter_4->setStretchFactor(1,1);
     ui->splitter->setStretchFactor(1,1);
+    ui->splitter_2->setStretchFactor(0, 1);
 
     ui->treeView->hide();       //fileExplorer
     ui->listWidget->hide();     //openedFiles
     ui->label->hide();          //fileExplorer Title
     ui->label_2->hide();        //openedFiles Title
-    ui->widget->hide();         //find dialog
+    ui->findWidget->hide();         //find dialog
+    ui->terminalWidget->hide();
+    ui->widget->hide();
 
     defaultLocation();      //sets fileExplorer default location
 
@@ -26,9 +29,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //minimap
     Mmap = new minimap ();
-    ui->widget_2->setLayout(Mmap->layout());
+    ui->minimap->setLayout(Mmap->layout());
 
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
+    themeFiles = new QMap<QString, QString> ();
+    themeFiles->insert("Light", ":/style/src/icons/default_classic.xml");
+    themeFiles->insert("Dark", ":/style/src/icons/creator-dark.xml");
 
     menuActionGroup();
     loadWindowsGeomentry();
@@ -39,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //find dialog
     find = new findDialog();
-    ui->widget->setLayout(find->layout());
+    ui->findWidget->setLayout(find->layout());
     connect(find,SIGNAL(closeFindDialog()),this,SLOT(closeFindDialog()));
     connect(find,SIGNAL(findButton_clicked(QString)),this,SLOT(findButton_clicked(QString)));
     connect(find,SIGNAL(findPrev_clicked(QString)),this,SLOT(findPrev_clicked(QString)));
@@ -47,17 +53,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(find, SIGNAL(replaceAll_clicked(QString, QString)), this, SLOT(replaceAll_clicked(QString, QString)));
     connect(find, SIGNAL(findStringChanged()), this, SLOT(findString_Changed()));
 
+    console = new termwidget (0, this);
+    ui->gridLayout_5->addWidget(console);
+
     on_actionShow_Minimap_triggered();
     isAutoSave = false;
     searchTextposlist.clear();
 
     ui->mainToolBar->hide();
+    ui->menuThemes->hide();
 }
 
 MainWindow::~MainWindow()
 {
     saveWindowsGeomentry();
-//    saveSettings();
+    saveSettings();
 //    delete find;
 //    delete Mmap;
 //    delete filemodel;
@@ -108,7 +118,7 @@ void MainWindow::saveSettings()
 {
     mySettings->setValue("file explorer", ui->actionFile_Explorer->isChecked());
     mySettings->setValue("opened files", ui->actionOpened_Files->isChecked());
-    mySettings->setValue("Current Theme", curThemeFile);
+//    mySettings->setValue("Current Theme", curThemeFile);
 }
 
 void MainWindow::saveWindowsGeomentry()
@@ -190,7 +200,7 @@ void MainWindow::loadSettings()
     ui->actionOpened_Files->setChecked(mySettings->value("opened files").toBool());
     on_actionOpened_Files_triggered();
     on_actionFile_Explorer_triggered();
-    curThemeFile = mySettings->value("Current Theme").toString();
+    curThemeFile = themeFiles->value(mySettings->value("theme", "Light").toString());
 }
 
 //default location of the file explorer
@@ -349,6 +359,7 @@ void MainWindow::openFile(QString filepath)
     updateRecentFileList(filepath);
     setStyleSheet(texteditor->lexer(), curThemeFile);
     loadCodeEditorSettings();
+    changeTabName();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -383,12 +394,7 @@ void MainWindow::saveFile(QString filepath)
             out << static_cast<codeEditor*>(ui->tabWidget->currentWidget())->text();
         }
     }
-    if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
-    {
-        QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
-        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(true);
-    }
+    changeTabName();
 }
 
 void MainWindow::saveFileAs(QString fileName)
@@ -469,7 +475,7 @@ void MainWindow::closeFile(int index)
         delete ui->tabWidget->widget(index);
         ui->listWidget->takeItem(index);
     }
-    ui->widget->hide();
+    ui->findWidget->hide();
     if(ui->tabWidget->count() == 0)
     {
         newTab("untitled");
@@ -760,6 +766,15 @@ void MainWindow::setFileTypeInStatusBar(QString strFileName)
     }
 }
 
+void MainWindow::changeTabName()
+{
+    if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
+    {
+        QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
+        static_cast<codeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(false);
+    }
+}
 
 void MainWindow::changeTabNameIfFileChanges()
 {
@@ -882,27 +897,34 @@ void MainWindow::on_actionClose_Window_triggered()
 
 void MainWindow::on_actionExit_triggered()
 {
+    for (int i = 0; i < ui->tabWidget->count(); i++)
+    {
+        if (static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
+        {
+            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save changes before close"),tr("Save changes before close ") + ui->tabWidget->tabText(i), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
+            if (ask == QMessageBox::No)
+            {
+                continue;
+            }
+            else if (ask == QMessageBox::Cancel)
+            {
+                break;
+            }
+            else if (ask == QMessageBox::Yes)
+            {
+                if (ui->tabWidget->tabWhatsThis(i) != "")
+                {
+                    saveFile(ui->tabWidget->tabWhatsThis(i));
+                }
+            }
+        }
+    }
     qApp->exit();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    for (int i = 0; i < ui->tabWidget->count(); ++i)
-    {
-        if (static_cast<codeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
-        {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save changes before close"),tr("Save changes before close") + ui->tabWidget->tabText(i), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
-            if (ask == QMessageBox::No)
-            {
-                break;
-            }
-            if (ui->tabWidget->tabWhatsThis(i) != "")
-            {
-                saveFile(ui->tabWidget->tabWhatsThis(i));
-            }
-        }
-    }
-    event->accept();
+    on_actionExit_triggered();
 }
 
 void MainWindow::on_actionUndo_triggered()
@@ -946,7 +968,7 @@ void MainWindow::on_actionDeselect_triggered()
 //Find and Replace function
 void MainWindow::on_actionFind_triggered()
 {
-    ui->widget->show();
+    ui->findWidget->show();
     find->hidereplaceWidget();
 }
 
@@ -957,7 +979,7 @@ void MainWindow::on_actionFind_Prev_triggered()
 
 void MainWindow::on_actionReplace_triggered()
 {
-    ui->widget->show();
+    ui->findWidget->show();
     find->showreplaceWidget();
 }
 
@@ -1021,7 +1043,7 @@ void MainWindow::replaceAll_clicked(QString searchtext, QString replacetext)
 
 void MainWindow::closeFindDialog()
 {
-    ui->widget->hide();
+    ui->findWidget->hide();
     findString_Changed();
     static_cast<codeEditor*>(ui->tabWidget->currentWidget())->cancelFind();
 }
@@ -1046,11 +1068,13 @@ void MainWindow::on_actionFile_Explorer_triggered()
     {
         ui->treeView->show();
         ui->label->show();
+        ui->widget->show();
     }
     else
     {
         ui->treeView->hide();
         ui->label->hide();
+        ui->widget->hide();
     }
 }
 
@@ -1587,7 +1611,7 @@ void MainWindow::setTextinMinimap()
 {
     QsciDocument text = static_cast<codeEditor*>(ui->tabWidget->currentWidget())->document();
     Mmap->getText()->setDocument(text);
-    Mmap->getText()->setLexer(0);
+    Mmap->getText()->setLexer(nullptr);
 }
 
 void MainWindow::setStyleSheet(QsciLexer *lexer, QString themeFileName)
@@ -1620,13 +1644,13 @@ void MainWindow::on_actionShow_Minimap_triggered()
     {
         ui->actionShow_Minimap->setText("Hide Minimap");
         showMinimap = true;
-        ui->widget_2->show();
+        ui->minimap->show();
     }
     else
     {
         ui->actionShow_Minimap->setText("Show Minimap");
         showMinimap = false;
-        ui->widget_2->hide();
+        ui->minimap->hide();
     }
 }
 
@@ -1697,4 +1721,23 @@ void MainWindow::on_actionStatusbar_triggered()
     {
         ui->statusBar->hide();
     }
+}
+
+void MainWindow::on_actionTerminal_triggered()
+{
+    ui->splitter_2->setChildrenCollapsible(true);
+    QObject::connect(console, SIGNAL(finished()), this, SLOT(hideTerminalWidget()));
+    ui->terminalWidget->show();
+    console->startShellProgram();
+    console->setFocus();
+}
+
+void MainWindow::hideTerminalWidget()
+{
+    ui->terminalWidget->hide();
+}
+
+void MainWindow::on_termClose_clicked()
+{
+    hideTerminalWidget();
 }

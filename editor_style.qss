@@ -48,23 +48,63 @@ QTabWidget::tab-bar:top
 {
     top: 1px;
 }
-/*
+
 QTabWidget::tab-bar:bottom
 {
     bottom: 1px;
 }
+
 QTabWidget::tab-bar:left
 {
     right: 1px;
 }
+
 QTabWidget::tab-bar:right
 {
     left: 1px;
 }
-QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
- QTabBar::tab {border: 1px #1b1b1b;}\n
-  QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}\n
-  QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}\n
-  QTabBar::tab:bottom:!selected {margin-bottom: 3px;}\n
-  QTabBar::tab:top, QTabBar::tab:bottom {\n            min-width: 8ex;\n            margin-right: -1px;\n            padding: 5px 10px 5px 10px;}\n
-*/
+
+QTabBar
+{
+    background-color: #1b1b1b;
+    qproperty-drawBase:0;
+}
+
+QTabBar::tab
+{
+    border: 1px #1b1b1b;
+}
+
+QTabBar::tab:selected
+{
+    background: #2b2b2b;
+    color: #bbbbbb;
+}
+
+QTabBar::tab:!selected
+{
+    background: #3c3e3f;
+    color: #bbbbbb;
+}
+
+QTabBar::tab:bottom:!selected
+{
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:top, QTabBar::tab:bottom
+{
+    min-width: 8ex;
+    margin-right: -1px;
+    padding: 5px 10px 5px 10px;
+}
+
+QWidget#minimap
+{
+    background-color: #1b1b1b;
+}
+
+QWidget#terminalWidget
+{
+    background-color: black;
+}

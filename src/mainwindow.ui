@@ -24,7 +24,7 @@
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_4">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -41,230 +41,339 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
-      <property name="lineWidth">
-       <number>0</number>
-      </property>
+     <widget class="QSplitter" name="splitter_4">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="handleWidth">
-       <number>0</number>
-      </property>
-      <widget class="QSplitter" name="splitter">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="handleWidth">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="layoutWidget">
-        <layout class="QVBoxLayout" name="openedFiles">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">text-transform: uppercase;
-text-align:center;</string>
-           </property>
-           <property name="text">
-            <string>Opened Files</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QListWidget" name="listWidget">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="movement">
-            <enum>QListView::Free</enum>
-           </property>
-           <property name="resizeMode">
-            <enum>QListView::Adjust</enum>
-           </property>
-           <property name="uniformItemSizes">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <layout class="QVBoxLayout" name="fileExplorer">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">text-transform: uppercase;
-text-align:center;</string>
-           </property>
-           <property name="text">
-            <string>FileExplorer</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTreeView" name="treeView">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarAsNeeded</enum>
-           </property>
-           <property name="headerHidden">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QSplitter" name="splitter_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <widget class="QWidget" name="widget_3" native="true">
-        <property name="styleSheet">
-         <string notr="true"/>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QTabWidget" name="tabWidget">
-           <property name="styleSheet">
-            <string notr="true">
-QTabWidget::pane {background: #272727;}
-        
-QTabWidget::tab-bar:top {top: 1px;}
-        
-QTabWidget::tab-bar:bottom {bottom: 1px;}
-        
-QTabWidget::tab-bar:left {right: 1px;}
-        
-QTabWidget::tab-bar:right {left: 1px;}
-        
-QTabBar{background-color: #1b1b1b; qproperty-drawBase:0;  }
-
-       
- QTabBar::tab {border: 1px #1b1b1b;}
-       
-  QTabBar::tab:selected {background: #2b2b2b;color: #bbbbbb;}
-        
-  QTabBar::tab:!selected {background: #3c3e3f;color: #bbbbbb;}
-        
-  QTabBar::tab:bottom:!selected {margin-bottom: 3px;}
-        
-  QTabBar::tab:top, QTabBar::tab:bottom {
-            min-width: 8ex;
-            margin-right: -1px;
-            padding: 5px 10px 5px 10px;
-}
-
-QTabBar::tear
-{
-	background-color: #222222;
-}
-
-QTabBar::QToolButton 
-{
-	display: none; 
-}
-
-
-
-</string>
-           </property>
-           <property name="tabShape">
-            <enum>QTabWidget::Rounded</enum>
-           </property>
-           <property name="usesScrollButtons">
-            <bool>true</bool>
-           </property>
-           <property name="documentMode">
-            <bool>true</bool>
-           </property>
-           <property name="tabsClosable">
-            <bool>true</bool>
-           </property>
-           <property name="movable">
-            <bool>true</bool>
-           </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="openedFiles">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">text-transform: uppercase;
+text-align:center;</string>
+              </property>
+              <property name="text">
+               <string>Opened Files</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidget">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="movement">
+               <enum>QListView::Free</enum>
+              </property>
+              <property name="resizeMode">
+               <enum>QListView::Adjust</enum>
+              </property>
+              <property name="uniformItemSizes">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="widget_2" native="true">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>110</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
+          <widget class="QWidget" name="layoutWidget_2">
+           <layout class="QVBoxLayout" name="fileExplorer">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">text-transform: uppercase;
+text-align:center;</string>
+              </property>
+              <property name="text">
+               <string>FileExplorer</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTreeView" name="treeView">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAsNeeded</enum>
+              </property>
+              <property name="headerHidden">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="widget" native="true"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="widget_4" native="true">
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QWidget" name="widget_6" native="true">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QSplitter" name="splitter_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <widget class="QWidget" name="mainWidget" native="true">
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QTabWidget" name="tabWidget">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="tabShape">
+                   <enum>QTabWidget::Rounded</enum>
+                  </property>
+                  <property name="usesScrollButtons">
+                   <bool>true</bool>
+                  </property>
+                  <property name="documentMode">
+                   <bool>true</bool>
+                  </property>
+                  <property name="tabsClosable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="movable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="minimap" native="true">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>110</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="findWidget" native="true"/>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="terminalWidget" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QWidget" name="termHeader" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>terminal</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="termClose">
+                 <property name="text">
+                  <string>x</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="terminal" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <property name="spacing">
+                <number>0</number>
+               </property>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -359,6 +468,7 @@ QTabBar::QToolButton
      </property>
      <addaction name="actionFile_Explorer"/>
      <addaction name="actionOpened_Files"/>
+     <addaction name="actionTerminal"/>
     </widget>
     <widget class="QMenu" name="menuLine_Ending">
      <property name="title">
@@ -443,8 +553,6 @@ QTabBar::QToolButton
      <property name="title">
       <string>Themes</string>
      </property>
-     <addaction name="actionDark"/>
-     <addaction name="actionLight"/>
     </widget>
     <addaction name="menuThemes"/>
     <addaction name="actionSettings"/>
@@ -1132,6 +1240,14 @@ QTabBar::QToolButton
    </property>
    <property name="text">
     <string>Statusbar</string>
+   </property>
+  </action>
+  <action name="actionTerminal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Terminal</string>
    </property>
   </action>
  </widget>

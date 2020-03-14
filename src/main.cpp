@@ -35,24 +35,29 @@ void Application::run()
 
 void Application::addarguments(QStringList arguments)
 {
+    QStringList fileTypes;
+    fileTypes <<  "application/x-shellscript" << "application/x-desktop" << "application/x-perl" << "application/x-php" << "application/x-ruby" << "application/xml" << "model/vrml" << "image/svg+xml" << "application/json";
     if (arguments.count() > 1)
     {
-         for (int i = 1; i < arguments.count(); i++)
-         {
-             QString file = (arguments.at(i));
-             QMimeDatabase db;
-             QMimeType fileType = db.mimeTypeForFile(file);
-             qDebug() << fileType.name();
-             w.openFile(file);
-//             if (fileType.name().contains("video"))
-//             {
-////                w.addToPlaylist(file);
-//             }
-         }
+        for (int i = 1; i < arguments.count(); i++)
+        {
+            QString file = (arguments.at(i));
+            QMimeDatabase db;
+            QMimeType fileType = db.mimeTypeForFile(file);
+            qDebug() << fileType.name();
+            if (fileType.name().contains("text") || fileTypes.contains(fileType.name()))
+            {
+                w.openFile(file);
+            }
+//            else
+//            {
+//                QMessageBox::warning(this, "warning", "unknown file type");
+//            }
+        }
     }
     else
     {
-        w.newTab("untitled");
+    w.newTab("untitled");
     }
 }
 
@@ -71,9 +76,19 @@ void Application::onArgumentRecieved(quint32 instanceId, QByteArray message)
 
 int main(int argc, char *argv[])
 {
+    QSettings *mySettings = new QSettings ("kumar","SimpleCodeEditor");
+    QString theme = mySettings->value("theme", "Light").toString();
+    if (theme == "Light")
+    {
+        theme = ":/style/editor_white_theme";
+    }
+    else
+    {
+        theme = ":/style/editor_style.qss";
+    }
     QApplication a(argc, argv);
 
-    QFile f(":/style/editor_style.qss");
+    QFile f(theme);
     if (!f.exists())
     {
         printf("Unable to set stylesheet, file not found\n");

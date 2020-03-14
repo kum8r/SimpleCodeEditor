@@ -51,7 +51,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="General">
       <attribute name="title">
@@ -77,9 +77,6 @@
           <string>font size</string>
          </property>
         </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="fontsize"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_2">
@@ -125,6 +122,9 @@
           </property>
          </item>
         </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="genFontSize"/>
        </item>
       </layout>
      </widget>
@@ -260,7 +260,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="fontSize">
+          <widget class="QLineEdit" name="editorfontSize">
            <property name="text">
             <string>12</string>
            </property>

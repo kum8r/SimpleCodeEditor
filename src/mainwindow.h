@@ -7,6 +7,7 @@
 #include "minimap.h"
 #include "comment.h"
 #include "stylesheet.h"
+#include "termwidget.h"
 
 #include <QMainWindow>
 #include <QList>
@@ -223,6 +224,10 @@ private slots:
     void on_actionDisplay_White_Space_triggered();
     void on_actionStatusbar_triggered();
 
+    void on_actionTerminal_triggered();
+    void hideTerminalWidget();
+    void on_termClose_clicked();
+
 public slots:
     void openFile(QString filepath = nullptr);
 
@@ -244,6 +249,8 @@ private:
     bool isAutoSave;
     static const int maxRecentFiles = 10;
     QList <QAction*> recentFileActionList;
+    termwidget *console;
+    QMap<QString, QString> *themeFiles, *colorScheme;
 
     codeEditor* getCodeEditor(QWidget *widget);
     void setStyleSheet(QsciLexer *lexer, QString themeFile);

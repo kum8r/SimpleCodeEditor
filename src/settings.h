@@ -24,18 +24,16 @@ public:
     void saveStartUpSettings(QWidget *parent);
 
 private slots:
-
-
-    void on_comboBox_currentIndexChanged(int index);
-
-
     void on_saveButton_clicked();
-
     void on_cancelButton_clicked();
 
 private:
     Ui::Settings *ui;
     QSettings *mySettings;
+    void saveGeneralSettings();
+    void saveTextEditorSettings();
+    void loadGeneralSettings();
+    void loadTextEditorSettings();
 
 };
 
