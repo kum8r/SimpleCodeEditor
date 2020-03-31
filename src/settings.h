@@ -29,7 +29,7 @@ private slots:
 
 private:
     Ui::Settings *ui;
-    QSettings *mySettings;
+    QSettings *my_settings;
     void saveGeneralSettings();
     void saveTextEditorSettings();
     void loadGeneralSettings();

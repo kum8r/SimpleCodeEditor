@@ -3,11 +3,11 @@
 
 #include <qtermwidget5/qtermwidget.h>
 
-class termwidget : public QTermWidget
+class TermWidget : public QTermWidget
 {
 
 public:
-    termwidget(int startnow, QWidget *parent = nullptr);
+    TermWidget(int startnow, QWidget *parent = nullptr);
 
 };
 

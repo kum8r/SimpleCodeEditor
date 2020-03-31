@@ -10,13 +10,13 @@
 #include <QObject>
 #include <QDragEnterEvent>
 
-class codeEditor : public QsciScintilla
+class CodeEditor : public QsciScintilla
 {
     Q_OBJECT
 
 public:
-    explicit codeEditor(QWidget *parent = nullptr);
-    ~codeEditor();
+    explicit CodeEditor(QWidget *parent = nullptr);
+    ~CodeEditor();
 
     QString defaultFont;
 

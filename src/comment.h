@@ -4,14 +4,15 @@
 #include <QObject>
 #include "Qsci/qsciscintilla.h"
 
-class comment
+class Comment
 {
 public:
-    comment(QsciScintilla *editor);
+    Comment(QsciScintilla *editor);
     void getcodeeditor(QsciScintilla *editor);
     void toggleComment();
-    void Comment();
+    void comment();
     void unComment();
+    void togglecomment();
 
 private:
     QString comment_string, line_ending, multiline_comment_start, multiline_comment_end;

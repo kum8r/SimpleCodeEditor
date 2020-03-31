@@ -1,14 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "finddialog.h"
-#include "codeeditor.h"
-#include "settings.h"
-#include "minimap.h"
-#include "comment.h"
-#include "stylesheet.h"
-#include "termwidget.h"
-
 #include <QMainWindow>
 #include <QList>
 #include <QFileDialog>
@@ -29,6 +21,7 @@
 #include <QInputDialog>
 #include <QMimeData>
 #include <QXmlStreamReader>
+#include <QScrollBar>
 
 //lexer
 #include "Qsci/qscilexer.h"
@@ -62,6 +55,13 @@
 #include "Qsci/qscilexeryaml.h"
 #include "Qsci/qsciprinter.h"
 
+#include "finddialog.h"
+#include "codeeditor.h"
+#include "settings.h"
+#include "minimap.h"
+#include "comment.h"
+#include "stylesheet.h"
+#include "termwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -77,52 +77,85 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void saveSettings();
-    void saveWindowsGeomentry();
-    void loadSettings();
-    void loadWindowsGeomentry();
-    void loadCodeEditorSettings();
-
-    void defaultLocation();
-    void statusBar(int, int);
-    void setEOL();
+    void setTheme();
     int newTab(QString tabname);
-    void openDirectory(QString filedir);
-    void addtoOpenedFiles(QString);
-    void saveFile(QString);
-    void saveFileAs(QString fileName);
-    void closeFile();
-    void closeFile(int index);
-    void lineNumwidthIncrement(int ,int);
-    void setFiletype(QString);
+
+
+
 
     void syntaxHighlighting(QsciLexer* lexers);
-
     void setMainWindowStyle(QString,QString);
     void setTabWidgetStyle(QString, QString);
     void updateHighlighterTheme();
     void setOverViewStyle(QString, QString);
     void setLineNumStyle(QString, QString);
-
-    void menuActionGroup();
-    void changeTabNameIfFileChanges();
-
     void autoComplete();
-    void highlighsearchtext(QString searchtext);
+    void multiedit();
 
+private:
+    Ui::MainWindow *ui;
+    FindDialog *find;
+    Settings *settings_dialog;
+    MiniMap *minimap;
+    QFileSystemModel *filemodel;
+    QStringList filelist;
+    QLabel *linenumber_label, *filetype_label;
+    QSplitter *statusbar_splitter;
+    QSpacerItem *spacer;
+    QSettings *my_settings;
+    QList<int> searchtext_position_list;
+    QString search_string, current_theme_file;
+    bool is_minimap_visible, is_autosave;
+    QList <QAction*> recentFileActionList;
+    TermWidget *console;
+    QMap<QString, QString> *themeFiles, *colorScheme;
+
+    static const int maxRecentFiles = 10;
+
+    //methods
+    void createStatusBarWidgets();
+    void setupFindWidgets();
+    void createRecentAction();
+    void updateRecentActionList();
+    void updateRecentFileList(QString recentFilePath);
+    void menuActionGroup();
+
+    void saveWindowsGeomentry();
+    void saveSettings();
+    void loadWindowsGeomentry();
+    void loadSettings();
+    void loadCodeEditorSettings();
+
+    void openDirectory(QString fileDir);
+    void saveFile(QString filePath);
+    void saveFileAs(QString fileName);
+    void closeFile();
+    bool closeFile(int index);
+
+//    void setFileTypeInStatusBar(QString fileName);
+    void setDefaultLocationForFileExplorer();
+    void setEOL();
+    void addtoOpenedFiles(QString fileName);
+    void setFiletype(QString fileName);
+    void changeTabNameIfFileChanges();
+    void highlighsearchtext(QString searchText);
+    void setColorScheme(QsciLexer *lexer, QString themeFile);
+    void revertBackTabName();
+    void changeColorScheme();
+    void loadMiniMap(int index);
+
+protected:
+    void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
 
-    void multiedit();
+public slots:
+    void openFile(QString filepath = nullptr);
 
 private slots:
-
-//    void openFile(QString filepath = nullptr);
-
-    void print(QPrinter *printer);
-    void lostFocus(QEvent *event);
-
+    //file menu slots
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionOpenDirectory_triggered();
@@ -131,13 +164,16 @@ private slots:
     void on_actionSave_All_triggered();
     void on_actionPrint_triggered();
     void on_actionPrint_Preview_triggered();
-    void on_actionClose_triggered();
-    void on_tabWidget_tabCloseRequested(int index);
-    void on_actionClose_All_Files_triggered();
+    void print(QPrinter *printer);
+    void openRecent();
+    void clearRecent();
     void on_actionNew_Window_triggered();
     void on_actionClose_Window_triggered();
+    void on_actionClose_triggered();
+    void on_actionClose_All_Files_triggered();
     void on_actionExit_triggered();
 
+    //edit menu slots
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
     void on_actionCut_triggered();
@@ -145,25 +181,39 @@ private slots:
     void on_actionPaste_triggered();
     void on_actionSelect_All_triggered();
     void on_actionDeselect_triggered();
+    void on_actionAdd_Indent_triggered();
+    void on_actionDecrease_Indent_triggered();
+    void on_actionDuplicate_Line_triggered();
+    void on_actionUPPER_CASE_triggered();
+    void on_actionlower_case_triggered();
 
+    //find menu slots
     void on_actionFind_triggered();
     void on_actionFind_Prev_triggered();
     void on_actionReplace_triggered();
     void on_actionReplace_All_triggered();
+    void on_actionGo_to_Line_triggered();
     void findButton_clicked(QString searchtext);
     void findPrev_clicked(QString searchtext);
     void replace_clicked(QString);
     void replaceAll_clicked(QString, QString);
     void closeFindDialog();
+    void clearSearchHighlight();
 
+    //view menu slots
     void on_actionOpened_Files_triggered();
     void on_actionFile_Explorer_triggered();
+    void on_actionTerminal_triggered();
     void on_actionMac_triggered();
     void on_actionUnix_triggered();
     void on_actionWindows_triggered();
+    void on_actionWordWrap_triggered();
     void on_actionShow_Linenumbers_triggered();
-    void on_actionStatusBar_triggered();
     void on_actionToolBar_triggered();
+    void on_actionShow_Minimap_triggered();
+    void on_actionStatusbar_triggered();
+    void on_actionDisplay_EOL_triggered();
+    void on_actionDisplay_White_Space_triggered();
 
     //syntax highlightning - lexers
     void on_actionNormal_triggered();
@@ -197,74 +247,30 @@ private slots:
     void on_actionXML_triggered();
     void on_actionYAML_triggered();
 
+    //help menu
     void on_actionAbout_triggered();
     void on_actionAbout_QT_triggered();
 
-    void on_treeView_doubleClicked(const QModelIndex &index);
-    void on_tabWidget_currentChanged(int index);
-    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-    void setLexer(QString lexername);
-    void on_actionWordWrap_triggered();
-    void on_actionAdd_Indent_triggered();
+    //preference
     void on_actionSettings_triggered();
-    void on_actionDuplicate_Line_triggered();
-    void findString_Changed();
-    void on_actionUPPER_CASE_triggered();
-    void on_actionlower_case_triggered();
-    void on_actionGo_to_Line_triggered();
-    void on_actionDecrease_Indent_triggered();
-    void setTextinMinimap();
-    void on_actionShow_Minimap_triggered();
-    void on_actionDark_triggered();
-    void on_actionLight_triggered();
-    void on_actionComment_triggered();
-    void openRecent();
-    void clearRecent();
-    void on_actionDisplay_EOL_triggered();
-    void on_actionDisplay_White_Space_triggered();
-    void on_actionStatusbar_triggered();
 
-    void on_actionTerminal_triggered();
+    void on_treeView_doubleClicked(const QModelIndex &index);
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_tabWidget_currentChanged(int index);
+    void on_tabWidget_tabCloseRequested(int index);
+
+    void setLexer(QString lexername);
+    void setTextinMinimap();
+    void scrollMiniMap(int value);
+    void setLineNumberAndColInStatusBar(int line, int index);
+
     void hideTerminalWidget();
     void on_termClose_clicked();
+//    void lostFocus(QEvent *event); //for autosave function not implemented
 
-public slots:
-    void openFile(QString filepath = nullptr);
-
-private:
-    Ui::MainWindow *ui;
-    findDialog *find;
-    Settings *settingsDialog;
-    minimap *Mmap;
-    QFileSystemModel *filemodel;
-    QStringList filelist;
-    QLabel *lineNumLabel, *fileTypeLabel;
-    QSplitter *statSpitter;
-    QSpacerItem *spacer;
-    QColor lineColor;
-    QSettings *mySettings;
-    QList<int> searchTextposlist;
-    QString searchString, curThemeFile;
-    bool showMinimap;
-    bool isAutoSave;
-    static const int maxRecentFiles = 10;
-    QList <QAction*> recentFileActionList;
-    termwidget *console;
-    QMap<QString, QString> *themeFiles, *colorScheme;
-
-    codeEditor* getCodeEditor(QWidget *widget);
-    void setStyleSheet(QsciLexer *lexer, QString themeFile);
-    void updateRecentActionList();
-    void createRecentAction();
-    void updateRecentFileList(QString recentFilePath);
-    void setFileTypeInStatusBar(QString strFileName);
-    void removeTextChanged();
-    void changeTabName();
-
-protected:
-    void closeEvent(QCloseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
+//    void on_actionDark_triggered();
+//    void on_actionLight_triggered();
+//    void on_actionComment_triggered();
 };
 
 #endif // MAINWINDOW_H

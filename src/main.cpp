@@ -73,41 +73,43 @@ void Application::onArgumentRecieved(quint32 instanceId, QByteArray message)
     addarguments(arguments);
 }
 
-
 int main(int argc, char *argv[])
 {
-    QSettings *mySettings = new QSettings ("kumar","SimpleCodeEditor");
-    QString theme = mySettings->value("theme", "Light").toString();
-    if (theme == "Light")
+    QApplication app(argc, argv);
+    MainWindow w;
+    w.setTheme();
+    QStringList fileTypes;
+
+    fileTypes <<  "application/x-shellscript" << "application/x-desktop" << "application/x-perl" << "application/x-php" << "application/x-ruby" << "application/xml" << "model/vrml" << "image/svg+xml" << "application/json";
+    if (argc > 1)
     {
-        theme = ":/style/editor_white_theme";
+        for (int i = 1; i < argc; i++)
+        {
+            QString file = QString::fromUtf8(argv[i]);
+            QMimeDatabase db;
+            QMimeType fileType = db.mimeTypeForFile(file);
+            qDebug() << fileType.name();
+            if (fileType.name().contains("text") || fileTypes.contains(fileType.name()))
+            {
+                w.openFile(file);
+            }
+            else
+            {
+                QMessageBox::warning(&w, "warning", "unknown file type");
+            }
+        }
     }
     else
     {
-        theme = ":/style/editor_style.qss";
+        w.newTab("untitled");
     }
-    QApplication a(argc, argv);
+//    Application app(argc, argv, true);
 
-    QFile f(theme);
-    if (!f.exists())
-    {
-        printf("Unable to set stylesheet, file not found\n");
-    }
-    else
-    {
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-        qApp->setStyleSheet(ts.readAll());
-    }
-
-    Application app(argc, argv, true);
-
-    if (app.isSecondary())
-    {
-        app.sendMessage(app.arguments().join("#").toUtf8());
-        return 0;
-    }
-    app.addarguments(app.arguments());
-    app.run();
-    return a.exec();
+//    if (app.isSecondary())
+//    {
+//        app.sendMessage(app.arguments().join("#").toUtf8());
+//        return 0;
+//    }
+    w.show();
+    return app.exec();
 }

@@ -9,10 +9,10 @@
 #include <Qsci/qscilexer.h>
 #include <Qsci/qscilexercpp.h>
 
-class stylesheet
+class StyleSheet
 {
 public:
-    stylesheet();
+    StyleSheet();
     QsciLexer* setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor);
 
 };

@@ -1,50 +1,52 @@
 *
 {
-    background-color: #EEEEEE;
-    color: black;
+    background-color: #222222;
+    color: white;
 }
 
 QScrollBar
 {
-    border: 2px solid #EEEEEE;
+    border: 2px solid #222222;
     border-radius: 10px;
-    background: #EEEEEE;
+    background: #222222;
     width: 15px;
     margin: 22px 0 22px 0;
 }
+
 QScrollBar::handle
 {
-    background: #A6A6A6;
+    background: #4e4e4e;
     border-radius: 20px;
     min-height: 20px;
 }
+
 QScrollBar::add-line
 {
-    border: 2px solid #EEEEEE;
-    background: #EEEEEE;
+    border: 2px solid #222222;
+    background: #222222;
     height: 20px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
 
 QScrollBar::sub-line {
-    border: 2px solid #EEEEEE;
-    background: #EEEEEE;
+    border: 2px solid #222222;
+    background: #222222;
     height: 20px;
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
-QScrollBar::up-arrow, QScrollBar::down-arrow
-{
-    border: 2px solid #EEEEEE;
+QScrollBar::up-arrow, QScrollBar::down-arrow {
+    border: 2px solid #222222;
     width: 0px;
     height: 0px;
-    background: #EEEEEE;
+    background: #222222;
 }
+
 
 QTabWidget::pane
 {
-    background: #EEEEEE;
+    background: #272727;
 }
 
 QTabWidget::tab-bar:top
@@ -56,35 +58,38 @@ QTabWidget::tab-bar:bottom
 {
     bottom: 1px;
 }
+
 QTabWidget::tab-bar:left
 {
     right: 1px;
 }
+
 QTabWidget::tab-bar:right
 {
     left: 1px;
 }
+
 QTabBar
 {
-    background-color: #EEEEEE;
+    background-color: #1b1b1b;
     qproperty-drawBase:0;
 }
 
 QTabBar::tab
 {
-    border: 1px #EEEEEE;
+    border: 1px #1b1b1b;
 }
 
 QTabBar::tab:selected
 {
-    background: white;
-    color: black;
+    background: #2b2b2b;
+    color: #bbbbbb;
 }
 
 QTabBar::tab:!selected
 {
-    background: #EEEEEE;
-    color: black;
+    background: #3c3e3f;
+    color: #bbbbbb;
 }
 
 QTabBar::tab:bottom:!selected
@@ -101,10 +106,15 @@ QTabBar::tab:top, QTabBar::tab:bottom
 
 QWidget#minimap
 {
-    background-color: #EEEEEE;
+    background-color: #1b1b1b;
 }
 
 QWidget#terminalWidget
 {
-    background-color: white;
+    background-color: black;
+}
+
+QTreeView::item
+{
+    padding: 10px;
 }

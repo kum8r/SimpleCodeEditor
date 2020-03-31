@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-minimap::minimap(QWidget *parent) :
+MiniMap::MiniMap(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::minimap)
 {
@@ -16,41 +16,55 @@ minimap::minimap(QWidget *parent) :
 
     QFont font("monospace",1);
     if (text->lexer() == nullptr)
-    {
-        text->setColor(QColor("white"));
-        text->setPaper(QColor("#393d44"));
+//    {
+//        text->setColor(QColor("white"));
+//        text->setPaper(QColor("#393d44"));
         text->setFont(font);
-    }
+//    }
     else
     {
         QsciLexer *lexer = text->lexer();
-        lexer->setDefaultColor(QColor("white"));
-        lexer->setDefaultPaper(QColor("#393d44"));
+//        lexer->setDefaultColor(QColor("white"));
+//        lexer->setDefaultPaper(QColor("#393d44"));
         lexer->setDefaultFont(font);
     }
 
     this->setFocusPolicy(Qt::NoFocus);
 }
 
-minimap::~minimap()
+MiniMap::~MiniMap()
 {
     delete ui;
 }
 
-void minimap::focusInEvent(QFocusEvent *e)
+void MiniMap::focusInEvent(QFocusEvent *e)
 {
         qDebug() << "clear focus";
     this->focusWidget()->clearFocus();
 }
 
-void minimap::mousePressEvent(QMouseEvent *event)
+void MiniMap::mousePressEvent(QMouseEvent *event)
 {
     qDebug() << "clear focus";
     this->focusWidget()->clearFocus();
 }
 
-QsciScintilla *minimap::getText() const
+QsciScintilla *MiniMap::getText() const
 {
     return text;
+}
+
+void MiniMap::setcolor()
+{
+//    if (text->lexer() != nullptr)
+//    {
+//        QsciLexer *lexer = text->lexer();
+//        lexer->setDefaultColor(QColor("white"));
+//        lexer->setDefaultPaper(QColor("#393d44"));
+//    }
+////    lexer->setDefaultFont(font);
+//    text->setColor(QColor("white"));
+//    text->setPaper(QColor("#393d44"));
+//    text->setFont(font);
 }
 

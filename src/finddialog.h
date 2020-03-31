@@ -7,14 +7,14 @@ namespace Ui {
 class findDialog;
 }
 
-class findDialog : public QDialog
+class FindDialog : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit findDialog(QWidget *parent = nullptr);
-    ~findDialog();
+    explicit FindDialog(QWidget *parent = nullptr);
+    ~FindDialog();
 
     QString getFindString();
     QString getReplaceString();

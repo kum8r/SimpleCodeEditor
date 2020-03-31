@@ -3,7 +3,7 @@
 #include "Qsci/qscilexercpp.h"
 #include <QDebug>
 
-comment::comment(QsciScintilla *editor) : editor(editor)
+Comment::Comment(QsciScintilla *editor) : editor(editor)
 {
     setCommentType();
     if (editor->eolMode() == editor->EolWindows)
@@ -12,7 +12,7 @@ comment::comment(QsciScintilla *editor) : editor(editor)
         line_ending = "\n";
 }
 
-QString comment::commentString(QString text)
+QString Comment::commentString(QString text)
 {
     QTextStream in(&text);
     QString line, commentedString;
@@ -34,7 +34,7 @@ QString comment::commentString(QString text)
     return commentedString;
 }
 
-QString comment::unCommentString(QString text)
+QString Comment::unCommentString(QString text)
 {
     QTextStream in(&text);
     QString line, commentedString;
@@ -57,7 +57,7 @@ QString comment::unCommentString(QString text)
     return commentedString;
 }
 
-void comment::toComment(QString text)
+void Comment::toComment(QString text)
 {
     _toComment = false;
     isMultiline = false;
@@ -98,7 +98,7 @@ void comment::toComment(QString text)
      }
 }
 
-void comment::setCommentType()
+void Comment::setCommentType()
 {
     qDebug() << editor->lexer()->lexer();
     if (strcmp(editor->lexer()->lexer(), "C++") || strcmp(editor->lexer()->lexer(), "Java") || strcmp(editor->lexer()->lexer(), "C")
@@ -140,7 +140,7 @@ void comment::setCommentType()
     }
 }
 
-void comment::toggleComment()
+void Comment::toggleComment()
 {
     QString SelectedText;
     if (editor->hasSelectedText())
@@ -177,7 +177,7 @@ void comment::toggleComment()
     }
 }
 
-void comment::Comment()
+void Comment::comment()
 {
     QString SelectedText;
     QString commentedString;
@@ -200,7 +200,7 @@ void comment::Comment()
 
 }
 
-void comment::unComment()
+void Comment::unComment()
 {
     QString SelectedText;
     if (editor->hasSelectedText())
@@ -213,4 +213,121 @@ void comment::unComment()
     }
     unCommentString(SelectedText);
 }
+
+//void comment::togglecomment()
+//{
+//    {
+////        QTextCursor cur = this->textCursor();
+//        if (!cur.hasSelection())
+//        {
+//            selectLine();
+//        }
+
+//        int endSelection = cur.selectionEnd();
+//        cur.setPosition(cur.selectionStart());
+//        cur.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+//        this->setTextCursor(cur);
+
+//        QString line = lineUnderCursor();
+
+//        QString commentStart;
+//        QString commentEnd;
+
+//        if(fileType == "html" or fileType == "css"){
+
+//            if(fileType == "html"){
+//                commentStart = "<!--";
+//                commentEnd = "-->";
+//            }else{
+//                commentStart = "/*";
+//                commentEnd = "*/";
+//            }
+
+//            if(line.startsWith(commentStart)){
+//                for(int i=0; i < commentStart.length(); i++){
+//                    cur.deleteChar();
+//                }
+//                endSelection -= commentStart.length();
+
+//                cur.setPosition(endSelection);
+//                cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+//                this->setTextCursor(cur);
+//                QString line = lineUnderCursor();
+
+//                if(line.endsWith(commentEnd)){
+//                    for(int i=0; i < commentEnd.length(); i++){
+//                        cur.deletePreviousChar();
+//                    }
+//                }
+//            }else{
+//                cur.insertText(commentStart);
+//                endSelection += commentStart.length();
+
+//                cur.setPosition(endSelection);
+//                cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+//                this->setTextCursor(cur);
+//                QString line = lineUnderCursor();
+
+//                if(!line.endsWith(commentEnd)){
+//                    cur.insertText(commentEnd);
+//                }
+//            }
+
+//        }else{
+//            if(fileType == "py"){
+//                commentStart = "#";
+//            }else{
+//                commentStart = "//";
+//            }
+
+//            if(line.startsWith(commentStart)){
+//                for(int i=0; i < commentStart.length(); i++){
+//                    cur.deleteChar();
+//                }
+//                endSelection -= commentStart.length();
+//                cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+
+//                while(cur.position() < endSelection){
+//                    cur.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+//                    this->setTextCursor(cur);
+//                    line = lineUnderCursor();
+
+//                    if(line.startsWith(commentStart)){
+//                        cur.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+//                        for(int i=0; i < commentStart.length(); i++){
+//                            cur.deleteChar();
+//                        }
+//                        endSelection -= commentStart.length();
+
+//                    }
+//                    cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+
+//                }
+
+//            }else{
+//                cur.insertText(commentStart);
+//                endSelection += commentStart.length();
+//                cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+
+//                while(cur.position() < endSelection){
+//                    cur.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+//                    this->setTextCursor(cur);
+//                    line = lineUnderCursor();
+
+//                    if(!line.startsWith(commentStart)){
+//                        cur.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+//                        cur.insertText(commentStart);
+//                        endSelection += commentStart.length();
+//                    }
+
+//                    cur.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+//                }
+//            }
+
+//        }
+
+//        this->setTextCursor(cur);
+//    }
+
+//}
 

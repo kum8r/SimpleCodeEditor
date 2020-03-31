@@ -6,6 +6,7 @@ Written in C++ and QT
     <ol>
         <li>Syntax Highlighting</li>
         <li>Tabbed Text editor</li>
+        <li>Terminal</li>
         <li>And More Features to come</li>
     </ol>
 
@@ -15,7 +16,7 @@ Written in C++ and QT
 Download from [Releases](https://github.com/kum8r/SimpleCodeEditor/releases)
 
 **Build From Source**
-install [Qt](https://qt.io "Qt")  and [qscintilla](https://www.riverbankcomputing.com "qscintilla")
+install [Qt](https://qt.io "Qt") , [qscintilla](https://www.riverbankcomputing.com "qscintilla") and [qtermwidget](https://github.com/lxqt/qtermwidget)
 
 - git clone https://github.com/kum8r/SimpleCodeEditor.git
 - cd SimlpeCodeEditor

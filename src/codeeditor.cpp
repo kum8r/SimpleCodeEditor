@@ -1,8 +1,8 @@
 #include "codeeditor.h"
 #include <Qsci/qscilexercpp.h>
+#include <QScrollBar>
 
-
-codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
+CodeEditor::CodeEditor(QWidget *parent) : QsciScintilla(parent)
 {
     setWrapMode(this->WrapWord); // wrapword
     setMarginType(0,NumberMargin);  //number margin
@@ -10,8 +10,9 @@ codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
     setIndentationsUseTabs(true);
     setTabWidth(4);
     this->setAcceptDrops(true);
+    this->verticalScrollBar()->hide();
 
-    defaultFont = "monaco";
+    defaultFont = "source code pro";
     QFont font(defaultFont);
     font.setFixedPitch(true);
     font.setPointSize(13);
@@ -21,71 +22,78 @@ codeEditor::codeEditor(QWidget *parent) : QsciScintilla(parent)
     setAutoIndent(true);
     setBraceMatching(SloppyBraceMatch);
     mySettings = new QSettings ("kumar","SimpleCodeEditor",this);
+
     connect(this, SIGNAL(textChanged()), this, SLOT(setTextChanges()));
-//    setMarginsBackgroundColor(QColor("#404244"));
-//    setMarginsForegroundColor(QColor("grey"));
+
     setFoldMarginColors(QColor("grey"), QColor("#404244"));
 }
 
-codeEditor::~codeEditor()
+CodeEditor::~CodeEditor()
 {
 
 }
 
-bool codeEditor::getTextChanges() const
+bool CodeEditor::getTextChanges() const
 {
     return textChanges;
 }
 
-void codeEditor::setTextChanges()
+void CodeEditor::setTextChanges()
 {
     textChanges = true;
 }
 
-void codeEditor::setTextChanges(bool value)
+void CodeEditor::setTextChanges(bool value)
 {
     textChanges = value;
 }
 
-void codeEditor::loadSettings()
+void CodeEditor::loadSettings()
 {
     QString fontName = mySettings->value("font").toString();
     int fontSize = mySettings->value("fontSize").toInt();
     this->setFont(QFont(fontName,fontSize));
     this->setTabWidth(mySettings->value("tabSize").toInt());
+
     if (mySettings->value("caretWidth")==4)
     {
         SendScintilla(SCI_SETCARETSTYLE,2);
     }
-    else {
+    else
+    {
         this->setCaretWidth(mySettings->value("caretWidth").toInt());
     }
+
     if (mySettings->value("autoIndent").toBool())
     {
         setAutoIndent(true);
     }
-    else {
+    else
+    {
         setAutoIndent(false);
     }
     if (mySettings->value("matchBracket").toBool())
     {
         setBraceMatching(SloppyBraceMatch);
     }
-    else {
+    else
+    {
        setBraceMatching(NoBraceMatch);
     }
     if (mySettings->value("lineNumber").toBool())
     {
         setMarginWidth(0, "0000");
     }
-    else {
+    else
+    {
        setMarginWidth(0, "");
     }
     if (mySettings->value("wordWrap").toBool())
     {
         setWrapMode(WrapWord);
     }
-    else {
+    else
+    {
        setWrapMode(WrapNone);
     }
     if (mySettings->value("autoComplete").toBool())
@@ -98,17 +106,17 @@ void codeEditor::loadSettings()
     }
 }
 
-QString codeEditor::getFileName() const
+QString CodeEditor::getFileName() const
 {
     return fileName;
 }
 
-void codeEditor::setFileName(const QString &value)
+void CodeEditor::setFileName(const QString &value)
 {
     fileName = value;
 }
 
-void codeEditor::autoComplete()
+void CodeEditor::autoComplete()
 {
     this->setAutoCompletionSource(this->AcsAll);
     setAutoCompletionThreshold(2);
@@ -116,16 +124,14 @@ void codeEditor::autoComplete()
 }
 
 
-void codeEditor::dragEnterEvent(QDragEnterEvent *event)
+void CodeEditor::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("text/plain"))
         event->acceptProposedAction();
 }
 
-void codeEditor::dropEvent(QDropEvent *event)
+void CodeEditor::dropEvent(QDropEvent *event)
 {
-//    if (event->mimeData()->hasFormat("text/plain"))
-    {
     QList<QUrl> urls = event->mimeData()->urls();
     if (urls.isEmpty())
         return;
@@ -135,5 +141,4 @@ void codeEditor::dropEvent(QDropEvent *event)
         return;
 
     emit dropFiles(fileName);
-    }
 }

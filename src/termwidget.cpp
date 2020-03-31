@@ -1,7 +1,7 @@
 #include "termwidget.h"
 #include <QProcessEnvironment>
 #include <QDebug>
-termwidget::termwidget(int startnow, QWidget *parent) : QTermWidget(startnow, parent)
+TermWidget::TermWidget(int startnow, QWidget *parent) : QTermWidget(startnow, parent)
 {
     QFont font;
     font.setFamily("Monospace");

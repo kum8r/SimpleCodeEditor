@@ -9,16 +9,17 @@ namespace Ui {
 class minimap;
 }
 
-class minimap : public QWidget
+class MiniMap : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit minimap(QWidget *parent = nullptr);
-    ~minimap();
+    explicit MiniMap(QWidget *parent = nullptr);
+    ~MiniMap();
     void focusInEvent (QFocusEvent *e);
     void mousePressEvent(QMouseEvent *event);
     QsciScintilla *getText() const;
+    void setcolor();
 
 private:
     Ui::minimap *ui;

@@ -96,12 +96,15 @@ text-align:center;</string>
               <property name="text">
                <string>Opened Files</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QListWidget" name="listWidget">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -141,6 +144,9 @@ text-align:center;</string>
               </property>
               <property name="text">
                <string>FileExplorer</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -385,7 +391,7 @@ text-align:center;</string>
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -546,15 +552,6 @@ text-align:center;</string>
     <property name="title">
      <string>Prefrences</string>
     </property>
-    <widget class="QMenu" name="menuThemes">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="title">
-      <string>Themes</string>
-     </property>
-    </widget>
-    <addaction name="menuThemes"/>
     <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
@@ -663,9 +660,6 @@ text-align:center;</string>
    <property name="text">
     <string>Cut</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+X</string>
-   </property>
   </action>
   <action name="actionCopy">
    <property name="icon">
@@ -674,9 +668,6 @@ text-align:center;</string>
    </property>
    <property name="text">
     <string>Copy</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionPaste">
@@ -1185,6 +1176,12 @@ text-align:center;</string>
    </property>
   </action>
   <action name="actionShow_Minimap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Show Minimap</string>
    </property>

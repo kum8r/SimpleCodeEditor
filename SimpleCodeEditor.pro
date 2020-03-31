@@ -4,7 +4,7 @@ TEMPLATE = app
 QT       += core gui printsupport widgets
 
 #ccache for speedup the build process
-QMAKE_CXX = ccache $$QMAKE_CXX
+#QMAKE_CXX = ccache $$QMAKE_CXX
 
 
 # The following define makes your compiler emit warnings if you use
@@ -24,6 +24,7 @@ LIBS += -lqtermwidget5
 
 
 SOURCES += \
+        recentfilelist.cpp \
         src/comment.cpp \
         src/minimap.cpp \
         src/codeeditor.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 
 
 HEADERS += \
+        recentfilelist.h \
         src/comment.h \
         src/minimap.h \
         src/codeeditor.h \
@@ -56,8 +58,8 @@ RESOURCES += \
 
 DISTFILES += \
     SimpleCodeEditor.desktop \
-    editor_style.qss \
-    editor_white_theme
+    dark_theme.qss \
+    light_theme.qss
 
 unix
 {
@@ -66,11 +68,11 @@ unix
         PREFIX = /usr/local
     }
     BINDIR = $$PREFIX/bin
+    DATADIR = $$PREFIX/share
 
     INSTALLS += target shortcut
-    target.path = $$BINDIR
 
-    DATADIR = $$PREFIX/share
+    target.path = $$BINDIR
     shortcut.path = $$DATADIR/applications
     shortcut.files = SimpleCodeEditor.desktop
 }

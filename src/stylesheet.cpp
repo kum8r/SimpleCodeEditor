@@ -2,13 +2,13 @@
 
 #include <QFileInfo>
 
-stylesheet::stylesheet()
+StyleSheet::StyleSheet()
 {
 
 }
 
 
-QsciLexer *stylesheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor)
+QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor)
 {
     QFile themeFile(themeFileName);
     QFileInfo fileinfo(themeFileName);
@@ -42,7 +42,6 @@ QsciLexer *stylesheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 }
             }
         }
-
         return nullptr;
     }
 
