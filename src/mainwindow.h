@@ -104,7 +104,7 @@ private:
     QSpacerItem *spacer;
     QSettings *my_settings;
     QList<int> searchtext_position_list;
-    QString search_string, current_theme_file;
+    QString search_string;
     bool is_minimap_visible, is_autosave;
     QList <QAction*> recentFileActionList;
     TermWidget *console;
@@ -139,10 +139,11 @@ private:
     void setFiletype(QString fileName);
     void changeTabNameIfFileChanges();
     void highlighsearchtext(QString searchText);
-    void setColorScheme(QsciLexer *lexer, QString themeFile);
+    void setColorScheme(QsciLexer *lexer, QString themeFile = nullptr);
     void revertBackTabName();
     void changeColorScheme();
     void loadMiniMap(int index);
+    void setpreferencefornewtab(int index);
 
 protected:
     void closeEvent(QCloseEvent *event);

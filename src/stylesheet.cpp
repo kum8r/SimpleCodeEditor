@@ -1,14 +1,10 @@
 #include "stylesheet.h"
 
-#include <QFileInfo>
-
 StyleSheet::StyleSheet()
 {
-
 }
 
-
-QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor)
+void *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor)
 {
     QFile themeFile(themeFileName);
     QFileInfo fileinfo(themeFileName);
@@ -56,6 +52,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                     lexer->setColor(QColor(xmlFile.attributes().value("foreground")), QsciLexerCPP::Comment);
                 if (xmlFile.attributes().hasAttribute("background"))
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Comment);
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::Comment);
+                    }
+                }
             }
             else if (xmlFile.attributes().value("name") == "Text")
             {
@@ -69,6 +73,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")));
                     lexer->setDefaultPaper(QColor(xmlFile.attributes().value("background")));
                 }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font);
+                    }
+                }
             }
             else if (xmlFile.attributes().value("name") == "String")
             {
@@ -79,6 +91,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 if (xmlFile.attributes().hasAttribute("background"))
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::RawString);
+                }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::RawString);
+                    }
                 }
             }
             else if (xmlFile.attributes().value("name") == "Number")
@@ -91,6 +111,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Number);
                 }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::Number);
+                    }
+                }
             }
             else if (xmlFile.attributes().value("name") == "Keyword")
             {
@@ -101,6 +129,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 if (xmlFile.attributes().hasAttribute("background"))
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Keyword);
+                }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::Keyword);
+                    }
                 }
             }
             else if (xmlFile.attributes().value("name") == "Operator")
@@ -113,6 +149,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Operator);
                 }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::Operator);
+                    }
+                }
             }
             else if (xmlFile.attributes().value("name") == "Occurrences.Unused")
             {
@@ -123,6 +167,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 if (xmlFile.attributes().hasAttribute("background"))
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::InactiveKeyword);
+                }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::InactiveKeyword);
+                    }
                 }
             }
             else if (xmlFile.attributes().value("name") == "Type")
@@ -135,6 +187,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::Identifier);
                 }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::Identifier);
+                    }
+                }
             }
             else if (xmlFile.attributes().value("name") == "Preprocessor")
             {
@@ -145,6 +205,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
                 if (xmlFile.attributes().hasAttribute("background"))
                 {
                     lexer->setPaper(QColor(xmlFile.attributes().value("background")), QsciLexerCPP::PreProcessor);
+                }
+                if (xmlFile.attributes().hasAttribute("italic"))
+                {
+                    if (xmlFile.attributes().value("italic") == "true")
+                    {
+                        font.setItalic(true);
+                        lexer->setFont(font, QsciLexerCPP::PreProcessor);
+                    }
                 }
             }
             else if (xmlFile.attributes().value("name") == "LineNumber")
@@ -174,4 +242,14 @@ QsciLexer *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, Qs
         }
     }
     return lexer;
+}
+
+void StyleSheet::setFont(QFont font)
+{
+    this->font = font;
+}
+
+void StyleSheet::setStyleForCommentAttribute()
+{
+
 }

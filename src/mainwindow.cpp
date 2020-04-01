@@ -94,7 +94,8 @@ int MainWindow::newTab(QString tabname)
     ui->tabWidget->currentWidget()->setFocus();
     loadCodeEditorSettings();
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
-    setColorScheme(texteditor->lexer(), current_theme_file);
+    setColorScheme(texteditor->lexer());
+    setpreferencefornewtab(tabindex);
     return tabindex;
 }
 
@@ -356,6 +357,7 @@ void MainWindow::saveFileAs(QString fileName)
     ui->listWidget->takeItem(tabindex);
     ui->listWidget->insertItem(tabindex,filename);
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFileName(filename);
+    revertBackTabName();
 }
 
 void MainWindow::closeFile()
@@ -624,11 +626,11 @@ void MainWindow::setFiletype(QString fileName)
 
 void MainWindow::changeTabNameIfFileChanges()
 {
-    if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
+    QString tabName;
+    if (!ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
     {
-        QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
-        static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(false);
+        tabName = ui->tabWidget->tabText(ui->tabWidget->currentIndex()) + "- *";
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabName);
     }
 }
 
@@ -655,15 +657,19 @@ void MainWindow::highlighsearchtext(QString searchText)
     }
 }
 
-void MainWindow::setColorScheme(QsciLexer *lexer, QString themeFile)
+void MainWindow::setColorScheme(QsciLexer *lexer, QString colorSchemeFile)
 {
-    current_theme_file = themeFile;
-    QString setsearchresultcolor;
+    if (colorSchemeFile.isNull())
+    {
+        colorSchemeFile = colorScheme->value(my_settings->value("colorscheme").toString());
+    }
     StyleSheet *styleSheet = new StyleSheet ();
+    styleSheet->setFont(static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->font());
     QString text = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->text();
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->clear();
-    styleSheet->setStyleSheet(lexer, themeFile, static_cast<CodeEditor*>(ui->tabWidget->currentWidget()));
+    styleSheet->setStyleSheet(lexer, colorSchemeFile, static_cast<CodeEditor*>(ui->tabWidget->currentWidget()));
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setText(text);
+    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
     loadMiniMap(ui->tabWidget->currentIndex());
 }
 
@@ -671,7 +677,7 @@ void MainWindow::revertBackTabName()
 {
     if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
     {
-        QString tabtext = ui->tabWidget->tabText(ui->tabWidget->currentIndex()).remove("- *");
+        QString tabtext = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->getFileName();
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
         static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(false);
     }
@@ -692,7 +698,17 @@ void MainWindow::loadMiniMap(int index)
         minimap->getText()->setLexer(0);
         minimap->getText()->setColor(static_cast<CodeEditor*>(ui->tabWidget->widget(index))->color());
         minimap->getText()->setPaper(static_cast<CodeEditor*>(ui->tabWidget->widget(index))->paper());
+        setTextinMinimap();
     }
+}
+
+void MainWindow::setpreferencefornewtab(int index)
+{
+    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
+    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged, this, &MainWindow::changeTabNameIfFileChanges);
+    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::setLineNumberAndColInStatusBar);
+    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
+    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index))->verticalScrollBar(), &QScrollBar::valueChanged , this, &MainWindow::scrollMiniMap);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -784,14 +800,14 @@ void MainWindow::openFile(QString filepath)
     ui->tabWidget->setCurrentIndex(tabindex);
     ui->tabWidget->setTabWhatsThis(tabindex,filepath);
     addtoOpenedFiles(filename);
-    setFiletype(filename);
     static_cast<CodeEditor*>(ui->tabWidget->widget(tabindex))->setFileName(filename);
-    static_cast<CodeEditor*>(ui->tabWidget->widget(tabindex))->setTextChanges(false);
     updateRecentFileList(filepath);
-    setColorScheme(texteditor->lexer(), current_theme_file);
+//    setColorScheme(texteditor->lexer());
+    setFiletype(filename);
     loadCodeEditorSettings();
     on_actionShow_Linenumbers_triggered();
     revertBackTabName();
+    setpreferencefornewtab(tabindex);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -830,12 +846,13 @@ void MainWindow::on_actionSave_AS_triggered()
 
 void MainWindow::on_actionSave_All_triggered()
 {
-    int curIndex = ui->tabWidget->currentIndex();
-    for (int i =0;i < ui->tabWidget->count();i++)
+    int curIndex = ui->tabWidget->currentIndex(), tabcount = ui->tabWidget->count();
+    for (int i = 0; i < tabcount; i++)
     {
         bool textchanged = static_cast<CodeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
         if (textchanged)
         {
+            qDebug() << ui->tabWidget->tabWhatsThis(i);
             if (ui->tabWidget->tabWhatsThis(i) == "")
             {
                 saveFileAs(ui->tabWidget->tabText(i));
@@ -1474,6 +1491,7 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     if (fileinfo.isDir())
     {
         openDirectory(filepath);
+        return;
     }
     openFile(filepath);
 }
@@ -1489,17 +1507,12 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     if (ui->tabWidget->count() <= 0)
         return;
 
-    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::statusBar);
-    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)),&QsciScintilla::textChanged, this, &MainWindow::changeTabNameIfFileChanges);
-    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), &QsciScintilla::cursorPositionChanged, this, &MainWindow::setLineNumberAndColInStatusBar);
-    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index)), SIGNAL(dropFiles(QString)), this, SLOT(openFile(QString)));
-    connect(static_cast<CodeEditor*>(ui->tabWidget->widget(index))->verticalScrollBar(), &QScrollBar::valueChanged , this, &MainWindow::scrollMiniMap);
     setFiletype(static_cast<CodeEditor*>(ui->tabWidget->widget(index))->getFileName());
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
     setEOL();
 
     loadMiniMap(index);
-    changeColorScheme();
+//    changeColorScheme();
 //    loadCodeEditorSettings();
 }
 
@@ -1553,16 +1566,15 @@ void MainWindow::setLexer(QString lexername)
             lexer->setDefaultFont(QFont(static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->defaultFont));
             lexer->setAutoIndentStyle(true);
             static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFolding(QsciScintilla::FoldStyle::BoxedTreeFoldStyle);
-//            static_cast<codeEditor*>(ui->tabWidget->currentWidget())->zoomIn(3);
         }
         else
         {
             static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFolding(QsciScintilla::FoldStyle::NoFoldStyle);
         }
     }
-    setColorScheme(lexer, current_theme_file);
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFont(static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->defaultFont);
+    setColorScheme(lexer);
 }
 
 void MainWindow::setTextinMinimap()

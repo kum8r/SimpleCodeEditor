@@ -8,13 +8,17 @@
 #include <QDebug>
 #include <Qsci/qscilexer.h>
 #include <Qsci/qscilexercpp.h>
+#include <QFileInfo>
 
 class StyleSheet
 {
 public:
     StyleSheet();
-    QsciLexer* setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor);
-
+    void *setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor);
+    void setFont(QFont font);
+private:
+    QFont font;
+    void setStyleForCommentAttribute();
 };
 
 #endif // STYLESHEET_H
