@@ -697,10 +697,11 @@ void MainWindow::loadMiniMap(int index)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    int tabcount = ui->tabWidget->count();
-    for (int i = 0;i < tabcount ;i++ )
+    int i = 0;
+    while (true)
     {
-        if (!closeFile(i))
+        i = ui->tabWidget->count() - 1;
+        if (!closeFile(i) || i == 0)
         {
             break;
         }
@@ -923,40 +924,33 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::on_actionClose_All_Files_triggered()
 {
-    int tabcount = ui->tabWidget->count();
-    for (int i = 0;i < tabcount; i++)
+    int i = 0;
+    while (true)
     {
-        closeFile(i);
+        i = ui->tabWidget->count() - 1;
+        if (!closeFile(i) || i == 0)
+        {
+            break;
+        }
+    }
+    if (ui->tabWidget->count() == 0)
+    {
+        on_actionNew_triggered();
     }
 }
 
 void MainWindow::on_actionExit_triggered()
 {
-    bool isExit = true;
-    for (int i = 0; i < ui->tabWidget->count(); i++)
+    int i = 0;
+    while (true)
     {
-        if (static_cast<CodeEditor*>(ui->tabWidget->widget(i))->getTextChanges())
+        i = ui->tabWidget->count() - 1;
+        if (!closeFile(i) || i == 0)
         {
-            QMessageBox::StandardButton ask = QMessageBox::question(this,tr("Save changes before close"),tr("Save changes before close ") + ui->tabWidget->tabText(i), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel);
-            if (ask == QMessageBox::No)
-            {
-                continue;
-            }
-            else if (ask == QMessageBox::Cancel)
-            {
-                isExit = false;
-                break;
-            }
-            else if (ask == QMessageBox::Yes)
-            {
-                if (ui->tabWidget->tabWhatsThis(i) != "")
-                {
-                    saveFile(ui->tabWidget->tabWhatsThis(i));
-                }
-            }
+            break;
         }
     }
-    if (isExit)
+    if (ui->tabWidget->count() == 0)
     {
         qApp->exit();
     }
