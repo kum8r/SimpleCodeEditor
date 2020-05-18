@@ -12,11 +12,11 @@ CodeEditor::CodeEditor(QWidget *parent) : QsciScintilla(parent)
     this->setAcceptDrops(true);
     this->verticalScrollBar()->hide();
 
-    defaultFont = "source code pro";
-    QFont font(defaultFont);
-    font.setFixedPitch(true);
-    font.setPointSize(13);
-    this->setFont(font);
+//    defaultFont = "source code pro";
+//    QFont font(defaultFont);
+//    font.setFixedPitch(true);
+//    font.setPointSize(13);
+//    this->setFont(font);
 
     setIndentationGuides(false);
     setAutoIndent(true);

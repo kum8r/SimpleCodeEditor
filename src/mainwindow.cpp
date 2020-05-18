@@ -19,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->terminalWidget->hide();
     ui->widget->hide();
 
+    ui->listWidget->hide();
+    ui->label_2->hide();
+    ui->actionOpened_Files->setVisible(false);
+
 //    minimap
     minimap = new MiniMap ();
     ui->minimap->setLayout(minimap->layout());
@@ -90,12 +94,8 @@ int MainWindow::newTab(QString tabname)
     CodeEditor *texteditor = new CodeEditor(this);
     int tabindex = ui->tabWidget->addTab(texteditor,tabname);
     ui->tabWidget->setCurrentIndex(tabindex);
-    ui->listWidget->addItem(tabname);
+    addtoOpenedFiles(tabname);
     ui->tabWidget->currentWidget()->setFocus();
-    loadCodeEditorSettings();
-    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
-    setColorScheme(texteditor->lexer());
-    setpreferencefornewtab(tabindex);
     return tabindex;
 }
 
@@ -235,7 +235,7 @@ void MainWindow::loadSettings()
     ui->actionOpened_Files->setChecked(my_settings->value("opened files", true).toBool());
     ui->actionShow_Minimap->setChecked(my_settings->value("minimap", true).toBool());
     ui->actionToolBar->setChecked(my_settings->value("toolbar", false).toBool());
-    on_actionOpened_Files_triggered();
+//    on_actionOpened_Files_triggered();
     on_actionFile_Explorer_triggered();
     on_actionShow_Minimap_triggered();
     on_actionToolBar_triggered();
@@ -244,7 +244,7 @@ void MainWindow::loadSettings()
 void MainWindow::loadCodeEditorSettings()
 {
     CodeEditor* codeeditor = static_cast<CodeEditor*>(ui->tabWidget->currentWidget());
-    QString fontName = my_settings->value("editorfont", codeeditor->defaultFont).toString();
+    QString fontName = my_settings->value("editorfont").toString();
     int fontSize = my_settings->value("editorfontsize", 13).toInt();
     QFont font = QFont(fontName);
     font.setPointSize(fontSize);
@@ -352,7 +352,6 @@ void MainWindow::saveFileAs(QString fileName)
     QString filename = filepath.section("/",-1,-1);
     int tabindex = ui->tabWidget->currentIndex();
     ui->tabWidget->setCurrentIndex(tabindex);
-    ui->tabWidget->setTabWhatsThis(tabindex,filepath);
     ui->tabWidget->setTabText(tabindex,filename);
     ui->listWidget->takeItem(tabindex);
     ui->listWidget->insertItem(tabindex,filename);
@@ -375,20 +374,21 @@ bool MainWindow::closeFile(int index)
                                                       QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
                                                       QMessageBox::Cancel);
 
+            CodeEditor *editor = static_cast<CodeEditor*>(ui->tabWidget->widget(index));
             if (ask == QMessageBox::Yes)
             {
-                if (ui->tabWidget->tabWhatsThis(index) == "")
+                if (editor->getFileName() == "")
                 {
                     saveFileAs(ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
-//                    delete ui->tabWidget->widget(index);
+                    delete ui->tabWidget->widget(index);
                     ui->listWidget->takeItem(index);
                     ui->tabWidget->removeTab(index);
                 }
                 else
                 {
-                    QString filepath = ui->tabWidget->tabWhatsThis(index);
+                    QString filepath = editor->getFileName();
                     saveFile(filepath);
-//                    delete ui->tabWidget->widget(index);
+                    delete ui->tabWidget->widget(index);
                     ui->listWidget->takeItem(index);
                     ui->tabWidget->removeTab(index);
                 }
@@ -397,7 +397,7 @@ bool MainWindow::closeFile(int index)
 
             else if (ask == QMessageBox::No)
             {
-//                delete ui->tabWidget->widget(index);
+                delete ui->tabWidget->widget(index);
                 ui->listWidget->takeItem(index);
                 ui->tabWidget->removeTab(index);
                 return true;
@@ -410,7 +410,7 @@ bool MainWindow::closeFile(int index)
     }
     else
     {
-//        delete ui->tabWidget->widget(index);
+        delete ui->tabWidget->widget(index);
         ui->listWidget->takeItem(index);
         ui->tabWidget->removeTab(index);
         return true;
@@ -677,7 +677,8 @@ void MainWindow::revertBackTabName()
 {
     if (ui->tabWidget->tabText(ui->tabWidget->currentIndex()).contains("- *"))
     {
-        QString tabtext = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->getFileName();
+        QString filepath = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->getFileName();
+        QString tabtext = filepath.section("/",-1,-1);
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),tabtext);
         static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setTextChanges(false);
     }
@@ -765,9 +766,6 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::openFile(QString filepath)
 {
-    CodeEditor *texteditor = new CodeEditor(this);
-    QString line;
-
     if (filepath.isNull())
     {
         filepath = QFileDialog::getOpenFileName(this,tr("Open file"),QDir::homePath());
@@ -775,12 +773,17 @@ void MainWindow::openFile(QString filepath)
 
     for (int i = 0; i < ui->tabWidget->count(); i++)
     {
-        if (ui->tabWidget->tabWhatsThis(i) == filepath)
+        CodeEditor *editor =  static_cast<CodeEditor*>(ui->tabWidget->widget(i));
+        if (editor->getFileName() == filepath)
         {
             ui->tabWidget->setCurrentIndex(i);
             return;
         }
     }
+
+    int tabindex = newTab("");
+    CodeEditor *texteditor = static_cast<CodeEditor*>(ui->tabWidget->widget(tabindex));
+    QString line;
 
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -796,13 +799,9 @@ void MainWindow::openFile(QString filepath)
 
     texteditor->setText(line);
     QString filename = filepath.section("/",-1,-1);
-    int tabindex = ui->tabWidget->addTab(texteditor,filename);
-    ui->tabWidget->setCurrentIndex(tabindex);
-    ui->tabWidget->setTabWhatsThis(tabindex,filepath);
-    addtoOpenedFiles(filename);
-    static_cast<CodeEditor*>(ui->tabWidget->widget(tabindex))->setFileName(filename);
+    texteditor->setFileName(filepath);
+    ui->tabWidget->setTabText(tabindex, filename);
     updateRecentFileList(filepath);
-//    setColorScheme(texteditor->lexer());
     setFiletype(filename);
     loadCodeEditorSettings();
     on_actionShow_Linenumbers_triggered();
@@ -812,7 +811,12 @@ void MainWindow::openFile(QString filepath)
 
 void MainWindow::on_actionNew_triggered()
 {
-    newTab("untitled");
+    int tabindex = newTab("untitled");
+    loadCodeEditorSettings();
+    on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
+    CodeEditor *texteditor = static_cast<CodeEditor*>(ui->tabWidget->widget(tabindex));
+    setColorScheme(texteditor->lexer());
+    setpreferencefornewtab(tabindex);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -828,13 +832,14 @@ void MainWindow::on_actionOpenDirectory_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    if (ui->tabWidget->tabWhatsThis(ui->tabWidget->currentIndex()) == "")
+    CodeEditor *editor = static_cast<CodeEditor*>(ui->tabWidget->currentWidget());
+    if (editor->getFileName() == "")
     {
         saveFileAs(ui->tabWidget->tabText(ui->tabWidget->currentIndex()));
     }
     else
     {
-        QString filepath = ui->tabWidget->tabWhatsThis(ui->tabWidget->currentIndex());
+        QString filepath = editor->getFileName();
         saveFile(filepath);
     }
 }
@@ -849,17 +854,17 @@ void MainWindow::on_actionSave_All_triggered()
     int curIndex = ui->tabWidget->currentIndex(), tabcount = ui->tabWidget->count();
     for (int i = 0; i < tabcount; i++)
     {
-        bool textchanged = static_cast<CodeEditor*>(ui->tabWidget->widget(i))->getTextChanges();
+        CodeEditor *editor = static_cast<CodeEditor*>(ui->tabWidget->widget(i));
+        bool textchanged = editor->getTextChanges();
         if (textchanged)
         {
-            qDebug() << ui->tabWidget->tabWhatsThis(i);
-            if (ui->tabWidget->tabWhatsThis(i) == "")
+            if (editor->getFileName() == "")
             {
                 saveFileAs(ui->tabWidget->tabText(i));
             }
             else
             {
-                QString filepath = ui->tabWidget->tabWhatsThis(i);
+                QString filepath = editor->getFileName();
                 saveFile(filepath);
             }
         }
@@ -1015,10 +1020,8 @@ void MainWindow::on_actionDeselect_triggered()
 void MainWindow::on_actionAdd_Indent_triggered()
 {
 
-    int pos =  static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
-                QsciScintilla::SCI_GETCURRENTPOS);
-    int line = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(
-                QsciScintilla::SCI_LINEFROMPOSITION,pos);
+    int pos =  static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+    int line = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION, pos);
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->indent(line);
 }
 
@@ -1036,8 +1039,7 @@ void MainWindow::on_actionDuplicate_Line_triggered()
     int pos = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
     int linepos = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION, pos);
     QString text = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->text(linepos);
-    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->insertAt(text + "\n", linepos, 0);
-
+    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->insertAt(text, linepos, 0);
 }
 
 void MainWindow::on_actionUPPER_CASE_triggered()
@@ -1085,8 +1087,8 @@ void MainWindow::on_actionReplace_All_triggered()
 void MainWindow::on_actionGo_to_Line_triggered()
 {
     int totalline = static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->lines();
-    int line = QInputDialog::getInt(this, "Go to Line", "enter the line", 0, 0, totalline);
-    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setCursorPosition(line, 0);
+    int line = QInputDialog::getInt(this, "Go to Line", "enter the line", 1, 1, totalline);
+    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setCursorPosition(line - 1, 0);
 }
 
 void MainWindow::findButton_clicked(QString searchtext)
@@ -1511,7 +1513,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     on_actionShow_Linenumbers_triggered(); // to show linenumber if it is checked
     setEOL();
 
-    loadMiniMap(index);
+//    loadMiniMap(index);
 //    changeColorScheme();
 //    loadCodeEditorSettings();
 }
@@ -1558,12 +1560,14 @@ void MainWindow::setLexer(QString lexername)
 
     QMap<QString, QsciLexer*>::iterator i = languageToLexer.find(lexername);
     QsciLexer *lexer = nullptr;
+    QFont font = QFont(my_settings->value("editorfont").toString());
+
     if (i != languageToLexer.end())
     {
         lexer = i.value();
         if (lexer != nullptr)
         {
-            lexer->setDefaultFont(QFont(static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->defaultFont));
+            lexer->setDefaultFont(font);
             lexer->setAutoIndentStyle(true);
             static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFolding(QsciScintilla::FoldStyle::BoxedTreeFoldStyle);
         }
@@ -1573,7 +1577,7 @@ void MainWindow::setLexer(QString lexername)
         }
     }
     static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setLexer(lexer);
-    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFont(static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->defaultFont);
+    static_cast<CodeEditor*>(ui->tabWidget->currentWidget())->setFont(font);
     setColorScheme(lexer);
 }
 

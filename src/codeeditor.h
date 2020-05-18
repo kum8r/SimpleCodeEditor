@@ -18,8 +18,6 @@ public:
     explicit CodeEditor(QWidget *parent = nullptr);
     ~CodeEditor();
 
-    QString defaultFont;
-
     void loadSettings();
     void autoComplete();
     void autoCompleteForCpp(QsciLexer *lexer);

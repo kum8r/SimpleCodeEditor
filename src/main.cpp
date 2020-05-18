@@ -57,7 +57,7 @@ void Application::addarguments(QStringList arguments)
     }
     else
     {
-    w.newTab("untitled");
+        w.on_actionNew_triggered();
     }
 }
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        w.newTab("untitled");
+        w.on_actionNew_triggered();
     }
 //    Application app(argc, argv, true);
 

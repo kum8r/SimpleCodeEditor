@@ -24,7 +24,6 @@ LIBS += -lqtermwidget5
 
 
 SOURCES += \
-        recentfilelist.cpp \
         src/comment.cpp \
         src/minimap.cpp \
         src/codeeditor.cpp \
@@ -37,7 +36,6 @@ SOURCES += \
 
 
 HEADERS += \
-        recentfilelist.h \
         src/comment.h \
         src/minimap.h \
         src/codeeditor.h \

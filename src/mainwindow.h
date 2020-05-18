@@ -78,10 +78,6 @@ public:
     ~MainWindow();
 
     void setTheme();
-    int newTab(QString tabname);
-
-
-
 
     void syntaxHighlighting(QsciLexer* lexers);
     void setMainWindowStyle(QString,QString);
@@ -126,6 +122,7 @@ private:
     void loadSettings();
     void loadCodeEditorSettings();
 
+    int newTab(QString tabname);
     void openDirectory(QString fileDir);
     void saveFile(QString filePath);
     void saveFileAs(QString fileName);
@@ -153,11 +150,11 @@ protected:
     void dropEvent(QDropEvent *event);
 
 public slots:
+    void on_actionNew_triggered();
     void openFile(QString filepath = nullptr);
 
 private slots:
     //file menu slots
-    void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionOpenDirectory_triggered();
     void on_actionSave_triggered();
