@@ -1,12 +1,14 @@
 #include "termwidget.h"
+
+#include <QFontDatabase>
 #include <QProcessEnvironment>
-#include <QDebug>
-TermWidget::TermWidget(int startnow, QWidget *parent) : QTermWidget(startnow, parent)
+
+TermWidget::TermWidget(int startnow, QWidget * parent)
+  : QTermWidget(startnow, parent)
 {
-    QFont font;
-    font.setFamily("Monospace");
-    font.setPointSize(12);
-    this->setTerminalFont(font);
+    QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    fixedFont.setPointSize(12);
+    this->setTerminalFont(fixedFont);
     setenv("TERM", "xterm-256color", 1);
     setColorScheme("WhiteOnBlack");
     QStringList env;

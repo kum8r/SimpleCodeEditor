@@ -1,27 +1,27 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QList>
-#include <QFileDialog>
-#include <QDir>
-#include <QFileSystemModel>
-#include <QMessageBox>
-#include <QListWidgetItem>
 #include <QDebug>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPainter>
-#include <QPrintPreviewDialog>
-#include <Qsci/qsciprinter.h>
-#include <QTextDocument>
-#include <QSettings>
-#include <QSplitter>
-#include <QSpacerItem>
+#include <QDir>
+#include <QFileDialog>
+#include <QFileSystemModel>
 #include <QInputDialog>
+#include <QList>
+#include <QListWidgetItem>
+#include <QMainWindow>
+#include <QMessageBox>
 #include <QMimeData>
-#include <QXmlStreamReader>
+#include <QPainter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
 #include <QScrollBar>
+#include <QSettings>
+#include <QSpacerItem>
+#include <QSplitter>
+#include <QTextDocument>
+#include <QXmlStreamReader>
+#include <Qsci/qsciprinter.h>
 
 //lexer
 #include "Qsci/qscilexer.h"
@@ -30,23 +30,22 @@
 #include "Qsci/qscilexercmake.h"
 #include "Qsci/qscilexercoffeescript.h"
 #include "Qsci/qscilexercsharp.h"
+#include "Qsci/qscilexercss.h"
 #include "Qsci/qscilexerd.h"
 #include "Qsci/qscilexerdiff.h"
+#include "Qsci/qscilexerfortran.h"
+#include "Qsci/qscilexerfortran77.h"
+#include "Qsci/qscilexerhtml.h"
 #include "Qsci/qscilexerjava.h"
 #include "Qsci/qscilexerjavascript.h"
 #include "Qsci/qscilexerjson.h"
-#include "Qsci/qscilexerhtml.h"
-#include "Qsci/qscilexerfortran.h"
-#include "Qsci/qscilexerfortran77.h"
-#include "Qsci/qscilexercss.h"
-#include "Qsci/qscilexerlua.h"
 #include "Qsci/qscilexerlua.h"
 #include "Qsci/qscilexermakefile.h"
 #include "Qsci/qscilexermarkdown.h"
 #include "Qsci/qscilexermatlab.h"
-#include "Qsci/qscilexerproperties.h"
 #include "Qsci/qscilexerpascal.h"
 #include "Qsci/qscilexerperl.h"
+#include "Qsci/qscilexerproperties.h"
 #include "Qsci/qscilexerpython.h"
 #include "Qsci/qscilexerruby.h"
 #include "Qsci/qscilexersql.h"
@@ -55,11 +54,11 @@
 #include "Qsci/qscilexeryaml.h"
 #include "Qsci/qsciprinter.h"
 
-#include "finddialog.h"
 #include "codeeditor.h"
-#include "settings.h"
-#include "minimap.h"
 #include "comment.h"
+#include "finddialog.h"
+#include "minimap.h"
+#include "settings.h"
 #include "stylesheet.h"
 #include "termwidget.h"
 
@@ -67,20 +66,18 @@ namespace Ui {
 class MainWindow;
 }
 
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
 
     void setTheme();
 
-    void syntaxHighlighting(QsciLexer* lexers);
-    void setMainWindowStyle(QString,QString);
+    void syntaxHighlighting(QsciLexer * lexers);
+    void setMainWindowStyle(QString, QString);
     void setTabWidgetStyle(QString, QString);
     void updateHighlighterTheme();
     void setOverViewStyle(QString, QString);
@@ -88,28 +85,51 @@ public:
     void autoComplete();
     void multiedit();
 
+public slots:
+    void on_actionNew_triggered();
+    void openFile(QString filepath = nullptr);
+
+protected:
+    void closeEvent(QCloseEvent * event);
+    void keyPressEvent(QKeyEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event);
+    void dragMoveEvent(QDragMoveEvent * event);
+    void dropEvent(QDropEvent * event);
+    void focusOutEvent(QFocusEvent * event);
+
 private:
-    Ui::MainWindow *ui;
-    FindDialog *find;
-    Settings *settings_dialog;
-    MiniMap *minimap;
-    QFileSystemModel *filemodel;
+    Ui::MainWindow * ui;
+
+    //statusbar widgets
+    QSplitter * m_statusBarSplitter;
+    QLabel *m_lineNumLabel, *m_fileTypeLabel;
+
+    //    minimap widget
+    CodeEditor * m_miniMap; // it create a bug in syntaxhighlighting
+
+    //terminal widget
+    TermWidget * m_terminal;
+
+    //find widget
+    FindDialog * m_findWidget;
+
+    QList<QAction *> m_recentFileActionList;
+    const int maxRecentFiles = 10;
+
+    Settings * m_settingDialog = nullptr;
+    QFileSystemModel * m_filemodel;
     QStringList filelist;
-    QLabel *linenumber_label, *filetype_label;
-    QSplitter *statusbar_splitter;
-    QSpacerItem *spacer;
-    QSettings *my_settings;
-    QList<int> searchtext_position_list;
+    QSpacerItem * spacer;
+    QSettings * m_settings;
+    QList<int> m_searchTextPosList;
     QString search_string;
     bool is_minimap_visible, is_autosave;
-    QList <QAction*> recentFileActionList;
-    TermWidget *console;
     QMap<QString, QString> *themeFiles, *colorScheme;
-
-    static const int maxRecentFiles = 10;
 
     //methods
     void createStatusBarWidgets();
+    void setupMiniMapWidget();
+    void setupTerminalWidgets();
     void setupFindWidgets();
     void createRecentAction();
     void updateRecentActionList();
@@ -117,41 +137,29 @@ private:
     void menuActionGroup();
 
     void saveWindowsGeomentry();
-    void saveSettings();
+    void saveSettings(); // not implemeted yet
     void loadWindowsGeomentry();
-    void loadSettings();
-    void loadCodeEditorSettings();
+    void loadSettings(); // this load settings for entire application
+    void loadCodeEditorSettings(); // this load settings for code editor tabs
 
     int newTab(QString tabname);
+    void openFile(QString filepath, int tabindex);
     void openDirectory(QString fileDir);
     void saveFile(QString filePath);
     void saveFileAs(QString fileName);
-    void closeFile();
     bool closeFile(int index);
 
-//    void setFileTypeInStatusBar(QString fileName);
+    //        void setFileTypeInStatusBar(QString fileName);
     void setDefaultLocationForFileExplorer();
     void setEOL();
     void addtoOpenedFiles(QString fileName);
     void setFiletype(QString fileName);
     void changeTabNameIfFileChanges();
     void highlighsearchtext(QString searchText);
-    void setColorScheme(QsciLexer *lexer, QString themeFile = nullptr);
+    void setColorScheme(QString themeFile = nullptr); // notworking properly
     void revertBackTabName();
-    void changeColorScheme();
-    void loadMiniMap(int index);
+    void loadMiniMap(int index); // not working properly
     void setpreferencefornewtab(int index);
-
-protected:
-    void closeEvent(QCloseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dropEvent(QDropEvent *event);
-
-public slots:
-    void on_actionNew_triggered();
-    void openFile(QString filepath = nullptr);
 
 private slots:
     //file menu slots
@@ -162,7 +170,7 @@ private slots:
     void on_actionSave_All_triggered();
     void on_actionPrint_triggered();
     void on_actionPrint_Preview_triggered();
-    void print(QPrinter *printer);
+    void print(QPrinter * printer); //not working properly
     void openRecent();
     void clearRecent();
     void on_actionNew_Window_triggered();
@@ -179,9 +187,11 @@ private slots:
     void on_actionPaste_triggered();
     void on_actionSelect_All_triggered();
     void on_actionDeselect_triggered();
-    void on_actionAdd_Indent_triggered();
+    void on_actionAdd_Indent_triggered(); //not working properly
     void on_actionDecrease_Indent_triggered();
     void on_actionDuplicate_Line_triggered();
+    void on_actionComment_triggered();
+    void on_actionComment_Block_triggered();
     void on_actionUPPER_CASE_triggered();
     void on_actionlower_case_triggered();
 
@@ -212,6 +222,8 @@ private slots:
     void on_actionStatusbar_triggered();
     void on_actionDisplay_EOL_triggered();
     void on_actionDisplay_White_Space_triggered();
+    void on_actionZoom_In_triggered();
+    void on_actionZoom_Out_triggered();
 
     //syntax highlightning - lexers
     void on_actionNormal_triggered();
@@ -252,8 +264,8 @@ private slots:
     //preference
     void on_actionSettings_triggered();
 
-    void on_treeView_doubleClicked(const QModelIndex &index);
-    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_treeView_doubleClicked(const QModelIndex & index);
+    void on_listWidget_itemDoubleClicked(QListWidgetItem * item);
     void on_tabWidget_currentChanged(int index);
     void on_tabWidget_tabCloseRequested(int index);
 
@@ -264,11 +276,14 @@ private slots:
 
     void hideTerminalWidget();
     void on_termClose_clicked();
-//    void lostFocus(QEvent *event); //for autosave function not implemented
+    //    void lostFocus(QEvent * event); //for autosave function not implemented
 
-//    void on_actionDark_triggered();
-//    void on_actionLight_triggered();
-//    void on_actionComment_triggered();
+    //    void on_actionDark_triggered();
+    //    void on_actionLight_triggered();
+    void on_actionReload_File_triggered();
+
+    void loadColorScheme();
+    void addColorScheme(const QString path);
 };
 
 #endif // MAINWINDOW_H

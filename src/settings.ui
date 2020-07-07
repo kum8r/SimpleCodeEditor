@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>606</width>
-    <height>518</height>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,15 +68,15 @@
        <item row="0" column="1">
         <widget class="QFontComboBox" name="fontComboBox"/>
        </item>
-       <item row="7" column="1">
-        <widget class="QComboBox" name="autosavetime"/>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>font size</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="genFontSize"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_2">
@@ -86,21 +86,45 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QCheckBox" name="AutoSave">
-         <property name="text">
-          <string/>
-         </property>
+        <widget class="QComboBox" name="autoSaveOptions">
+         <item>
+          <property name="text">
+           <string>Never</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>After Delay</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string extracomment="when tab changes">On Tab Focus Out</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>After Windows Focus Out</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>When app is idle</string>
+          <string>auto save time delay</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="autosavetimesec"/>
+        <widget class="QSpinBox" name="autosavetime_2">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>60</number>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_5">
@@ -123,9 +147,6 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="genFontSize"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="texteditor">
@@ -145,36 +166,40 @@
          <item row="0" column="1">
           <widget class="QFontComboBox" name="Font"/>
          </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>Font Size</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="editorfontSize">
+           <property name="text">
+            <string>12</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>Caret width</string>
+            <string>Caret Style</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
           <widget class="QComboBox" name="caretWidth">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <item>
             <property name="text">
-             <string>0</string>
+             <string>Invisible</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>3</string>
+             <string>Line</string>
             </property>
            </item>
            <item>
@@ -198,6 +223,13 @@
            </property>
            <property name="checked">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>Color Scheme</string>
            </property>
           </widget>
          </item>
@@ -252,39 +284,46 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>Font Size</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="editorfontSize">
-           <property name="text">
-            <string>12</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Color Scheme</string>
-           </property>
-          </widget>
-         </item>
          <item row="4" column="1">
-          <widget class="QComboBox" name="colorScheme">
-           <item>
-            <property name="text">
-             <string>Default</string>
+          <widget class="QWidget" name="widget" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>0</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Default Dark</string>
+            <property name="leftMargin">
+             <number>0</number>
             </property>
-           </item>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QComboBox" name="colorScheme">
+              <item>
+               <property name="text">
+                <string>Default</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Default Dark</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>Import new</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -298,68 +337,33 @@
           <item row="0" column="0">
            <layout class="QFormLayout" name="formLayout_4">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>Label with</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="comboBox_5">
-              <item>
-               <property name="text">
-                <string>Tabs</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Spaces</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
              <widget class="QLabel" name="label_6">
               <property name="text">
                <string>Tab Size</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="0" column="1">
              <widget class="QLineEdit" name="tabsize">
               <property name="text">
                <string>4</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_23">
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Auto Indent</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEdit_7">
-              <property name="text">
-               <string>2</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
+            <item row="1" column="1">
              <widget class="QCheckBox" name="autoIndent">
               <property name="text">
                <string/>
               </property>
               <property name="checked">
                <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>Auto Indent</string>
               </property>
              </widget>
             </item>

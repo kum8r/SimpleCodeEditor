@@ -46,7 +46,6 @@ HEADERS += \
         src/termwidget.h
 
 FORMS += \
-        src/minimap.ui \
         src/finddialog.ui \
         src/mainwindow.ui \
         src/settings.ui

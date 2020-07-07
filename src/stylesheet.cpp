@@ -1,16 +1,21 @@
 #include "stylesheet.h"
 
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
+#include <QXmlStreamReader>
+
 StyleSheet::StyleSheet()
 {
 }
 
-void *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciScintilla *codeeditor)
+void StyleSheet::setStyleSheet(QsciLexer * lexer, QString themeFileName, QsciScintilla * codeeditor)
 {
     QFile themeFile(themeFileName);
     QFileInfo fileinfo(themeFileName);
-    if (!themeFile.open(QIODevice::ReadOnly ))
+    if (!themeFile.open(QIODevice::ReadOnly))
     {
-        return nullptr;
+        return;
     }
     QXmlStreamReader xmlFile(&themeFile);
 
@@ -38,7 +43,7 @@ void *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciSci
                 }
             }
         }
-        return nullptr;
+        return;
     }
 
     while (!xmlFile.atEnd())
@@ -224,7 +229,7 @@ void *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciSci
                 }
                 if (xmlFile.attributes().hasAttribute("background"))
                 {
-                    codeeditor->setMarginBackgroundColor(codeeditor->NumberMargin ,QColor(xmlFile.attributes().value("background")));
+                    codeeditor->setMarginBackgroundColor(codeeditor->NumberMargin, QColor(xmlFile.attributes().value("background")));
                 }
             }
             else if (xmlFile.attributes().value("name") == "Selection")
@@ -238,10 +243,8 @@ void *StyleSheet::setStyleSheet(QsciLexer *lexer, QString themeFileName, QsciSci
                     codeeditor->setSelectionBackgroundColor(QColor(xmlFile.attributes().value("background")));
                 }
             }
-
         }
     }
-    return lexer;
 }
 
 void StyleSheet::setFont(QFont font)
@@ -251,5 +254,4 @@ void StyleSheet::setFont(QFont font)
 
 void StyleSheet::setStyleForCommentAttribute()
 {
-
 }
